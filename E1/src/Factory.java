@@ -1,9 +1,9 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 
 public class Factory {
@@ -15,11 +15,11 @@ public class Factory {
 
     public Factory(String instanceType, String folderPath) {
         this.instanceType = instanceType;
-        var factorySize = Factories.sizes.get(instanceType);
+        var factorySize = FactoryValues.sizes.get(instanceType);
         this.x = factorySize[0];
         this.y = factorySize[1];
         gridSize = x * y;
-        this.numberOfMachines = Factories.numbOfMachines.get(instanceType);
+        this.numberOfMachines = FactoryValues.numbOfMachines.get(instanceType);
         this.setMachinesValues(folderPath);
     }
 
@@ -27,8 +27,8 @@ public class Factory {
     public int getY(int position) { return position / x; }
 
     private void setMachinesValues(String folderPath) {
-        int[][] flow = ReadJson.getData(folderPath, instanceType, Factories.FLOW);
-        int[][] cost = ReadJson.getData(folderPath, instanceType, Factories.COST);
+        int[][] flow = ReadJson.getData(folderPath, instanceType, FactoryValues.flow);
+        int[][] cost = ReadJson.getData(folderPath, instanceType, FactoryValues.cost);
         for (int[] ints : flow) {
             var id1 = ints[0];
             var id2 = ints[1];
@@ -46,11 +46,15 @@ public class Factory {
     public int[] createInitMachinesPositions() {
         // index = machine number
         // value = position in grid, (grid as a flattened matrix)
-        var firstSetup = new int[numberOfMachines];
-        for (int i = 0; i < numberOfMachines; i++) {
-            firstSetup[i] = i;
+        int[] array = IntStream.range(0, gridSize).toArray();
+        Random rd = new Random();
+        for (int i = gridSize-1; i > 0; i--) {
+            int j = rd.nextInt(i+1);
+            int temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
         }
-        return firstSetup;
+        return Arrays.copyOfRange(array, 0, numberOfMachines);
     }
 
     private ValuesBetweenMachines find(int id1, int id2) {
@@ -79,12 +83,25 @@ public class Factory {
 
     @Override
     public String toString() {
-        return "FactoryGrid{" +
-                "x=" + x +
-                ", y=" + y +
-                ", numberOfMachines=" + numberOfMachines +
-                ", allMachinesValues=" + betweenMachinesVals +
-                '}';
+        return "Factory {grid:" + x + "x" + y + ", machines:" + numberOfMachines +
+                ", relations=" + betweenMachinesVals + '}';
+    }
+
+    public void displayPopulation(int[] population) {
+        Integer[][] grid = new Integer[x][y];
+        for (int i = 0; i < population.length; i++) {
+            var position = population[i];
+            grid[getX(position)][getY(position)] = i;
+        }
+
+        for (var row: grid) {
+            System.out.print("\n| ");
+            for (var element : row) {
+                if (element != null) { System.out.printf("%2d", element); }
+                else { System.out.print("  "); }
+                System.out.print(" | ");
+            }
+        }
     }
 }
 

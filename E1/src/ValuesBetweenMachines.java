@@ -27,6 +27,6 @@ public class ValuesBetweenMachines {
 
     @Override
     public String toString() {
-        return "{(" + id1 + ", " + id2 + ") => f=" + flow + ", c=" + cost + '}';
+        return "<" + id1 + "," + id2 + "> => D*" + flow + "*" + cost + "";
     }
 }

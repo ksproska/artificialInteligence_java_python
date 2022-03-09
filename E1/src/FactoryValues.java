@@ -1,8 +1,8 @@
 import java.util.HashMap;
 
-public class Factories {
+public class FactoryValues {
     public static final String EASY = "easy", FLAT = "flat", HARD = "hard";
-    public static final String COST = "cost", FLOW = "flow";
+    public static final String cost = "cost", flow = "flow";
     public static final HashMap<String, int[]> sizes = new HashMap<>() {
         {
             put(EASY, new int[]{3, 3});
