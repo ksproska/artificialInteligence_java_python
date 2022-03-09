@@ -1,0 +1,182 @@
+[
+	{
+		"source": 21,
+		"dest": 0,
+		"amount": 440
+	},
+	{
+		"source": 0,
+		"dest": 12,
+		"amount": 760
+	},
+	{
+		"source": 12,
+		"dest": 20,
+		"amount": 440
+	},
+	{
+		"source": 2,
+		"dest": 19,
+		"amount": 733
+	},
+	{
+		"source": 19,
+		"dest": 23,
+		"amount": 150
+	},
+	{
+		"source": 13,
+		"dest": 6,
+		"amount": 230
+	},
+	{
+		"source": 6,
+		"dest": 22,
+		"amount": 230
+	},
+	{
+		"source": 22,
+		"dest": 23,
+		"amount": 230
+	},
+	{
+		"source": 14,
+		"dest": 5,
+		"amount": 505
+	},
+	{
+		"source": 5,
+		"dest": 17,
+		"amount": 665
+	},
+	{
+		"source": 17,
+		"dest": 7,
+		"amount": 665
+	},
+	{
+		"source": 7,
+		"dest": 11,
+		"amount": 520
+	},
+	{
+		"source": 11,
+		"dest": 4,
+		"amount": 65
+	},
+	{
+		"source": 8,
+		"dest": 16,
+		"amount": 268
+	},
+	{
+		"source": 16,
+		"dest": 9,
+		"amount": 173
+	},
+	{
+		"source": 3,
+		"dest": 15,
+		"amount": 543
+	},
+	{
+		"source": 1,
+		"dest": 10,
+		"amount": 440
+	},
+	{
+		"source": 10,
+		"dest": 18,
+		"amount": 695
+	},
+	{
+		"source": 18,
+		"dest": 4,
+		"amount": 415
+	},
+	{
+		"source": 4,
+		"dest": 20,
+		"amount": 105
+	},
+	{
+		"source": 12,
+		"dest": 21,
+		"amount": 160
+	},
+	{
+		"source": 9,
+		"dest": 16,
+		"amount": 130
+	},
+	{
+		"source": 16,
+		"dest": 11,
+		"amount": 130
+	},
+	{
+		"source": 1,
+		"dest": 4,
+		"amount": 130
+	},
+	{
+		"source": 4,
+		"dest": 10,
+		"amount": 130
+	},
+	{
+		"source": 19,
+		"dest": 11,
+		"amount": 295
+	},
+	{
+		"source": 6,
+		"dest": 13,
+		"amount": 185
+	},
+	{
+		"source": 13,
+		"dest": 22,
+		"amount": 185
+	},
+	{
+		"source": 7,
+		"dest": 9,
+		"amount": 145
+	},
+	{
+		"source": 19,
+		"dest": 16,
+		"amount": 85
+	},
+	{
+		"source": 23,
+		"dest": 15,
+		"amount": 105
+	},
+	{
+		"source": 20,
+		"dest": 1,
+		"amount": 130
+	},
+	{
+		"source": 11,
+		"dest": 20,
+		"amount": 145
+	},
+	{
+		"source": 15,
+		"dest": 10,
+		"amount": 65
+	},
+	{
+		"source": 10,
+		"dest": 13,
+		"amount": 65
+	},
+	{
+		"source": 12,
+		"dest": 18,
+		"amount": 160
+	}
+]
