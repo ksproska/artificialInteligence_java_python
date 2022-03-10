@@ -11,17 +11,17 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class ReadJson {
-    private static final String[] instanceTypes = new String[]{FactorySetupVals.EASY, FactorySetupVals.FLAT, FactorySetupVals.HARD};
-    private static final String[] dataTypes = new String[]{FactorySetupVals.cost, FactorySetupVals.flow};
-    private static final HashMap<String, String[]> dataTypeElementSubames = new HashMap<>() {
+    private static final FactorySetupVals.InstanceType[] instanceTypes = new FactorySetupVals.InstanceType[]{FactorySetupVals.InstanceType.EASY, FactorySetupVals.InstanceType.FLAT, FactorySetupVals.InstanceType.HARD};
+    private static final FactorySetupVals.DataType[] dataTypes = new FactorySetupVals.DataType[]{FactorySetupVals.DataType.COST, FactorySetupVals.DataType.FLOW};
+    private static final HashMap<FactorySetupVals.DataType, String[]> dataTypeElementSubames = new HashMap<>() {
         {
-            put(FactorySetupVals.cost, new String[]{"source", "dest", "cost"});
-            put(FactorySetupVals.flow, new String[]{"source", "dest", "amount"});
+            put(FactorySetupVals.DataType.COST, new String[]{"source", "dest", "cost"});
+            put(FactorySetupVals.DataType.FLOW, new String[]{"source", "dest", "amount"});
         }
     };
     private static final String FILE_TYPE = "json";
 
-    public static int[][] getData(String folderPath, String instanceType, String dataType) {
+    public static int[][] getData(String folderPath, FactorySetupVals.InstanceType instanceType, FactorySetupVals.DataType dataType) {
         // checking if selection parameters are correct
         if(Arrays.stream(instanceTypes).noneMatch(instanceType::equals)) {
             String errorMessage = String.format("Instance type: %s; allowed: %s", instanceType, Arrays.toString(instanceTypes));
@@ -32,7 +32,7 @@ public class ReadJson {
             throw new IllegalArgumentException(errorMessage);
         }
         // reading file
-        String filename = String.format("%s\\%s_%s.%s", folderPath, instanceType, dataType, FILE_TYPE);
+        String filename = String.format("%s\\%s_%s.%s", folderPath, FactorySetupVals.instanceTypeStringHashMap.get(instanceType), FactorySetupVals.dataTypeStringHashMap.get(dataType), FILE_TYPE);
         try (FileReader reader = new FileReader(filename)) {
             return getValsFromJson(reader, dataType);
         }
@@ -43,7 +43,7 @@ public class ReadJson {
         return null;
     }
 
-    private static int[][] getValsFromJson(FileReader reader, String dataType) throws IOException, ParseException {
+    private static int[][] getValsFromJson(FileReader reader, FactorySetupVals.DataType dataType) throws IOException, ParseException {
         JSONParser jsonParser = new JSONParser();
         Object parsedReader = jsonParser.parse(reader);
         JSONArray elementsList = (JSONArray) parsedReader;
