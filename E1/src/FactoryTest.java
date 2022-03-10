@@ -31,16 +31,16 @@ class FactoryTest {
         var easyF = new Factory(FactoryValues.EASY, folderPath); // 3x3
         var initial = IntStream.range(0, 10).toArray();
 
-        int calculate1 = easyF.evaluateMachines(new ValuesBetweenMachines(0, 1, 3, 4), initial);
+        int calculate1 = easyF.evaluateTwoMachines(new ValuesBetweenTwoMachines(0, 1, 3, 4), initial);
         Assertions.assertEquals(calculate1, 1 * 3 * 4);
 
-        int calculate2 = easyF.evaluateMachines(new ValuesBetweenMachines(0, 4, 3, 4), initial);
+        int calculate2 = easyF.evaluateTwoMachines(new ValuesBetweenTwoMachines(0, 4, 3, 4), initial);
         Assertions.assertEquals(calculate2, 2 * 3 * 4);
 
-        int calculate3 = easyF.evaluateMachines(new ValuesBetweenMachines(3, 8, 3, 4), initial);
+        int calculate3 = easyF.evaluateTwoMachines(new ValuesBetweenTwoMachines(3, 8, 3, 4), initial);
         Assertions.assertEquals(calculate3, 3 * 3 * 4);
 
-        int calculate4 = easyF.evaluateMachines(new ValuesBetweenMachines(0, 8, 3, 4), initial);
+        int calculate4 = easyF.evaluateTwoMachines(new ValuesBetweenTwoMachines(0, 8, 3, 4), initial);
         Assertions.assertEquals(calculate4, 4 * 3 * 4);
     }
 
@@ -54,11 +54,11 @@ class FactoryTest {
         var flatF = new Factory(FactoryValues.FLAT, folderPath);
         initial = IntStream.range(0, 12).toArray();
         calculate1 = flatF.evaluatePopulation(initial);
-        Assertions.assertEquals(calculate1, 13005);
+        Assertions.assertEquals(calculate1, 15865);
 
         var hardF = new Factory(FactoryValues.HARD, folderPath);
         initial = IntStream.range(0, 24).toArray();
         calculate1 = hardF.evaluatePopulation(initial);
-        Assertions.assertEquals(calculate1, 37420);
+        Assertions.assertEquals(calculate1, 38625);
     }
 }

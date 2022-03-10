@@ -1,8 +1,8 @@
-public class ValuesBetweenMachines {
+public class ValuesBetweenTwoMachines {
     public final int id1, id2;
     private int flow, cost;
 
-    public ValuesBetweenMachines(int id1, int id2, int flow, int cost) {
+    public ValuesBetweenTwoMachines(int id1, int id2, int flow, int cost) {
         this.id1 = id1;
         this.id2 = id2;
         this.flow = flow;
