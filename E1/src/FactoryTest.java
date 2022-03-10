@@ -45,6 +45,78 @@ class FactoryTest {
     }
 
     @Test
+    void EasyLoadingTest() {
+        var factory = new Factory(FactoryValues.EASY, folderPath);
+        var machinesVals = factory.getAllMachinesVals();
+        var machine0 = machinesVals.get(0);
+        var machine5 = machinesVals.get(5);
+        var machineLast = machinesVals.get(machinesVals.size() - 1);
+
+        Assertions.assertEquals(machine0.id1, 0);
+        Assertions.assertEquals(machine0.id2, 1);
+        Assertions.assertEquals(machine0.getFlow(), 100);
+        Assertions.assertEquals(machine0.getCost(), 1);
+
+        Assertions.assertEquals(machine5.id1, 2);
+        Assertions.assertEquals(machine5.id2, 3);
+        Assertions.assertEquals(machine5.getFlow(), 0);
+        Assertions.assertEquals(machine5.getCost(), 5);
+
+        Assertions.assertEquals(machineLast.id1, 7);
+        Assertions.assertEquals(machineLast.id2, 8);
+        Assertions.assertEquals(machineLast.getFlow(), 12);
+        Assertions.assertEquals(machineLast.getCost(), 1);
+    }
+
+    @Test
+    void FlatLoadingTest() {
+        var factory = new Factory(FactoryValues.FLAT, folderPath);
+        var machinesVals = factory.getAllMachinesVals();
+        var machine0 = machinesVals.get(0);
+        var machine5 = machinesVals.get(5);
+        var machineLast = machinesVals.get(machinesVals.size() - 1);
+
+        Assertions.assertEquals(machine0.id1, 0);
+        Assertions.assertEquals(machine0.id2, 3);
+        Assertions.assertEquals(machine0.getFlow(), 310);
+        Assertions.assertEquals(machine0.getCost(), 1);
+
+        Assertions.assertEquals(machine5.id1, 11);
+        Assertions.assertEquals(machine5.id2, 9);
+        Assertions.assertEquals(machine5.getFlow(), 120);
+        Assertions.assertEquals(machine5.getCost(), 1);
+
+        Assertions.assertEquals(machineLast.id1, 1);
+        Assertions.assertEquals(machineLast.id2, 7);
+        Assertions.assertEquals(machineLast.getFlow(), 90);
+        Assertions.assertEquals(machineLast.getCost(), 1);
+    }
+
+    @Test
+    void HardLoadingTest() {
+        var factory = new Factory(FactoryValues.HARD, folderPath);
+        var machinesVals = factory.getAllMachinesVals();
+        var machine0 = machinesVals.get(0);
+        var machine5 = machinesVals.get(5);
+        var machineLast = machinesVals.get(machinesVals.size() - 1);
+
+        Assertions.assertEquals(machine0.id1, 21);
+        Assertions.assertEquals(machine0.id2, 0);
+        Assertions.assertEquals(machine0.getFlow(), 440);
+        Assertions.assertEquals(machine0.getCost(), 1);
+
+        Assertions.assertEquals(machine5.id1, 13);
+        Assertions.assertEquals(machine5.id2, 6);
+        Assertions.assertEquals(machine5.getFlow(), 230);
+        Assertions.assertEquals(machine5.getCost(), 1);
+
+        Assertions.assertEquals(machineLast.id1, 12);
+        Assertions.assertEquals(machineLast.id2, 18);
+        Assertions.assertEquals(machineLast.getFlow(), 160);
+        Assertions.assertEquals(machineLast.getCost(), 1);
+    }
+
+    @Test
     void FactoryEvaluatePopulationTest() {
         var easyF = new Factory(FactoryValues.EASY, folderPath);
         var initial = IntStream.range(0, 10).toArray();

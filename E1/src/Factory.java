@@ -87,6 +87,11 @@ public class Factory {
 
     // -----------------------------------------------------------------------------------------------------------------
 
+
+    public ArrayList<ValuesBetweenTwoMachines> getAllMachinesVals() {
+        return betweenMachinesVals;
+    }
+
     @Override
     public String toString() {
         return "Factory {grid:" + x + "x" + y + ", machines:" + numberOfMachines +
