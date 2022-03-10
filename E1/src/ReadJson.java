@@ -11,7 +11,7 @@ import org.json.simple.parser.ParseException;
 public class ReadJson {
     private static final String[] instanceTypes = new String[]{FactoryValues.EASY, FactoryValues.FLAT, FactoryValues.HARD};
     private static final String[] dataTypes = new String[]{FactoryValues.cost, FactoryValues.flow};
-    private static final HashMap<String, String[]> dataTypeElements = new HashMap<>() {
+    private static final HashMap<String, String[]> dataTypeElementSubames = new HashMap<>() {
         {
             put(FactoryValues.cost, new String[]{"source", "dest", "cost"});
             put(FactoryValues.flow, new String[]{"source", "dest", "amount"});
@@ -20,6 +20,7 @@ public class ReadJson {
     private static final String FILE_TYPE = "json";
 
     public static int[][] getData(String folderPath, String instanceType, String dataType) {
+        // checking if selection parameters are correct
         if(Arrays.stream(instanceTypes).noneMatch(instanceType::equals)) {
             String errorMessage = String.format("Instance type: %s; allowed: %s", instanceType, Arrays.toString(instanceTypes));
             throw new IllegalArgumentException(errorMessage);
@@ -28,26 +29,32 @@ public class ReadJson {
             String errorMessage = String.format("Data type: %s; allowed: %s", dataType, Arrays.toString(dataTypes));
             throw new IllegalArgumentException(errorMessage);
         }
+        // reading file
         String filename = String.format("%s\\%s_%s.%s", folderPath, instanceType, dataType, FILE_TYPE);
-
-        JSONParser jsonParser = new JSONParser();
-        int[][] readTables = new int[0][];
-        try (FileReader reader = new FileReader(filename))
-        {
-            Object obj = jsonParser.parse(reader);
-            JSONArray elementList = (JSONArray) obj;
-            String[] dataNames = dataTypeElements.get(dataType);
-            readTables = new int[elementList.size()][dataNames.length];
-
-            for (int ei = 0; ei < elementList.size(); ei++) {
-                JSONObject jsObj = ((JSONObject) elementList.get(ei));
-                for (int ni = 0; ni < dataNames.length; ni++) {
-                    readTables[ei][ni] = ((Long) (jsObj.get(dataNames[ni]))).intValue();
-                }
-            }
-        } catch (IOException | ParseException e) {
+        try (FileReader reader = new FileReader(filename)) {
+            return getTableOfIntTables(reader, dataType);
+        }
+        catch (IOException | ParseException e) {
             String errorMessage = String.format("Problem reading file \"%s\"", filename);
             System.out.println(errorMessage);
+        }
+        return null;
+    }
+
+    private static int[][] getTableOfIntTables(FileReader reader, String dataType) throws IOException, ParseException {
+        JSONParser jsonParser = new JSONParser();
+        Object parsedReader = jsonParser.parse(reader);
+        JSONArray elementsList = (JSONArray) parsedReader;
+
+        String[] elementSubnamesList = dataTypeElementSubames.get(dataType);
+        int[][] readTables = new int[elementsList.size()][elementSubnamesList.length];
+
+        for (int iElem = 0; iElem < elementsList.size(); iElem++) {
+            JSONObject jsonElement = ((JSONObject) elementsList.get(iElem));
+            for (int iName = 0; iName < elementSubnamesList.length; iName++) {
+                String subname = elementSubnamesList[iName];
+                readTables[iElem][iName] = ((Long) (jsonElement.get(subname))).intValue();
+            }
         }
         return readTables;
     }
