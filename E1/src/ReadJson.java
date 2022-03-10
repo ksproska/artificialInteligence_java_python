@@ -53,7 +53,8 @@ public class ReadJson {
             JSONObject jsonElement = ((JSONObject) elementsList.get(iElem));
             for (int iName = 0; iName < elementSubnamesList.length; iName++) {
                 String subname = elementSubnamesList[iName];
-                readTables[iElem][iName] = ((Long) (jsonElement.get(subname))).intValue();
+                var readValue = jsonElement.get(subname);
+                readTables[iElem][iName] = ((Long) (readValue)).intValue();
             }
         }
         return readTables;
