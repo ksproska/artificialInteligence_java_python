@@ -76,7 +76,7 @@ public class Factory {
         int x1 = getX(position1), y1 = getY(position1);
         int x2 = getX(position2), y2 = getY(position2);
         int D = Math.abs(x1 - x2) + Math.abs(y1 - y2);
-        return D * valuesBetweenTwoMachines.getCost() * valuesBetweenTwoMachines.getFlow();
+        return D * valuesBetweenTwoMachines.getCostTimesFlow();
     }
 
     private Stream<Integer> getEvaluationForEachMachine(int[] machinesPositions) {
@@ -120,20 +120,24 @@ public class Factory {
     public static class ValuesBetweenTwoMachines {
         public final int id1, id2;
         private int flow, cost;
+        private int costTimesFlow;
 
         public ValuesBetweenTwoMachines(int id1, int id2, int flow, int cost) {
             this.id1 = id1;
             this.id2 = id2;
             this.flow = flow;
             this.cost = cost;
+            costTimesFlow = cost * flow;
         }
 
         public void setCost(int cost) {
             this.cost = cost;
+            costTimesFlow = cost * flow;
         }
 
         public void setFlow(int flow) {
             this.flow = flow;
+            costTimesFlow = cost * flow;
         }
 
         public int getCost() {
@@ -147,6 +151,10 @@ public class Factory {
         @Override
         public String toString() {
             return "<" + id1 + "," + id2 + "> => D*" + flow + "*" + cost + "";
+        }
+
+        public int getCostTimesFlow() {
+            return costTimesFlow;
         }
     }
 }
