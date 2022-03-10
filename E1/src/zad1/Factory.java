@@ -8,11 +8,13 @@ import java.util.stream.Stream;
 
 
 public class Factory {
+    private static Random random = new Random();
     public final int x, y;
     public final int gridSize;
     public final int numberOfMachines;
     public final InstanceEnum instanceEnum;
     private final ArrayList<ValuesBetweenTwoMachines> betweenMachinesVals = new ArrayList<>();
+    private final int[][] partialMultiplicationForIds;
 
     public Factory(InstanceEnum instanceEnum, String folderPath) {
         this.instanceEnum = instanceEnum;
@@ -22,6 +24,11 @@ public class Factory {
         this.y = factorySize[1];
         gridSize = x * y;
         this.setMachinesValues(folderPath);
+        partialMultiplicationForIds = new int[numberOfMachines][numberOfMachines];
+        for (var vals : this.betweenMachinesVals) {
+            partialMultiplicationForIds[vals.id1][vals.id2] = vals.getCostTimesFlow();
+            partialMultiplicationForIds[vals.id2][vals.id1] = vals.getCostTimesFlow();
+        }
     }
 
     private ValuesBetweenTwoMachines find(int id1, int id2) {
@@ -50,49 +57,107 @@ public class Factory {
 
     // -----------------------------------------------------------------------------------------------------------------
 
-    public int[] createInitMachinesPositions() {
-        // index = machine id
-        // value = position of the machine in grid, (grid as a flattened matrix)
 
-        int[] grid = IntStream.range(0, gridSize).toArray();
-        Random rd = new Random();
-        for (int i = gridSize-1; i > 0; i--) {
-            int j = rd.nextInt(i+1);
-            int temp = grid[i];
-            grid[i] = grid[j];
-            grid[j] = temp;
-        }
-        return Arrays.copyOfRange(grid, 0, numberOfMachines);
-    }
+//    public int[] createInitMachinesPositions() {
+//        // index = machine id
+//        // value = position of the machine in grid, (grid as a flattened matrix)
+//
+//        int[] grid = IntStream.range(0, gridSize).toArray();
+//        for (int i = gridSize-1; i > 0; i--) {
+//            int j = random.nextInt(i+1);
+//            int temp = grid[i];
+//            grid[i] = grid[j];
+//            grid[j] = temp;
+//        }
+//        return Arrays.copyOfRange(grid, 0, numberOfMachines);
+//    }
+//
+//    public int[] machinesPositionsToGrid(int[] population) {
+//        int[] grid = new int[gridSize];
+//        Arrays.fill(grid, -1);
+//        for (int i = 0; i < population.length; i++) {
+//            var position = population[i];
+//            grid[position] = i;
+//        }
+//        return grid;
+//    }
 
     // -----------------------------------------------------------------------------------------------------------------
+
+    public static <T> T[] shuffle(T[] array) {
+        for (int i = array.length-1; i > 0; i--) {
+            int j = random.nextInt(i+1);
+            T temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    }
+
+    public int[] createInitGrid() {
+        // index = machine id
+        // value = position of the machine in flattenedGrid, (flattenedGrid as a flattened matrix)
+
+        int[] flattenedGrid = new int[gridSize];
+//        Arrays.fill(flattenedGrid, -1);
+        for (int i = 0; i < numberOfMachines; i++) { flattenedGrid[i] = i; }
+        for (int i = numberOfMachines; i < gridSize; i++) { flattenedGrid[i] = -1; }
+
+        for (int i = gridSize-1; i > 0; i--) {
+            int j = random.nextInt(i+1);
+            int temp = flattenedGrid[i];
+            flattenedGrid[i] = flattenedGrid[j];
+            flattenedGrid[j] = temp;
+        }
+        return flattenedGrid;
+    }
 
     public int getX(int position) { return position % x; }
     public int getY(int position) { return position / x; }
 
-    public int evaluateTwoMachines(ValuesBetweenTwoMachines valuesBetweenTwoMachines, int[] machinesPositions) {
-        int position1 = machinesPositions[valuesBetweenTwoMachines.id1];
-        int position2 = machinesPositions[valuesBetweenTwoMachines.id2];
-        int x1 = getX(position1), y1 = getY(position1);
-        int x2 = getX(position2), y2 = getY(position2);
-        int D = Math.abs(x1 - x2) + Math.abs(y1 - y2);
-        return D * valuesBetweenTwoMachines.getCostTimesFlow();
+    public int evaluateGrid(int[] grid) {
+        int sum = 0;
+        for (int position1 = 0; position1 < grid.length; position1++) {
+            int id1 = grid[position1];
+            if(id1 != -1) {
+                int x1 = getX(position1), y1 = getY(position1);
+
+                for (int position2 = position1 + 1; position2 < grid.length; position2++) {
+                    int id2 = grid[position2];
+                    if(id2 != -1) {
+                        int x2 = getX(position2), y2 = getY(position2);
+                        int D = Math.abs(x1 - x2) + Math.abs(y1 - y2);
+                        sum += D * partialMultiplicationForIds[id1][id2];
+                    }
+                }
+            }
+        }
+        return sum;
     }
 
-    private Stream<Integer> getEvaluationForEachMachine(int[] machinesPositions) {
-        return betweenMachinesVals.stream().map(elem -> evaluateTwoMachines(elem, machinesPositions));
-    }
+//    public int evaluateTwoMachines(ValuesBetweenTwoMachines valuesBetweenTwoMachines, int[] machinesPositions) {
+//        int position1 = machinesPositions[valuesBetweenTwoMachines.id1];
+//        int position2 = machinesPositions[valuesBetweenTwoMachines.id2];
+//        int x1 = getX(position1), y1 = getY(position1);
+//        int x2 = getX(position2), y2 = getY(position2);
+//        int D = Math.abs(x1 - x2) + Math.abs(y1 - y2);
+//        return D * valuesBetweenTwoMachines.getCostTimesFlow();
+//    }
 
-    public int evaluateMachinesPositions(int[] machinesPositions) {
-        return getEvaluationForEachMachine(machinesPositions).reduce(0, Integer::sum);
-    }
+//    private Stream<Integer> getEvaluationForEachMachine(int[] machinesPositions) {
+//        return betweenMachinesVals.stream().map(elem -> evaluateTwoMachines(elem, machinesPositions));
+//    }
+
+//    public int evaluateMachinesPositions(int[] machinesPositions) {
+//        return getEvaluationForEachMachine(machinesPositions).reduce(0, Integer::sum);
+//    }
 
     // -----------------------------------------------------------------------------------------------------------------
 
 
-    public ArrayList<ValuesBetweenTwoMachines> getAllMachinesVals() {
-        return betweenMachinesVals;
-    }
+//    public ArrayList<ValuesBetweenTwoMachines> getAllMachinesVals() {
+//        return betweenMachinesVals;
+//    }
 
     @Override
     public String toString() {
@@ -100,19 +165,35 @@ public class Factory {
                 ",\n\trelations=" + betweenMachinesVals + '}';
     }
 
-    public void displayMachinesPositions(int[] population) {
-        Integer[][] grid = new Integer[x][y];
-        for (int i = 0; i < population.length; i++) {
-            var position = population[i];
-            grid[getX(position)][getY(position)] = i;
-        }
+//    public void displayMachinesPositions(int[] population) {
+//        Integer[][] grid = new Integer[x][y];
+//        for (int i = 0; i < population.length; i++) {
+//            var position = population[i];
+//            grid[getX(position)][getY(position)] = i;
+//        }
+//
+//        for (var row: grid) {
+//            System.out.print("\n| ");
+//            for (var element : row) {
+//                if (element != null) { System.out.printf("%2d", element); }
+//                else { System.out.print("  "); }
+//                System.out.print(" | ");
+//            }
+//        }
+//    }
 
-        for (var row: grid) {
-            System.out.print("\n| ");
-            for (var element : row) {
-                if (element != null) { System.out.printf("%2d", element); }
-                else { System.out.print("  "); }
-                System.out.print(" | ");
+    public void displayGrid(int[] grid) {
+        System.out.print(" | ");
+        for (int i = 0; i < grid.length; i++) {
+            if (grid[i] == -1) {
+                System.out.print("  ");
+            }
+            else {
+                System.out.printf("%2d", grid[i]);
+            }
+            System.out.print(" | ");
+            if((i + 1) % x == 0) {
+                System.out.print("\n | ");
             }
         }
     }
