@@ -14,8 +14,8 @@ public class Factory {
 
     public Factory(String instanceType, String folderPath) {
         this.instanceType = instanceType;
-        this.numberOfMachines = FactoryValues.numbOfMachines.get(instanceType);
-        var factorySize = FactoryValues.sizes.get(instanceType);
+        this.numberOfMachines = FactorySetupVals.numbOfMachines.get(instanceType);
+        var factorySize = FactorySetupVals.sizes.get(instanceType);
         this.x = factorySize[0];
         this.y = factorySize[1];
         gridSize = x * y;
@@ -30,8 +30,8 @@ public class Factory {
     }
 
     private void setMachinesValues(String folderPath) {
-        int[][] flow = ReadJson.getData(folderPath, instanceType, FactoryValues.flow);
-        int[][] cost = ReadJson.getData(folderPath, instanceType, FactoryValues.cost);
+        int[][] flow = ReadJson.getData(folderPath, instanceType, FactorySetupVals.flow);
+        int[][] cost = ReadJson.getData(folderPath, instanceType, FactorySetupVals.cost);
         for (int[] ints : flow) {
             var id1 = ints[0];
             var id2 = ints[1];
@@ -112,6 +112,39 @@ public class Factory {
                 else { System.out.print("  "); }
                 System.out.print(" | ");
             }
+        }
+    }
+
+    public static class ValuesBetweenTwoMachines {
+        public final int id1, id2;
+        private int flow, cost;
+
+        public ValuesBetweenTwoMachines(int id1, int id2, int flow, int cost) {
+            this.id1 = id1;
+            this.id2 = id2;
+            this.flow = flow;
+            this.cost = cost;
+        }
+
+        public void setCost(int cost) {
+            this.cost = cost;
+        }
+
+        public void setFlow(int flow) {
+            this.flow = flow;
+        }
+
+        public int getCost() {
+            return cost;
+        }
+
+        public int getFlow() {
+            return flow;
+        }
+
+        @Override
+        public String toString() {
+            return "<" + id1 + "," + id2 + "> => D*" + flow + "*" + cost + "";
         }
     }
 }

@@ -1,6 +1,6 @@
 import java.util.HashMap;
 
-public class FactoryValues {
+public class FactorySetupVals {
     public static final String EASY = "easy", FLAT = "flat", HARD = "hard";
     public static final String cost = "cost", flow = "flow";
     public static final HashMap<String, int[]> sizes = new HashMap<>() {

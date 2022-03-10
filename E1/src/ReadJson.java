@@ -9,12 +9,12 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class ReadJson {
-    private static final String[] instanceTypes = new String[]{FactoryValues.EASY, FactoryValues.FLAT, FactoryValues.HARD};
-    private static final String[] dataTypes = new String[]{FactoryValues.cost, FactoryValues.flow};
+    private static final String[] instanceTypes = new String[]{FactorySetupVals.EASY, FactorySetupVals.FLAT, FactorySetupVals.HARD};
+    private static final String[] dataTypes = new String[]{FactorySetupVals.cost, FactorySetupVals.flow};
     private static final HashMap<String, String[]> dataTypeElementSubames = new HashMap<>() {
         {
-            put(FactoryValues.cost, new String[]{"source", "dest", "cost"});
-            put(FactoryValues.flow, new String[]{"source", "dest", "amount"});
+            put(FactorySetupVals.cost, new String[]{"source", "dest", "cost"});
+            put(FactorySetupVals.flow, new String[]{"source", "dest", "amount"});
         }
     };
     private static final String FILE_TYPE = "json";
