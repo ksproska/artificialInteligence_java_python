@@ -96,7 +96,7 @@ public class Factory {
 
     @Override
     public String toString() {
-        return "zad1.Factory {grid:" + x + "x" + y + ", machines:" + numberOfMachines +
+        return "Factory " + instanceEnum + " {grid:" + x + "x" + y + ", machines:" + numberOfMachines +
                 ", relations=" + betweenMachinesVals + '}';
     }
 
