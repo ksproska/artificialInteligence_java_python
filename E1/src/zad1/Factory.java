@@ -16,8 +16,8 @@ public class Factory {
 
     public Factory(InstanceEnum instanceEnum, String folderPath) {
         this.instanceEnum = instanceEnum;
-        this.numberOfMachines = FactorySetupVals.numbOfMachines.get(instanceEnum);
-        var factorySize = FactorySetupVals.sizes.get(instanceEnum);
+        this.numberOfMachines = FactorySetupVals.getNumberOfMachines(instanceEnum);
+        var factorySize = FactorySetupVals.getSize(instanceEnum);
         this.x = factorySize[0];
         this.y = factorySize[1];
         gridSize = x * y;

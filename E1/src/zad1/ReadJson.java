@@ -32,7 +32,12 @@ public class ReadJson {
             throw new IllegalArgumentException(errorMessage);
         }
         // reading file
-        String filename = String.format("%s\\%s_%s.%s", folderPath, FactorySetupVals.instanceTypeStringHashMap.get(instanceEnum), FactorySetupVals.dataTypeStringHashMap.get(dataEnum), FILE_TYPE);
+        String filename = String.format("%s\\%s_%s.%s",
+                folderPath,
+                FactorySetupVals.getInstanceEnumString(instanceEnum),
+                FactorySetupVals.getDataEnumString(dataEnum),
+                FILE_TYPE);
+
         try (FileReader reader = new FileReader(filename)) {
             return getValsFromJson(reader, dataEnum);
         }
