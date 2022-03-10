@@ -11,13 +11,13 @@ public class Factory {
     public final int x, y;
     public final int gridSize;
     public final int numberOfMachines;
-    public final FactorySetupVals.InstanceType instanceType;
+    public final InstanceEnum instanceEnum;
     private final ArrayList<ValuesBetweenTwoMachines> betweenMachinesVals = new ArrayList<>();
 
-    public Factory(FactorySetupVals.InstanceType instanceType, String folderPath) {
-        this.instanceType = instanceType;
-        this.numberOfMachines = FactorySetupVals.numbOfMachines.get(instanceType);
-        var factorySize = FactorySetupVals.sizes.get(instanceType);
+    public Factory(InstanceEnum instanceEnum, String folderPath) {
+        this.instanceEnum = instanceEnum;
+        this.numberOfMachines = FactorySetupVals.numbOfMachines.get(instanceEnum);
+        var factorySize = FactorySetupVals.sizes.get(instanceEnum);
         this.x = factorySize[0];
         this.y = factorySize[1];
         gridSize = x * y;
@@ -32,8 +32,8 @@ public class Factory {
     }
 
     private void setMachinesValues(String folderPath) {
-        int[][] flow = ReadJson.getData(folderPath, instanceType, FactorySetupVals.DataType.FLOW);
-        int[][] cost = ReadJson.getData(folderPath, instanceType, FactorySetupVals.DataType.COST);
+        int[][] flow = ReadJson.getData(folderPath, instanceEnum, DataEnum.FLOW);
+        int[][] cost = ReadJson.getData(folderPath, instanceEnum, DataEnum.COST);
         for (int[] ints : flow) {
             var id1 = ints[0];
             var id2 = ints[1];

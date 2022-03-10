@@ -12,7 +12,7 @@ class FactoryTest {
 
     @Test
     void FactoryGetXYTest() {
-        var hardF = new Factory(FactorySetupVals.InstanceType.HARD, folderPath); // 5x6
+        var hardF = new Factory(InstanceEnum.HARD, folderPath); // 5x6
 
         Assertions.assertEquals(hardF.getX(13), 3);
         Assertions.assertEquals(hardF.getY(13), 2);
@@ -32,7 +32,7 @@ class FactoryTest {
 
     @Test
     void FactoryEvaluateMachinesTest() {
-        var easyF = new Factory(FactorySetupVals.InstanceType.EASY, folderPath); // 3x3
+        var easyF = new Factory(InstanceEnum.EASY, folderPath); // 3x3
         var initial = IntStream.range(0, 10).toArray();
 
         int calculate1 = easyF.evaluateTwoMachines(new Factory.ValuesBetweenTwoMachines(0, 1, 3, 4), initial);
@@ -50,7 +50,7 @@ class FactoryTest {
 
     @Test
     void EasyLoadingTest() {
-        var factory = new Factory(FactorySetupVals.InstanceType.EASY, folderPath);
+        var factory = new Factory(InstanceEnum.EASY, folderPath);
         var machinesVals = factory.getAllMachinesVals();
         var machine0 = machinesVals.get(0);
         var machine5 = machinesVals.get(5);
@@ -74,7 +74,7 @@ class FactoryTest {
 
     @Test
     void FlatLoadingTest() {
-        var factory = new Factory(FactorySetupVals.InstanceType.FLAT, folderPath);
+        var factory = new Factory(InstanceEnum.FLAT, folderPath);
         var machinesVals = factory.getAllMachinesVals();
         var machine0 = machinesVals.get(0);
         var machine5 = machinesVals.get(5);
@@ -98,7 +98,7 @@ class FactoryTest {
 
     @Test
     void HardLoadingTest() {
-        var factory = new Factory(FactorySetupVals.InstanceType.HARD, folderPath);
+        var factory = new Factory(InstanceEnum.HARD, folderPath);
         var machinesVals = factory.getAllMachinesVals();
         var machine0 = machinesVals.get(0);
         var machine5 = machinesVals.get(5);
@@ -122,17 +122,17 @@ class FactoryTest {
 
     @Test
     void FactoryEvaluatePopulationTest() {
-        var easyF = new Factory(FactorySetupVals.InstanceType.EASY, folderPath);
+        var easyF = new Factory(InstanceEnum.EASY, folderPath);
         var initial = IntStream.range(0, 10).toArray();
         int calculate1 = easyF.evaluatePopulation(initial);
         Assertions.assertEquals(calculate1, 7664);
 
-        var flatF = new Factory(FactorySetupVals.InstanceType.FLAT, folderPath);
+        var flatF = new Factory(InstanceEnum.FLAT, folderPath);
         initial = IntStream.range(0, 12).toArray();
         calculate1 = flatF.evaluatePopulation(initial);
         Assertions.assertEquals(calculate1, 15865);
 
-        var hardF = new Factory(FactorySetupVals.InstanceType.HARD, folderPath);
+        var hardF = new Factory(InstanceEnum.HARD, folderPath);
         initial = IntStream.range(0, 24).toArray();
         calculate1 = hardF.evaluatePopulation(initial);
         Assertions.assertEquals(calculate1, 38625);
@@ -140,7 +140,7 @@ class FactoryTest {
 
     @Test
     void InitPopulationTest() {
-        var factory = new Factory(FactorySetupVals.InstanceType.HARD, folderPath);
+        var factory = new Factory(InstanceEnum.HARD, folderPath);
         var initial = factory.createInitMachinesPositions();
         var sorted = Arrays.stream(initial).sorted();
         Assertions.assertTrue(sorted.toArray()[0] >= 0);
