@@ -1,6 +1,10 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 class FactoryTest {
@@ -132,5 +136,22 @@ class FactoryTest {
         initial = IntStream.range(0, 24).toArray();
         calculate1 = hardF.evaluatePopulation(initial);
         Assertions.assertEquals(calculate1, 38625);
+    }
+
+    @Test
+    void InitPopulationTest() {
+        var factory = new Factory(FactoryValues.HARD, folderPath);
+        var initial = factory.createInitMachinesPositions();
+        var sorted = Arrays.stream(initial).sorted();
+        Assertions.assertTrue(sorted.toArray()[0] >= 0);
+        sorted = Arrays.stream(initial).sorted();
+        Assertions.assertTrue(sorted.toArray()[initial.length - 1] < factory.gridSize);
+
+        var noDuplicates = new HashSet<Integer>();
+        for (int i : initial) {
+            noDuplicates.add(i);
+        }
+
+        Assertions.assertEquals(noDuplicates.size(), initial.length);
     }
 }
