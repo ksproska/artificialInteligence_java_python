@@ -32,7 +32,7 @@ public class ReadJson {
         // reading file
         String filename = String.format("%s\\%s_%s.%s", folderPath, instanceType, dataType, FILE_TYPE);
         try (FileReader reader = new FileReader(filename)) {
-            return getTableOfIntTablesFromJson(reader, dataType);
+            return getValsFromJson(reader, dataType);
         }
         catch (IOException | ParseException e) {
             String errorMessage = String.format("Problem reading file \"%s\"", filename);
@@ -41,7 +41,7 @@ public class ReadJson {
         return null;
     }
 
-    private static int[][] getTableOfIntTablesFromJson(FileReader reader, String dataType) throws IOException, ParseException {
+    private static int[][] getValsFromJson(FileReader reader, String dataType) throws IOException, ParseException {
         JSONParser jsonParser = new JSONParser();
         Object parsedReader = jsonParser.parse(reader);
         JSONArray elementsList = (JSONArray) parsedReader;
