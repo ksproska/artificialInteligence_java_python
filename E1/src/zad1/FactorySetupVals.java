@@ -1,3 +1,5 @@
+package zad1;
+
 import java.util.HashMap;
 
 public class FactorySetupVals {

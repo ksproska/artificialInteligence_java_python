@@ -1,3 +1,5 @@
+package zad1;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -94,7 +96,7 @@ public class Factory {
 
     @Override
     public String toString() {
-        return "Factory {grid:" + x + "x" + y + ", machines:" + numberOfMachines +
+        return "zad1.Factory {grid:" + x + "x" + y + ", machines:" + numberOfMachines +
                 ", relations=" + betweenMachinesVals + '}';
     }
 

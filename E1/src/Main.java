@@ -1,3 +1,6 @@
+import zad1.Factory;
+import zad1.FactorySetupVals;
+
 public class Main {
     public static void main(String[] args) {
         String folderPath = "F:\\sztuczna_inteligencja\\flo_dane_v1.2";
