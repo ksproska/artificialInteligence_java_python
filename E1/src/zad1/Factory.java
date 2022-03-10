@@ -97,7 +97,7 @@ public class Factory {
     @Override
     public String toString() {
         return "Factory " + instanceEnum + " {grid:" + x + "x" + y + ", machines:" + numberOfMachines +
-                ", relations=" + betweenMachinesVals + '}';
+                ",\n\trelations=" + betweenMachinesVals + '}';
     }
 
     public void displayPopulation(int[] population) {
