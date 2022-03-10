@@ -7,9 +7,10 @@ public class Main {
         Factory factory = new Factory(InstanceEnum.EASY, folderPath);
         System.out.println(factory);
 
-        var initPopulation = factory.createInitMachinesPositions();
-        factory.displayPopulation(initPopulation);
-        var eval = factory.evaluatePopulation(initPopulation);
+        int[] initMachinesPositions = factory.createInitMachinesPositions();
+        factory.displayMachinesPositions(initMachinesPositions);
+
+        int eval = factory.evaluateMachinesPositions(initMachinesPositions);
         System.out.printf("\nEvaluated: %s", eval);
     }
 }

@@ -124,17 +124,17 @@ class FactoryTest {
     void FactoryEvaluatePopulationTest() {
         var easyF = new Factory(InstanceEnum.EASY, folderPath);
         var initial = IntStream.range(0, 10).toArray();
-        int calculate1 = easyF.evaluatePopulation(initial);
+        int calculate1 = easyF.evaluateMachinesPositions(initial);
         Assertions.assertEquals(calculate1, 7664);
 
         var flatF = new Factory(InstanceEnum.FLAT, folderPath);
         initial = IntStream.range(0, 12).toArray();
-        calculate1 = flatF.evaluatePopulation(initial);
+        calculate1 = flatF.evaluateMachinesPositions(initial);
         Assertions.assertEquals(calculate1, 15865);
 
         var hardF = new Factory(InstanceEnum.HARD, folderPath);
         initial = IntStream.range(0, 24).toArray();
-        calculate1 = hardF.evaluatePopulation(initial);
+        calculate1 = hardF.evaluateMachinesPositions(initial);
         Assertions.assertEquals(calculate1, 38625);
     }
 

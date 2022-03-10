@@ -83,7 +83,7 @@ public class Factory {
         return betweenMachinesVals.stream().map(elem -> evaluateTwoMachines(elem, machinesPositions));
     }
 
-    public int evaluatePopulation(int[] machinesPositions) {
+    public int evaluateMachinesPositions(int[] machinesPositions) {
         return getEvaluationForEachMachine(machinesPositions).reduce(0, Integer::sum);
     }
 
@@ -100,7 +100,7 @@ public class Factory {
                 ",\n\trelations=" + betweenMachinesVals + '}';
     }
 
-    public void displayPopulation(int[] population) {
+    public void displayMachinesPositions(int[] population) {
         Integer[][] grid = new Integer[x][y];
         for (int i = 0; i < population.length; i++) {
             var position = population[i];
