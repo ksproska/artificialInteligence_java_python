@@ -166,4 +166,12 @@ public class Factory {
             return costTimesFlow;
         }
     }
+
+    public int[][] getRandomGeneration(int N) {
+        int[][] generation = new int[N][];
+        for (int i = 0; i < generation.length; i++) {
+            generation[i] = createInitGrid();
+        }
+        return generation;
+    }
 }
