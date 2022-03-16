@@ -16,50 +16,36 @@ public class Selection {
         this.factory = factory;
     }
 
-    private TreeMap<Float, Integer> getDistributionTreeMap(int[][] generation) {
+    public double[] reverseEvaluation(int[][] generation) {
+        double[] evaluationForEach = Arrays.stream(getEvaluationForEach(generation)).asDoubleStream().toArray();
+        var maxVal = Arrays.stream(evaluationForEach).max().getAsDouble();
+        for (int i = 0; i < evaluationForEach.length; i++) {
+            evaluationForEach[i] = (-evaluationForEach[i]) + maxVal + 1;
+        }
+        return evaluationForEach;
+    }
+
+    public TreeMap<Float, Integer> getDistributionTreeMap(int[][] generation) {
         var treeMap = new TreeMap<Float, Integer>();
-        int[] evaluationForEach = getEvaluationForEach(generation);
-        int sumAll = Arrays.stream(evaluationForEach).sum();
-        float[] distribution = new float[generation.length];
-        distribution[0] = (float) evaluationForEach[0] / sumAll;
-        treeMap.put(distribution[0], 0);
+        var evaluationForEach = reverseEvaluation(generation);
+
+        double sumAll = Arrays.stream(evaluationForEach).sum();
+        double[] distribution = new double[generation.length];
+        distribution[0] = evaluationForEach[0] / sumAll;
+        treeMap.put((float) distribution[0], 0);
         for (int i = 0; i < distribution.length - 1; i++) {
             distribution[i + 1] = ((float) evaluationForEach[i + 1] / sumAll) + distribution[i];
-            treeMap.put(distribution[i + 1], i + 1);
+            treeMap.put((float) distribution[i + 1], i + 1);
         }
         return treeMap;
     }
 
-    private int[] getEvaluationForEach(int[][] generation) {
+    public int[] getEvaluationForEach(int[][] generation) {
         int[] evaluationForEach = new int[generation.length];
         for (int i = 0; i < generation.length; i++) {
             evaluationForEach[i] = factory.evaluateGrid(generation[i]);
         }
         return evaluationForEach;
-    }
-
-    private float[] getAllDistribution(int[][] generation) {
-        int[] evaluationForEach = getEvaluationForEach(generation);
-        int sumAll = Arrays.stream(evaluationForEach).sum();
-        float[] distribution = new float[generation.length];
-        distribution[0] = (float) evaluationForEach[0] / sumAll;
-        for (int i = 0; i < distribution.length - 1; i++) {
-            distribution[i + 1] = ((float) evaluationForEach[i + 1] / sumAll) + distribution[i];
-        }
-        return distribution;
-    }
-
-    private static HashSet<Integer> getRandomIntsDistribution(float[] probabilities, int numberOfChosenInts) {
-        HashSet<Integer> selectedInts = new HashSet<>();
-        while (numberOfChosenInts > selectedInts.size()) {
-            var randFloat = random.nextFloat();
-            int chosenIndex = probabilities.length - 1;
-            while (chosenIndex > 0 && randFloat < probabilities[chosenIndex]) {
-                chosenIndex ++;
-            }
-            selectedInts.add(chosenIndex + 1);
-        }
-        return selectedInts;
     }
 
     private static HashSet<Integer> getRandomIntsDistributionTreeMap(TreeMap<Float, Integer> treeMap, int numberOfChosenInts) {
@@ -106,8 +92,6 @@ public class Selection {
     }
 
     private int[] selectionRoulette(int[][] generation, int N) {
-//        float[] distribution = getAllDistribution(generation);
-//        HashSet<Integer> chosenInts =  getRandomIntsDistribution(distribution, N);
         var distributionTreeMap = getDistributionTreeMap(generation);
         var chosenInts = getRandomIntsDistributionTreeMap(distributionTreeMap, N);
         return getBestForIndexes(generation, chosenInts);
@@ -131,7 +115,7 @@ class SelectionTest {
     static int[][] generation;
     @BeforeAll
     public static void beforeAll() {
-        factory = new Factory(InstanceEnum.TEST, folderPath); // 5x6
+        factory = new Factory(InstanceEnum.HARD, folderPath); // 5x6
         selection = new Selection(factory);
         generation = factory.getRandomGeneration(1000);
     }
@@ -141,7 +125,7 @@ class SelectionTest {
         for (var N : new int[]{10, 50, 100, 500, 1000}){
             var selected = selection.selection(SelectionEnum.TOURNAMENT, generation, N);
             System.out.println(factory.evaluateGrid(selected));
-            System.out.println(Arrays.toString(selected));
+//            System.out.println(Arrays.toString(selected));
         }
     }
 
@@ -150,7 +134,7 @@ class SelectionTest {
         for (var N : new int[]{10, 50, 100, 500, 1000}){
             var selected = selection.selection(SelectionEnum.ROULETTE, generation, N);
             System.out.println(factory.evaluateGrid(selected));
-            System.out.println(Arrays.toString(selected));
+//            System.out.println(Arrays.toString(selected));
         }
     }
 }
