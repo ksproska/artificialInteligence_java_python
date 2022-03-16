@@ -14,6 +14,7 @@ public class FactorySetupVals{
             put(InstanceEnum.EASY, "easy");
             put(InstanceEnum.FLAT, "flat");
             put(InstanceEnum.HARD, "hard");
+            put(InstanceEnum.TEST, "test");
         }
     };
     private static final HashMap<InstanceEnum, int[]> sizes = new HashMap<>() {
@@ -21,6 +22,7 @@ public class FactorySetupVals{
             put(InstanceEnum.EASY, new int[]{3, 3});
             put(InstanceEnum.FLAT, new int[]{1, 12});
             put(InstanceEnum.HARD, new int[]{5, 6});
+            put(InstanceEnum.TEST, new int[]{1, 8});
         }
     };
     private static final HashMap<InstanceEnum, Integer> numbOfMachines = new HashMap<>() {
@@ -28,6 +30,7 @@ public class FactorySetupVals{
             put(InstanceEnum.EASY, 9);
             put(InstanceEnum.FLAT, 12);
             put(InstanceEnum.HARD, 24);
+            put(InstanceEnum.TEST, 6);
         }
     };
 
