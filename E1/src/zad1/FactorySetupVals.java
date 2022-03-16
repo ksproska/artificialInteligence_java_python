@@ -22,7 +22,7 @@ public class FactorySetupVals{
             put(InstanceEnum.EASY, new int[]{3, 3});
             put(InstanceEnum.FLAT, new int[]{1, 12});
             put(InstanceEnum.HARD, new int[]{5, 6});
-            put(InstanceEnum.TEST, new int[]{1, 8});
+            put(InstanceEnum.TEST, new int[]{3, 2});
         }
     };
     private static final HashMap<InstanceEnum, Integer> numbOfMachines = new HashMap<>() {
