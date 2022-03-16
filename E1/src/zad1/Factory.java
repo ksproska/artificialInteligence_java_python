@@ -1,10 +1,8 @@
 package zad1;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Random;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 
 public class Factory {
@@ -54,35 +52,6 @@ public class Factory {
             this.find(id1, id2).setCost(machinesCost);
         }
     }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-
-//    public int[] createInitMachinesPositions() {
-//        // index = machine id
-//        // value = position of the machine in grid, (grid as a flattened matrix)
-//
-//        int[] grid = IntStream.range(0, gridSize).toArray();
-//        for (int i = gridSize-1; i > 0; i--) {
-//            int j = random.nextInt(i+1);
-//            int temp = grid[i];
-//            grid[i] = grid[j];
-//            grid[j] = temp;
-//        }
-//        return Arrays.copyOfRange(grid, 0, numberOfMachines);
-//    }
-//
-//    public int[] machinesPositionsToGrid(int[] population) {
-//        int[] grid = new int[gridSize];
-//        Arrays.fill(grid, -1);
-//        for (int i = 0; i < population.length; i++) {
-//            var position = population[i];
-//            grid[position] = i;
-//        }
-//        return grid;
-//    }
-
-    // -----------------------------------------------------------------------------------------------------------------
 
     public static <T> T[] shuffle(T[] array) {
         for (int i = array.length-1; i > 0; i--) {
@@ -135,52 +104,11 @@ public class Factory {
         return sum;
     }
 
-//    public int evaluateTwoMachines(ValuesBetweenTwoMachines valuesBetweenTwoMachines, int[] machinesPositions) {
-//        int position1 = machinesPositions[valuesBetweenTwoMachines.id1];
-//        int position2 = machinesPositions[valuesBetweenTwoMachines.id2];
-//        int x1 = getX(position1), y1 = getY(position1);
-//        int x2 = getX(position2), y2 = getY(position2);
-//        int D = Math.abs(x1 - x2) + Math.abs(y1 - y2);
-//        return D * valuesBetweenTwoMachines.getCostTimesFlow();
-//    }
-
-//    private Stream<Integer> getEvaluationForEachMachine(int[] machinesPositions) {
-//        return betweenMachinesVals.stream().map(elem -> evaluateTwoMachines(elem, machinesPositions));
-//    }
-
-//    public int evaluateMachinesPositions(int[] machinesPositions) {
-//        return getEvaluationForEachMachine(machinesPositions).reduce(0, Integer::sum);
-//    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-
-
-//    public ArrayList<ValuesBetweenTwoMachines> getAllMachinesVals() {
-//        return betweenMachinesVals;
-//    }
-
     @Override
     public String toString() {
         return "Factory " + instanceEnum + " {grid:" + x + "x" + y + ", machines:" + numberOfMachines +
                 ",\n\trelations=" + betweenMachinesVals + '}';
     }
-
-//    public void displayMachinesPositions(int[] population) {
-//        Integer[][] grid = new Integer[x][y];
-//        for (int i = 0; i < population.length; i++) {
-//            var position = population[i];
-//            grid[getX(position)][getY(position)] = i;
-//        }
-//
-//        for (var row: grid) {
-//            System.out.print("\n| ");
-//            for (var element : row) {
-//                if (element != null) { System.out.printf("%2d", element); }
-//                else { System.out.print("  "); }
-//                System.out.print(" | ");
-//            }
-//        }
-//    }
 
     public void displayGrid(int[] grid) {
         System.out.print(" | ");
