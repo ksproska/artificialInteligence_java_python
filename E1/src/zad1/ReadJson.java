@@ -11,7 +11,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class ReadJson {
-    private static final InstanceEnum[] INSTANCE_ENUMS = new InstanceEnum[]{InstanceEnum.EASY, InstanceEnum.FLAT, InstanceEnum.HARD};
+    private static final InstanceEnum[] INSTANCE_ENUMS = new InstanceEnum[]{InstanceEnum.EASY, InstanceEnum.FLAT, InstanceEnum.HARD, InstanceEnum.TEST};
     private static final DataEnum[] DATA_ENUMS = new DataEnum[]{DataEnum.COST, DataEnum.FLOW};
     private static final HashMap<DataEnum, String[]> dataTypeElementSubames = new HashMap<>() {
         {
