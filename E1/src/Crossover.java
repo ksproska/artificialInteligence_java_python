@@ -2,12 +2,56 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class Crossover {
-    public static int[] partiallyMatchedCrossover(int[] parent1, int[] parent2, int startInx, int segmentLength) {
+    static Random random = new Random();
+    public static int[] pmxRandom(int[] parent1, int[] parent2) {
+        var startInx = random.nextInt(parent1.length);
+        var segmentLen = parent1.length/4;
+        if(startInx + segmentLen > parent1.length) {
+            segmentLen = parent1.length - startInx;
+        }
+        return partiallyMatchedCrossover(parent1, parent2, startInx, segmentLen);
+    }
+
+    public static int[] noRepetitions(int[] parent) {
+        int[] newParent = new int[parent.length];
+        int zeroCount = 0;
+        for (int i = 0; i < parent.length; i++) {
+            newParent[i] = parent[i];
+            if (parent[i] == -1) {
+                zeroCount += 1;
+                newParent[i] -= zeroCount;
+            }
+        }
+        return newParent;
+    }
+    public static int[] toRepetitions(int[] parent) {
+        int[] newParent = new int[parent.length];
+        for (int i = 0; i < parent.length; i++) {
+            if (parent[i] >= 0) {
+                newParent[i] = parent[i];
+            }
+            else {
+                newParent[i] = -1;
+            }
+        }
+        return newParent;
+    }
+
+    public static int[] partiallyMatchedCrossover(int[] parent1Repetitions, int[] parent2Repetitions, int startInx, int segmentLength) {
+        var parent1 = noRepetitions(parent1Repetitions);
+        var parent2 = noRepetitions(parent2Repetitions);
         int[] child = new int[parent1.length];
         Arrays.fill(child, -1);
         if (segmentLength >= 0) System.arraycopy(parent1, startInx, child, startInx, segmentLength);
+//        var p1c = parent1.clone();
+//        Arrays.sort(p1c);
+//        System.out.println(Arrays.toString(p1c));
+//        System.out.println(Arrays.toString(parent2));
+//        System.out.println(startInx);
+//        System.out.println(segmentLength);
 
         for (int i = 0; i < segmentLength; i++) {
             int oldInx = i + startInx;
@@ -17,6 +61,7 @@ public class Crossover {
                 while (child[oldInx] != -1) {
                     List<Integer> l2 =  Arrays.stream(parent2).boxed().toList();
                     oldInx = l2.indexOf(parent1[oldInx]);
+//                    System.out.println(oldInx);
                 }
                 child[oldInx] = valToAdd;
             }
@@ -26,7 +71,8 @@ public class Crossover {
                 child[i] = parent2[i];
             }
         }
-        return child;
+        return toRepetitions(child);
+//        return child;
     }
 }
 
@@ -49,5 +95,26 @@ class CrossoverTest {
         int startInx = 3, segmentLen = 2;
 
         Assertions.assertArrayEquals(Crossover.partiallyMatchedCrossover(parent1, parent2, startInx, segmentLen), child);
+    }
+
+    @Test
+    public void partiallyMatchedCrossoverTest3() {
+        int[] parent1 = new int[]{1, 2, 3, 5, 4, 6};
+        int[] parent2 = new int[]{4, 3, 2, 6, 1, 5};
+        int[] child =   new int[]{4, 2, 3, 6, 1, 5};
+        int startInx = 1, segmentLen = 2;
+
+        Assertions.assertArrayEquals(Crossover.partiallyMatchedCrossover(parent1, parent2, startInx, segmentLen), child);
+    }
+
+    @Test
+    public void repetitionsReplacer() {
+        int[] parent = new int[]{1, 2, -1, 3, 5, -1, 4, 6, -1};
+        int[] parentNoReplacement = new int[]{1, 2, -2, 3, 5, -3, 4, 6, -4};
+
+        var replaced = Crossover.noRepetitions(parent);
+        System.out.println(Arrays.toString(replaced));
+        var normal = Crossover.toRepetitions(replaced);
+        System.out.println(Arrays.toString(normal));
     }
 }

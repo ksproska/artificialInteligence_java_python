@@ -99,4 +99,23 @@ public class Factory {
             }
         }
     }
+
+    public int[] getBest(int[][] generation) {
+        int[] selected = null;
+        int selectedEval = -1;
+        for (var gen : generation) {
+            if (selected == null) {
+                selected = gen;
+                selectedEval = evaluateGrid(selected);
+            }
+            else {
+                var newSelectedEval = evaluateGrid(gen);
+                if(newSelectedEval < selectedEval) {
+                    selected = gen;
+                    selectedEval = newSelectedEval;
+                }
+            }
+        }
+        return selected;
+    }
 }
