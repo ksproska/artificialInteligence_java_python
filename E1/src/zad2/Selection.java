@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Test;
 import zad1.Factory;
 import zad1.InstanceEnum;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Selection {
     private static final Random random = new Random();
@@ -110,33 +107,33 @@ public class Selection {
     }
 }
 
-class SelectionTest {
-    static String folderPath = "F:\\sztuczna_inteligencja\\flo_dane_v1.2";
-    static Factory factory;
-    static Selection selection;
-    static int[][] generation;
-    @BeforeAll
-    public static void beforeAll() {
-        factory = new Factory(InstanceEnum.HARD, folderPath); // 5x6
-        selection = new Selection(factory);
-        generation = factory.getRandomGeneration(1000);
-    }
-
-    @Test
-    public void testTournament() {
-        for (var N : new int[]{10, 50, 100, 500, 1000}){
-            var selected = selection.selection(SelectionEnum.TOURNAMENT, generation, N);
-            System.out.println(factory.evaluateGrid(selected));
-//            System.out.println(Arrays.toString(selected));
-        }
-    }
-
-    @Test
-    public void testRoulette() {
-        for (var N : new int[]{10, 50, 100, 500, 1000}){
-            var selected = selection.selection(SelectionEnum.ROULETTE, generation, N);
-            System.out.println(factory.evaluateGrid(selected));
-//            System.out.println(Arrays.toString(selected));
-        }
-    }
-}
+//class SelectionTest {
+//    static String folderPath = "F:\\sztuczna_inteligencja\\flo_dane_v1.2";
+//    static Factory factory;
+//    static Selection selection;
+//    static int[][] generation;
+//    @BeforeAll
+//    public static void beforeAll() {
+//        factory = new Factory(InstanceEnum.HARD, folderPath); // 5x6
+//        selection = new Selection(factory);
+//        generation = factory.getRandomGeneration(1000);
+//    }
+//
+//    @Test
+//    public void testTournament() {
+//        for (var N : new int[]{10, 50, 100, 500, 1000}){
+//            var selected = selection.selection(SelectionEnum.TOURNAMENT, generation, N);
+//            System.out.println(factory.evaluateGrid(selected));
+////            System.out.println(Arrays.toString(selected));
+//        }
+//    }
+//
+//    @Test
+//    public void testRoulette() {
+//        for (var N : new int[]{10, 50, 100, 500, 1000}){
+//            var selected = selection.selection(SelectionEnum.ROULETTE, generation, N);
+//            System.out.println(factory.evaluateGrid(selected));
+////            System.out.println(Arrays.toString(selected));
+//        }
+//    }
+//}
