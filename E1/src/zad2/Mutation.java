@@ -9,12 +9,14 @@ public class Mutation {
     private static final Random random = new Random();
 
     public static int[] mutate(int[] child) {
-        int[] newChild = child.clone();
         int first = random.nextInt(child.length), second = random.nextInt(child.length);
+        while(first == second) {
+            second = random.nextInt(child.length);
+        }
         int temp = child[first];
-        newChild[first] = child[second];
-        newChild[second] = temp;
-        return newChild;
+        child[first] = child[second];
+        child[second] = temp;
+        return child;
     }
 
 //    public static int[] mutate(int[] child, double percentage) {

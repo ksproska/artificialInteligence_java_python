@@ -1,5 +1,6 @@
 import zad1.Factory;
 import zad1.InstanceEnum;
+import zad2.Crossover;
 import zad2.Mutation;
 import zad2.Selection;
 import zad2.SelectionEnum;
@@ -34,10 +35,10 @@ public class GeneticAlgorithm {
                 nextGeneration.add(child);
                 if (factory.evaluateGrid(child) < factory.evaluateGrid(best)) {
                     best = child;
+                    System.out.println("Best: " + factory.evaluateGrid(best));
                 }
             }
             initialGeneration = nextGeneration.toArray(new int[][]{});
-            System.out.println("Best: " + factory.evaluateGrid(best));
         }
         System.out.println(factory.evaluateGrid(best));
     }
