@@ -1,3 +1,5 @@
+package zad2;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import zad1.Factory;
@@ -104,7 +106,7 @@ public class Selection {
         if(selectionEnum == SelectionEnum.TOURNAMENT) {
             return selectionTournament(generation, N);
         }
-        throw new IllegalArgumentException("SelectionEnum: " + selectionEnum + " is incorrect.");
+        throw new IllegalArgumentException("zad2.SelectionEnum: " + selectionEnum + " is incorrect.");
     }
 }
 

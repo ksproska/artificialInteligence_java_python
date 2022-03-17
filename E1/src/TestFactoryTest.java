@@ -3,6 +3,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import zad1.Factory;
 import zad1.InstanceEnum;
+import zad2.Selection;
 
 
 public class TestFactoryTest {

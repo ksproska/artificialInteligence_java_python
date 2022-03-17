@@ -1,7 +1,6 @@
 import zad1.Factory;
 import zad1.InstanceEnum;
 
-import java.util.Arrays;
 
 public class Main {
     public static int[] bestGridOutOfFirst(int n, Factory factory) {
