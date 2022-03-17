@@ -1,5 +1,6 @@
 package zad2;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -39,7 +40,22 @@ public class Mutation {
 
 class MutationTest {
     @Test
-    public void mutationTest() {
-        System.out.println(Arrays.toString(Mutation.mutate(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9})));
+    public void mutationTest1() {
+        var child = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        var childCopy = child.clone();
+        var mutated = Mutation.mutate(child);
+        int sumChange = 0;
+        int sumChangeCopy = 0;
+
+        for (int i = 0; i < child.length; i++) {
+            if(child[i] != mutated[i]) {
+                sumChange += 1;
+            }
+            if(childCopy[i] != mutated[i]) {
+                sumChangeCopy += 1;
+            }
+        }
+        Assertions.assertEquals(0, sumChange);
+        Assertions.assertEquals(2, sumChangeCopy);
     }
 }

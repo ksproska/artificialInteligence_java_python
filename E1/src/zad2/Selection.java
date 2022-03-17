@@ -90,15 +90,23 @@ public class Selection {
         return getBestForIndexes(generation, chosenInts);
     }
 
-    private int[] selectionRoulette(int[][] generation, int N) {
+    private int[] selectionRouletteAndTournament(int[][] generation, int N) {
         var distributionTreeMap = getDistributionTreeMap(generation);
         var chosenInts = getRandomIntsDistributionTreeMap(distributionTreeMap, N);
         return getBestForIndexes(generation, chosenInts);
     }
 
+    private int[] selectionRoulette(int[][] generation) {
+        var distributionTreeMap = getDistributionTreeMap(generation);
+        var randFloat = random.nextFloat();
+        float chosenKey = distributionTreeMap.tailMap(randFloat).firstKey();
+        return generation[distributionTreeMap.get(chosenKey)];
+    }
+
     public int[] selection(SelectionEnum selectionEnum, int[][] generation, int N) {
         if(selectionEnum == SelectionEnum.ROULETTE) {
-            return selectionRoulette(generation, N);
+//            return selectionRoulette(generation);
+            return selectionRouletteAndTournament(generation, N);
         }
         if(selectionEnum == SelectionEnum.TOURNAMENT) {
             return selectionTournament(generation, N);
@@ -107,18 +115,25 @@ public class Selection {
     }
 }
 
-//class SelectionTest {
-//    static String folderPath = "F:\\sztuczna_inteligencja\\flo_dane_v1.2";
-//    static Factory factory;
-//    static Selection selection;
-//    static int[][] generation;
-//    @BeforeAll
-//    public static void beforeAll() {
-//        factory = new Factory(InstanceEnum.HARD, folderPath); // 5x6
-//        selection = new Selection(factory);
-//        generation = factory.getRandomGeneration(1000);
-//    }
-//
+class SelectionTest {
+    static String folderPath = "F:\\sztuczna_inteligencja\\flo_dane_v1.2";
+    static Factory factory;
+    static Selection selection;
+    static int[][] generation;
+    @BeforeAll
+    public static void beforeAll() {
+        factory = new Factory(InstanceEnum.HARD, folderPath); // 5x6
+        selection = new Selection(factory);
+        generation = factory.getRandomGeneration(1000);
+    }
+
+    @Test
+    public void testDistribution() {
+        var tree = selection.getDistributionTreeMap(generation);
+        var treeKeys = tree.keySet();
+        Arrays.sort(treeKeys.toArray());
+    }
+
 //    @Test
 //    public void testTournament() {
 //        for (var N : new int[]{10, 50, 100, 500, 1000}){
@@ -136,4 +151,4 @@ public class Selection {
 ////            System.out.println(Arrays.toString(selected));
 //        }
 //    }
-//}
+}
