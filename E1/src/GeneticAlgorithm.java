@@ -14,21 +14,27 @@ public class GeneticAlgorithm {
         String folderPath = "F:\\sztuczna_inteligencja\\flo_dane_v1.2";
         Factory factory = new Factory(InstanceEnum.HARD, folderPath);
         Selection selection = new Selection(factory);
+        SelectionEnum selectionEnum = SelectionEnum.TOURNAMENT;
 
         var initialGeneration = factory.getRandomGeneration(20);
         var best = factory.getBest(initialGeneration);
 
-        while (factory.evaluateGrid(best) > 2000) {
+        while (true) {
             ArrayList<int[]> nextGeneration = new ArrayList<>();
-            for (int i = 0; i < initialGeneration.length; i++) {
-                var p1 = selection.selection(SelectionEnum.ROULETTE, initialGeneration, 5);
-                var p2 = selection.selection(SelectionEnum.ROULETTE, initialGeneration, 5);
+            for (int i = 0; i < initialGeneration.size(); i++) {
+                var p1 = selection.selection(selectionEnum, initialGeneration, 5);
+                var p2 = selection.selection(selectionEnum, initialGeneration, 5);
 
                 int[] child;
                 if (0.3 < random.nextDouble()) {
                     child = Crossover.partiallyMatchedCrossover(p1, p2,  random.nextInt(4), 5);
                 } else {
-                    child = factory.getBest(new int[][]{p1, p2}).clone();
+                    child = factory.getBest(new ArrayList<>(){
+                        {
+                            add(p1);
+                            add(p2);
+                        }
+                    }).clone();
                 }
                 child = Mutation.mutate(child);
 
@@ -38,9 +44,8 @@ public class GeneticAlgorithm {
                     System.out.println("Best: " + factory.evaluateGrid(best));
                 }
             }
-            initialGeneration = nextGeneration.toArray(new int[][]{});
+            initialGeneration = nextGeneration;
         }
-        System.out.println(factory.evaluateGrid(best));
     }
 
     public static void main(String[] args) throws Exception {

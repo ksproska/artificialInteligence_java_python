@@ -1,0 +1,50 @@
+- funkcja przystosowania najlepiej by zwracała double
+- operator -> problem minimalizacyjny (w ruletce)
+
+sprawozdanie:
+- bez wstępu (teorii)
+- cel: podanie wystarczająco informacji by móc odtworzyć nasze kroki
+- wprowadzenie elityzmu, zaproponowanie własnego operatora - opisywać
+- wszystkie własne pomysły/modyfikacje opisać
+
+1) AUTORSKIE PROPOZYCJE/MODYFIKACJE
+2) eskperymenty/opis badań
+2.1 opis celu (możemy w spr1 pominąć)
+2.2 stałe i zmienne - dużo różnych parametrów, np w postaci tabelki przedstawić wartości stałe, ZMIENIAĆ TYLKO JEDNĄ RZECZ NA EKSPERYMENT
+np lista stałe
+-> rozmiar populacji 100
+-> liczba pokoleń 50
+-> prawd krzyżowania 80%
+np zmienne:
+-> praw mutacji: 0.001, ...
+-> problem: easy/flat/hard
+
+WYNIKI:
+-> tabelki, wykresy, wnioski
+
+PODSUMOWANIE:
+-> działa dobrze dla, źle dla ...
+
+eksperymenty powtóżyć x10
+
+tabela 3...
+	problem...
+wartości
+.
+.
+.
+- można najlepsze wyniki pogrubić
+- tabele dla konkretnych wartości się stosuje, nas bardziej interesują trendy (a więc wykresy)
+
+opisy wyjresów:
+Rys 1.: dokładny opis pod wykresem dotyczący treści
+
+punkty można łączyć jeśli są elementy pośrednie
+
+y - przystosowanie
+x - pokolenie
+wartości najlepsze dla każdego pokolenia (lninia w dół)
+wartości dla najgorszego przystosowania (skacze ale spada)
+wartości uśrednione najlepszego i najgorszego
+
+! ZAPAMIĘTAĆ GDZIEŚ NAJLEPSZE ROZWIĄZANIE, przedstawiać najlepsze dla pokolenia, nie ogólnie naljepsze

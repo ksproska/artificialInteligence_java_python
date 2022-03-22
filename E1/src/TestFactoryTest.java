@@ -18,12 +18,14 @@ public class TestFactoryTest {
     static Selection selection;
 
     static int[] evaluations = new int[]{7, 5, 5, 9, 11};
-    static int[][] grids = new int[][] {
-            new int[]{0, 1, 2, 3, 4, 5},
-            new int[]{0, 1, 2, 5, 4, 3},
-            new int[]{0, 3, 4, 1, 2, 5},
-            new int[]{0, 4, 2, 5, 1, 3},
-            new int[]{0, 5, 3, 2, 4, 1}
+    static ArrayList<int[]> grids = new ArrayList<>() {
+        {
+            add(new int[]{0, 1, 2, 3, 4, 5});
+            add(new int[]{0, 1, 2, 5, 4, 3});
+            add(new int[]{0, 3, 4, 1, 2, 5});
+            add(new int[]{0, 4, 2, 5, 1, 3});
+            add(new int[]{0, 5, 3, 2, 4, 1});
+        }
     };
 
     @BeforeAll
@@ -35,7 +37,7 @@ public class TestFactoryTest {
     @Test
     public void evaluateGrid() {
         for (int i = 0; i < evaluations.length; i++) {
-            Assertions.assertEquals(evaluations[i], factory.evaluateGrid(grids[i]));
+            Assertions.assertEquals(evaluations[i], factory.evaluateGrid(grids.get(i)));
         }
     }
 

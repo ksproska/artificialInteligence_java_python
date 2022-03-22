@@ -2,6 +2,7 @@ package zad1;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -69,10 +70,11 @@ public class Factory {
         return flattenedGrid;
     }
 
-    public int[][] getRandomGeneration(int N) {
-        int[][] generation = new int[N][];
-        for (int i = 0; i < generation.length; i++) {
-            generation[i] = createInitGrid();
+    public ArrayList<int[]> getRandomGeneration(int N) {
+        ArrayList<int[]> generation = new ArrayList<>();
+//        int[][] generation = new int[N][];
+        for (int i = 0; i < N; i++) {
+            generation.add(createInitGrid());
         }
         return generation;
     }
@@ -103,7 +105,7 @@ public class Factory {
         }
     }
 
-    public int[] getBest(int[][] generation) {
+    public int[] getBorderline(Iterable<int[]> generation, boolean best) {
         int[] selected = null;
         int selectedEval = -1;
         for (var gen : generation) {
@@ -113,13 +115,28 @@ public class Factory {
             }
             else {
                 var newSelectedEval = evaluateGrid(gen);
-                if(newSelectedEval < selectedEval) {
-                    selected = gen;
-                    selectedEval = newSelectedEval;
+                if (best) {
+                    if (newSelectedEval < selectedEval) {
+                        selected = gen;
+                        selectedEval = newSelectedEval;
+                    }
+                }
+                else {
+                    if (newSelectedEval > selectedEval) {
+                        selected = gen;
+                        selectedEval = newSelectedEval;
+                    }
                 }
             }
         }
         return selected;
+    }
+
+    public int[] getBest(Iterable<int[]> generation) {
+        return getBorderline(generation, true);
+    }
+    public int[] getWorst(Iterable<int[]> generation) {
+        return getBorderline(generation, false);
     }
 }
 

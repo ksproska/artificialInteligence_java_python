@@ -15,7 +15,7 @@ public class Selection {
         this.factory = factory;
     }
 
-    public double[] reverseEvaluation(int[][] generation) {
+    public double[] reverseEvaluation(ArrayList<int[]> generation) {
         double[] evaluationForEach = Arrays.stream(getEvaluationForEach(generation)).asDoubleStream().toArray();
         var maxVal = Arrays.stream(evaluationForEach).max().getAsDouble();
         for (int i = 0; i < evaluationForEach.length; i++) {
@@ -24,12 +24,12 @@ public class Selection {
         return evaluationForEach;
     }
 
-    public TreeMap<Float, Integer> getDistributionTreeMap(int[][] generation) {
+    public TreeMap<Float, Integer> getDistributionTreeMap(ArrayList<int[]> generation) {
         var treeMap = new TreeMap<Float, Integer>();
         var evaluationForEach = reverseEvaluation(generation);
 
         double sumAll = Arrays.stream(evaluationForEach).sum();
-        double[] distribution = new double[generation.length];
+        double[] distribution = new double[generation.size()];
         distribution[0] = evaluationForEach[0] / sumAll;
         treeMap.put((float) distribution[0], 0);
         for (int i = 0; i < distribution.length - 1; i++) {
@@ -39,10 +39,10 @@ public class Selection {
         return treeMap;
     }
 
-    public int[] getEvaluationForEach(int[][] generation) {
-        int[] evaluationForEach = new int[generation.length];
-        for (int i = 0; i < generation.length; i++) {
-            evaluationForEach[i] = factory.evaluateGrid(generation[i]);
+    public int[] getEvaluationForEach(ArrayList<int[]> generation) {
+        int[] evaluationForEach = new int[generation.size()];
+        for (int i = 0; i < generation.size(); i++) {
+            evaluationForEach[i] = factory.evaluateGrid(generation.get(i));
         }
         return evaluationForEach;
     }
@@ -65,16 +65,16 @@ public class Selection {
         return selectedInts;
     }
 
-    private int[] getBestForIndexes(int[][] generation, HashSet<Integer> chosenIndexes) {
+    private int[] getBestForIndexes(ArrayList<int[]> generation, HashSet<Integer> chosenIndexes) {
         int[] selected = null;
         int selectedEval = -1;
         for (var value : chosenIndexes) {
             if (selected == null) {
-                selected = generation[value];
+                selected = generation.get(value);
                 selectedEval = factory.evaluateGrid(selected);
             }
             else {
-                var newSelected = generation[value];
+                var newSelected = generation.get(value);
                 var newSelectedEval = factory.evaluateGrid(newSelected);
                 if(newSelectedEval < selectedEval) {
                     selected = newSelected;
@@ -85,25 +85,25 @@ public class Selection {
         return selected;
     }
 
-    private int[] selectionTournament(int[][] generation, int N) {
-        var chosenInts = getRandomInts(generation.length, N);
+    private int[] selectionTournament(ArrayList<int[]> generation, int N) {
+        var chosenInts = getRandomInts(generation.size(), N);
         return getBestForIndexes(generation, chosenInts);
     }
 
-    private int[] selectionRouletteAndTournament(int[][] generation, int N) {
+    private int[] selectionRouletteAndTournament(ArrayList<int[]> generation, int N) {
         var distributionTreeMap = getDistributionTreeMap(generation);
         var chosenInts = getRandomIntsDistributionTreeMap(distributionTreeMap, N);
         return getBestForIndexes(generation, chosenInts);
     }
 
-    private int[] selectionRoulette(int[][] generation) {
+    private int[] selectionRoulette(ArrayList<int[]> generation) {
         var distributionTreeMap = getDistributionTreeMap(generation);
         var randFloat = random.nextFloat();
         float chosenKey = distributionTreeMap.tailMap(randFloat).firstKey();
-        return generation[distributionTreeMap.get(chosenKey)];
+        return generation.get(distributionTreeMap.get(chosenKey));
     }
 
-    public int[] selection(SelectionEnum selectionEnum, int[][] generation, int N) {
+    public int[] selection(SelectionEnum selectionEnum, ArrayList<int[]> generation, int N) {
         if(selectionEnum == SelectionEnum.ROULETTE) {
 //            return selectionRoulette(generation);
             return selectionRouletteAndTournament(generation, N);
@@ -119,7 +119,7 @@ class SelectionTest {
     static String folderPath = "F:\\sztuczna_inteligencja\\flo_dane_v1.2";
     static Factory factory;
     static Selection selection;
-    static int[][] generation;
+    static ArrayList<int[]> generation;
     @BeforeAll
     public static void beforeAll() {
         factory = new Factory(InstanceEnum.HARD, folderPath); // 5x6
