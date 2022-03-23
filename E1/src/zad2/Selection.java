@@ -105,8 +105,8 @@ public class Selection {
 
     public int[] selection(SelectionEnum selectionEnum, ArrayList<int[]> generation, int N) {
         if(selectionEnum == SelectionEnum.ROULETTE) {
-//            return selectionRoulette(generation);
-            return selectionRouletteAndTournament(generation, N);
+            return selectionRoulette(generation);
+//            return selectionRouletteAndTournament(generation, N);
         }
         if(selectionEnum == SelectionEnum.TOURNAMENT) {
             return selectionTournament(generation, N);
