@@ -3,4 +3,6 @@ public interface ProblemSuggestedSolution <D, V> {
     boolean isCurrentCorrect();
     boolean isCompleted();
     boolean wereNegativelyAffected();
+    D[] getDomain();
+    ProblemSuggestedSolution<D, V> copy();
 }

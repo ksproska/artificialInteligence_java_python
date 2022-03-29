@@ -4,55 +4,74 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Scanner;
-
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import static java.util.Arrays.asList;
 
 class BinarySuggestedSolution implements ProblemSuggestedSolution<Integer, Integer> {
-    public final ArrayList<Integer> problem;
-    public final ArrayList<ArrayList<Integer>> rows, columns;
-    public final BinaryRiddle binaryRiddle;
+    public BinaryRiddle binaryRiddle;
+    public static final Integer[] domain = new Integer[]{0, 1};
+    public ArrayList<Integer> partialSolution;
+    public ArrayList<ArrayList<Integer>> rows, columns;
     private Integer lastChangedPosition;
     private boolean isCorrectAfterLastChange;
     private int itemX, itemY;
 
+    public int getX(int position) { return position % binaryRiddle.x; }
+    public int getY(int position) { return position / binaryRiddle.x; }
+
+    public BinarySuggestedSolution() {}
+
     public BinarySuggestedSolution(BinaryRiddle binaryRiddle) {
         this.binaryRiddle = binaryRiddle;
-        this.problem = new ArrayList<>(binaryRiddle.problem);
-        this.rows = new ArrayList<>(binaryRiddle.rows);
-        this.columns = new ArrayList<>(binaryRiddle.columns);
+        this.partialSolution = new ArrayList<>(binaryRiddle.problem);
+
+        rows = new ArrayList<>();
+        columns = new ArrayList<>();
+        for (int i = 0; i < binaryRiddle.x; i++) {
+            columns.add(new ArrayList<>());
+        }
+        for (int i = 0; i < binaryRiddle.y; i++) {
+            rows.add(new ArrayList<>());
+        }
+        for (int i = 0; i < this.partialSolution.size(); i++) {
+            var tempX = getX(i);
+            var tempY = getY(i);
+            rows.get(tempY).add(tempX, partialSolution.get(i));
+            columns.get(tempX).add(tempY, partialSolution.get(i));
+        }
+
         isCorrectAfterLastChange = true;
     }
 
-    public BinarySuggestedSolution(BinarySuggestedSolution binarySuggestedSolution) {
-        this.binaryRiddle = binarySuggestedSolution.binaryRiddle;
-        this.problem = new ArrayList<>(binarySuggestedSolution.problem);
-        this.rows = new ArrayList<ArrayList<Integer>>();
-        for (var row : binarySuggestedSolution.rows) {
-            rows.add(new ArrayList<Integer>(row));
+    public BinarySuggestedSolution copy() {
+        var copiedItem = new BinarySuggestedSolution();
+        copiedItem.binaryRiddle = binaryRiddle;
+        copiedItem.partialSolution = new ArrayList<>(partialSolution);
+        copiedItem.rows = new ArrayList<ArrayList<Integer>>();
+        for (var row : rows) {
+            copiedItem.rows.add(new ArrayList<Integer>(row));
         }
-        this.columns = new ArrayList<ArrayList<Integer>>();
-        for (var column : binarySuggestedSolution.columns) {
-            columns.add(new ArrayList<Integer>(column));
+        copiedItem.columns = new ArrayList<ArrayList<Integer>>();
+        for (var column : columns) {
+            copiedItem.columns.add(new ArrayList<Integer>(column));
         }
-        lastChangedPosition = binarySuggestedSolution.lastChangedPosition;
-        isCorrectAfterLastChange = binarySuggestedSolution.isCorrectAfterLastChange;
+        copiedItem.lastChangedPosition = lastChangedPosition;
+        copiedItem.isCorrectAfterLastChange = isCorrectAfterLastChange;
+        return copiedItem;
     }
 
     public void setValue(Integer domainItem, Integer variableItem) {
         if(!isCorrectAfterLastChange) {
             throw new IllegalStateException("Solution incorrect after last change");
         }
-        if(problem.get(variableItem) != null) {
+        if(partialSolution.get(variableItem) != null) {
             throw new IllegalArgumentException("Value already set at variableItem: " + variableItem);
         }
         lastChangedPosition = variableItem;
-        problem.set(variableItem, domainItem);
-        itemX = binaryRiddle.getX(variableItem);
-        itemY = binaryRiddle.getY(variableItem);
+        partialSolution.set(variableItem, domainItem);
+        itemX = getX(variableItem);
+        itemY = getY(variableItem);
         rows.get(itemY).set(itemX, domainItem);
         columns.get(itemX).set(itemY, domainItem);
         isCorrectAfterLastChange = wereNegativelyAffected();
@@ -138,27 +157,30 @@ class BinarySuggestedSolution implements ProblemSuggestedSolution<Integer, Integ
         return areAllUnique() && isHalf0AndHalf1() && areValuesRepeatedMax2TimesInARow();
     }
 
+    @Override
+    public Integer[] getDomain() {
+        return domain;
+    }
+
     public boolean isCurrentCorrect() {
         return isCorrectAfterLastChange;
     }
 
     @Override
     public boolean isCompleted() {
-        return !problem.contains(null);
+        return !partialSolution.contains(null);
     }
 
     @Override
     public String toString() {
-        return binaryRiddle.chosenProblem + "\n" + binaryRiddle.toDisplay(problem) + isCorrectAfterLastChange;
+        return binaryRiddle.chosenProblem + "\n" + binaryRiddle.toDisplay(partialSolution) + isCorrectAfterLastChange;
     }
 }
 
 public class BinaryRiddle implements ProblemToSolve<Integer, Integer> {
     public final BinaryEnum chosenProblem;
-    public static final Integer[] domain = new Integer[]{0, 1};
     public final int x, y;
     public final ArrayList<Integer> problem;
-    public final ArrayList<ArrayList<Integer>> rows, columns;
     public final ArrayList<Integer> indexesToFill;
 
     public BinaryRiddle(BinaryEnum chosenProblem) {
@@ -167,21 +189,6 @@ public class BinaryRiddle implements ProblemToSolve<Integer, Integer> {
         this.y = BinaryConsts.getSize(chosenProblem)[1];
         this.problem = new ArrayList<>();
         readProblem(ProjectConsts.folderPath);
-
-        rows = new ArrayList<>();
-        columns = new ArrayList<>();
-        for (int i = 0; i < x; i++) {
-            columns.add(new ArrayList<>());
-        }
-        for (int i = 0; i < y; i++) {
-            rows.add(new ArrayList<>());
-        }
-        for (int i = 0; i < this.problem.size(); i++) {
-            var itemX = getX(i);
-            var itemY = getY(i);
-            rows.get(itemY).add(itemX, problem.get(i));
-            columns.get(itemX).add(itemY, problem.get(i));
-        }
 
         indexesToFill = new ArrayList<>();
         for (int i = 0; i < problem.size(); i++) {
@@ -222,11 +229,6 @@ public class BinaryRiddle implements ProblemToSolve<Integer, Integer> {
     }
 
     @Override
-    public Integer[] getDomain() {
-        return domain;
-    }
-
-    @Override
     public ArrayList<Integer> getVariables() {
         return indexesToFill;
     }
@@ -247,16 +249,13 @@ public class BinaryRiddle implements ProblemToSolve<Integer, Integer> {
             return;
         }
         if(suggestedSolution.isCurrentCorrect()) {
-            for (var domainItem : getDomain()) {
-                var solutionCopy = new BinarySuggestedSolution(suggestedSolution);
+            for (var domainItem : suggestedSolution.getDomain()) {
+                var solutionCopy = suggestedSolution.copy();
                 solutionCopy.setValue(domainItem, getVariables().get(currentVariable));
                 getResultsRecursive(solutionCopy, currentVariable + 1, accumulator);
             }
         }
     }
-
-    public int getX(int position) { return position % x; }
-    public int getY(int position) { return position / x; }
 
     public String toDisplay(ArrayList<Integer> grid) {
         var allToDisplay = " | ";
@@ -281,6 +280,10 @@ public class BinaryRiddle implements ProblemToSolve<Integer, Integer> {
         return chosenProblem + "\n" + toDisplay(problem);
     }
 }
+
+//class CSP {
+//
+//}
 
 
 class BinaryRiddleTest {
@@ -308,7 +311,6 @@ class BinaryRiddleTest {
         binaryRiddle = new BinaryRiddle(BinaryEnum.B6x6);
         var results = binaryRiddle.getResults();
         Assertions.assertEquals(1, results.size());
-        System.out.println(results.get(0).problem);
         var expected = new ArrayList<Integer>(asList(
                 0, 1, 0, 1, 1, 0,
                 1, 0, 0, 1, 0, 1,
@@ -318,7 +320,7 @@ class BinaryRiddleTest {
                 1, 0, 1, 0, 0, 1
 
         ));
-        Assertions.assertIterableEquals(expected, results.get(0).problem);
+        Assertions.assertIterableEquals(expected, results.get(0).partialSolution);
     }
 
     @Test
@@ -337,7 +339,7 @@ class BinaryRiddleTest {
                 1, 0, 0, 1, 0, 1, 0, 1
 
         ));
-        Assertions.assertIterableEquals(expected, results.get(0).problem);
+        Assertions.assertIterableEquals(expected, results.get(0).partialSolution);
     }
 
     @Test
@@ -357,6 +359,6 @@ class BinaryRiddleTest {
                 1, 0, 1, 0, 0, 1, 1, 0, 1, 0,
                 0, 1, 0, 1, 0, 0, 1, 0, 1, 1
         ));
-        Assertions.assertIterableEquals(expected, results.get(0).problem);
+        Assertions.assertIterableEquals(expected, results.get(0).partialSolution);
     }
 }
