@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 
-public interface ProblemSuggestedSolution <D, V> {
+public interface CspPartialSolution<D, V> {
     void setValue(D domainItem, V variableItem);
     boolean isCurrentCorrect();
     boolean isCompleted();
     boolean wereNegativelyAffected();
     D[] getDomain();
-    ProblemSuggestedSolution<D, V> copy();
+    CspPartialSolution<D, V> copy();
     ArrayList<D> getPartialSolution();
 }
