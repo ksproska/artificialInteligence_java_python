@@ -1,7 +1,8 @@
+import consts.FutoshikiEnum;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.stream.IntStream;
 
 public class FutoshikiPartialSolution extends GridPartialSolution<Object, FutoshikiEnum, Integer> {
     public static Integer[] domain; //todo

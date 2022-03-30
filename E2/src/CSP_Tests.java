@@ -1,3 +1,5 @@
+import consts.BinaryEnum;
+import consts.FutoshikiEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ public class CSP_Tests {
     static FutoshikiCSP futoshikiCSP;
 
     @Test
-    void testCorrections() {
+    void testCorrectionsB6x6() {
         binaryProblem = new BinaryProblem(BinaryEnum.B6x6);
         var suggestion = new BinaryPartialSolution(binaryProblem);
         suggestion.setNewValue(0, 0);
@@ -25,6 +27,18 @@ public class CSP_Tests {
         suggestion.setNewValue(1, 29);
         suggestion.setNewValue(1, 35);
         Assertions.assertFalse(suggestion.areConstraintsNotBrokenAfterLastChange());
+    }
+
+    @Test
+    void testCorrectionsF4x4() {
+        futoshikiProblem = new FutoshikiProblem(FutoshikiEnum.F4x4);
+        var solution = futoshikiProblem.getInitialSolution();
+        solution.setNewValue(4, 4);
+        solution.setNewValue(2, 20);
+        solution.setNewValue(2, 32);
+        solution.setNewValue(1, 46);
+        solution.setNewValue(1, 48);
+        Assertions.assertFalse(solution.areConstraintsNotBrokenAfterLastChange());
     }
 
     @Test

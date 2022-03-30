@@ -1,3 +1,5 @@
+package consts;
+
 import java.util.HashMap;
 
 

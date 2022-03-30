@@ -1,8 +1,10 @@
+import consts.FutoshikiConsts;
+import consts.FutoshikiEnum;
+import consts.ProjectConsts;
 import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -83,22 +85,5 @@ public class FutoshikiProblem extends GridProblem<Object, FutoshikiEnum, Integer
     @Override
     public FutoshikiPartialSolution getInitialSolution() {
         return new FutoshikiPartialSolution(this);
-    }
-}
-
-class FutoshikiTests {
-    static FutoshikiProblem futoshikiProblem;
-
-    @Test
-    void test1() {
-        futoshikiProblem = new FutoshikiProblem(FutoshikiEnum.F4x4);
-        System.out.println(futoshikiProblem);
-        var solution = futoshikiProblem.getInitialSolution();
-        solution.setNewValue(4, 4);
-        solution.setNewValue(2, 20);
-        solution.setNewValue(2, 32);
-        solution.setNewValue(1, 46);
-        System.out.println(solution);
-        System.out.println(solution.partialSolution);
     }
 }

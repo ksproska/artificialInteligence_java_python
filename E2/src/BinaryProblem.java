@@ -1,3 +1,7 @@
+import consts.BinaryConsts;
+import consts.BinaryEnum;
+import consts.ProjectConsts;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
