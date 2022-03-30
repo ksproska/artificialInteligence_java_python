@@ -1,23 +1,17 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
-
-public class BinaryProblem implements CspProblem<Integer, Integer> {
-    public final BinaryEnum chosenProblem;
-    public final int x, y;
-    public final ArrayList<Integer> problem;
-    public final ArrayList<Integer> indexesToFill;
-
+public class BinaryProblem extends GridProblem<BinaryEnum, Integer, Integer, Integer> {
     public BinaryProblem(BinaryEnum chosenProblem) {
-        this.chosenProblem = chosenProblem;
-        this.x = BinaryConsts.getSize(chosenProblem)[0];
-        this.y = BinaryConsts.getSize(chosenProblem)[1];
-        this.problem = new ArrayList<>();
-        indexesToFill = new ArrayList<>();
+        super(chosenProblem,
+                BinaryConsts.getSize(chosenProblem)[0],
+                BinaryConsts.getSize(chosenProblem)[1]
+        );
+
         readProblem(ProjectConsts.folderPath);
         setIndexesToFill();
+        displaySplitter = " | ";
     }
 
     private void readProblem(String folderPath) {
@@ -50,30 +44,6 @@ public class BinaryProblem implements CspProblem<Integer, Integer> {
             }
         }
     }
-
-    public String toDisplay(ArrayList<Integer> grid) {
-        var allToDisplay = " | ";
-        for (int i = 0; i < grid.size(); i++) {
-            if (grid.get(i) == null) {
-                allToDisplay += " ";
-            }
-            else {
-                allToDisplay += grid.get(i);
-            }
-            allToDisplay += " | ";
-            if((i + 1) % x == 0) {
-                allToDisplay += "\n | ";
-            }
-        }
-        allToDisplay = allToDisplay.substring(0, allToDisplay.length() - 3);
-        return allToDisplay;
-    }
-
-    @Override
-    public String toString() { return chosenProblem + "\n" + toDisplay(problem); }
-
-    @Override
-    public ArrayList<Integer> getVariables() { return indexesToFill; }
 
     @Override
     public CspPartialSolution<Integer, Integer> getInitialSolution() {

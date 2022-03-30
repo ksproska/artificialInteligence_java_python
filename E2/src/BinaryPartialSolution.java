@@ -2,6 +2,56 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
+//class GridPartialSolution<D, T> implements CspPartialSolution<D, T> {
+//    public CspProblem<D, T> cspProblem;
+//    protected static D[] domain;
+//    public ArrayList<Integer> partialSolution;
+//    public ArrayList<ArrayList<Integer>> rows, columns;
+//    private Integer lastChangedPosition;
+//    private boolean isCorrectAfterLastChange;
+//    private int itemX, itemY;
+//
+//    public int getX(int position) { return position % cspProblem.x; }
+//    public int getY(int position) { return position / cspProblem.x; }
+//
+//    private BinaryPartialSolution() {}
+//
+//    @Override
+//    public void setNewValue(D domainItem, T variableItem) {
+//
+//    }
+//
+//    @Override
+//    public boolean areConstraintsNotBrokenAfterLastChange() {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isSatisfied() {
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean checkConstraintsAfterLastChange() {
+//        return false;
+//    }
+//
+//    @Override
+//    public D[] getDomain() {
+//        return null;
+//    }
+//
+//    @Override
+//    public CspPartialSolution<D, T> copy() {
+//        return null;
+//    }
+//
+//    @Override
+//    public ArrayList<D> getPartialSolution() {
+//        return null;
+//    }
+//}
+
 class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
     public BinaryProblem binaryProblem;
     public static final Integer[] domain = new Integer[]{0, 1};
