@@ -1,21 +1,21 @@
 import java.util.ArrayList;
 
-class CSP {
+class BinaryCSP {
     private final BinaryProblem cspProblem;
-    public CSP(BinaryProblem cspProblem) {
+    public BinaryCSP(BinaryProblem cspProblem) {
         this.cspProblem = cspProblem;
     }
 
-    public ArrayList<BinaryProblem.BinaryPartialSolution> getResults() {
-        ArrayList<BinaryProblem.BinaryPartialSolution> accumulator = new ArrayList<>();
+    public ArrayList<BinaryPartialSolution> getResults() {
+        ArrayList<BinaryPartialSolution> accumulator = new ArrayList<>();
         var cspProblemInitialSolution = cspProblem.getInitialSolution();
         getResultsRecursive(cspProblemInitialSolution, 0, accumulator);
         return accumulator;
     }
 
-    private void getResultsRecursive(BinaryProblem.BinaryPartialSolution cspPartialSolution,
+    private void getResultsRecursive(BinaryPartialSolution cspPartialSolution,
                                     int currentVariable,
-                                    ArrayList<BinaryProblem.BinaryPartialSolution> accumulator) {
+                                    ArrayList<BinaryPartialSolution> accumulator) {
         if(cspPartialSolution.isSatisfied()) {
             if(cspPartialSolution.areConstraintsNotBrokenAfterLastChange()) {
                 accumulator.add(cspPartialSolution);
