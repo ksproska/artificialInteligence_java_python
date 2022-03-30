@@ -14,18 +14,22 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
     public int getX(int position) { return position % binaryProblem.x; }
     public int getY(int position) { return position / binaryProblem.x; }
 
-    public BinaryPartialSolution() {}
+    private BinaryPartialSolution() {}
 
     public BinaryPartialSolution(BinaryProblem binaryProblem) {
         this.binaryProblem = binaryProblem;
         this.partialSolution = new ArrayList<>(binaryProblem.problem);
+        setRowsAndColumns(binaryProblem.x, binaryProblem.y);
+        isCorrectAfterLastChange = true;
+    }
 
+    private void setRowsAndColumns(int x, int y) {
         rows = new ArrayList<>();
         columns = new ArrayList<>();
-        for (int i = 0; i < binaryProblem.x; i++) {
+        for (int i = 0; i < x; i++) {
             columns.add(new ArrayList<>());
         }
-        for (int i = 0; i < binaryProblem.y; i++) {
+        for (int i = 0; i < y; i++) {
             rows.add(new ArrayList<>());
         }
         for (int i = 0; i < this.partialSolution.size(); i++) {
@@ -34,7 +38,6 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
             rows.get(tempY).add(tempX, partialSolution.get(i));
             columns.get(tempX).add(tempY, partialSolution.get(i));
         }
-        isCorrectAfterLastChange = true;
     }
 
     @Override
@@ -69,10 +72,10 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
         itemY = getY(variableItem);
         rows.get(itemY).set(itemX, domainItem);
         columns.get(itemX).set(itemY, domainItem);
-        isCorrectAfterLastChange = wereNegativelyAffected();
+        isCorrectAfterLastChange = checkConstraintsAfterLastChange();
     }
 
-    private boolean areAllUnique() {
+    private boolean constraint_areAllUnique() {
         if(!columns.get(itemX).contains(null)) {
             for (var column : columns) {
                 if (!column.contains(null)) {
@@ -96,7 +99,7 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
         return true;
     }
 
-    private boolean isHalf0AndHalf1() {
+    private boolean constraint_isHalf0AndHalf1() {
         var freq0 = Collections.frequency(columns.get(itemX), 0);
         var freq1 = Collections.frequency(columns.get(itemX), 1);
         if (freq0 > binaryProblem.y/2 || freq1 > binaryProblem.y/2) {
@@ -111,7 +114,7 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
         return true;
     }
 
-    private boolean areValuesRepeatedMax2TimesInARow() {
+    private boolean constraint_areValuesRepeatedMax2TimesInARow() {
         Integer previous = null;
         int counter = 0;
         for (var elem : columns.get(itemX)) {
@@ -149,8 +152,8 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
     }
 
     @Override
-    public boolean wereNegativelyAffected() {
-        return areAllUnique() && isHalf0AndHalf1() && areValuesRepeatedMax2TimesInARow();
+    public boolean checkConstraintsAfterLastChange() {
+        return constraint_areAllUnique() && constraint_isHalf0AndHalf1() && constraint_areValuesRepeatedMax2TimesInARow();
     }
 
     @Override
