@@ -56,7 +56,7 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
     }
 
     @Override
-    public void setValue(Integer domainItem, Integer variableItem) {
+    public void setNewValue(Integer domainItem, Integer variableItem) {
         if(!isCorrectAfterLastChange) {
             throw new IllegalStateException("Solution incorrect after last change");
         }
@@ -157,10 +157,10 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
     public Integer[] getDomain() { return domain; }
 
     @Override
-    public boolean isCurrentCorrect() { return isCorrectAfterLastChange; }
+    public boolean areConstraintsNotBrokenAfterLastChange() { return isCorrectAfterLastChange; }
 
     @Override
-    public boolean isCompleted() { return !partialSolution.contains(null); }
+    public boolean isSatisfied() { return !partialSolution.contains(null); }
 
     @Override
     public ArrayList<Integer> getPartialSolution() { return partialSolution; }

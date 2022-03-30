@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
 public interface CspPartialSolution<D, V> {
-    void setValue(D domainItem, V variableItem);
-    boolean isCurrentCorrect();
-    boolean isCompleted();
+    void setNewValue(D domainItem, V variableItem);
+    boolean areConstraintsNotBrokenAfterLastChange();
+    boolean isSatisfied();
     boolean wereNegativelyAffected();
     D[] getDomain();
     CspPartialSolution<D, V> copy();

@@ -16,16 +16,16 @@ class CSP <D, V> {
     private void getResultsRecursive(CspPartialSolution<D, V> cspPartialSolution,
                                     int currentVariable,
                                     ArrayList<CspPartialSolution<D, V>> accumulator) {
-        if(cspPartialSolution.isCompleted()) {
-            if(cspPartialSolution.isCurrentCorrect()) {
+        if(cspPartialSolution.isSatisfied()) {
+            if(cspPartialSolution.areConstraintsNotBrokenAfterLastChange()) {
                 accumulator.add(cspPartialSolution);
             }
             return;
         }
-        if(cspPartialSolution.isCurrentCorrect()) {
+        if(cspPartialSolution.areConstraintsNotBrokenAfterLastChange()) {
             for (var domainItem : cspPartialSolution.getDomain()) {
                 var solutionCopy = cspPartialSolution.copy();
-                solutionCopy.setValue(domainItem, cspProblem.getVariables().get(currentVariable));
+                solutionCopy.setNewValue(domainItem, cspProblem.getVariables().get(currentVariable));
                 getResultsRecursive(solutionCopy, currentVariable + 1, accumulator);
             }
         }

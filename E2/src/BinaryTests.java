@@ -13,17 +13,17 @@ class BinaryTests {
     void testCorrections() {
         binaryProblem = new BinaryProblem(BinaryEnum.B6x6);
         var suggestion = new BinaryPartialSolution(binaryProblem);
-        suggestion.setValue(0, 0);
-        suggestion.setValue(1, 6);
-        suggestion.setValue(0, 18);
-        suggestion.setValue(1, 24);
+        suggestion.setNewValue(0, 0);
+        suggestion.setNewValue(1, 6);
+        suggestion.setNewValue(0, 18);
+        suggestion.setNewValue(1, 24);
 
-        suggestion.setValue(0, 5);
-        suggestion.setValue(0, 17);
-        suggestion.setValue(0, 23);
-        suggestion.setValue(1, 29);
-        suggestion.setValue(1, 35);
-        Assertions.assertFalse(suggestion.isCurrentCorrect());
+        suggestion.setNewValue(0, 5);
+        suggestion.setNewValue(0, 17);
+        suggestion.setNewValue(0, 23);
+        suggestion.setNewValue(1, 29);
+        suggestion.setNewValue(1, 35);
+        Assertions.assertFalse(suggestion.areConstraintsNotBrokenAfterLastChange());
     }
 
     @Test
