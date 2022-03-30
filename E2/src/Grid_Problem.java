@@ -1,20 +1,20 @@
 import java.util.ArrayList;
 
-public abstract class GridProblem<P, E extends Enum, D extends P> implements CspProblem<P, D> {
+public abstract class Grid_Problem<P, E extends Enum, D extends P> implements CSP_Problem<P, D> {
     public final E chosenProblem;
     public final int x, y;
     public final ArrayList<P> problem = new ArrayList<>();
     public final ArrayList<Integer> indexesToFill = new ArrayList<>();
     protected String displaySplitter = " | ";
 
-    protected GridProblem(E chosenProblem, int x, int y) {
+    protected Grid_Problem(E chosenProblem, int x, int y) {
         this.chosenProblem = chosenProblem;
         this.x = x;
         this.y = y;
     }
 
     @Override
-    public GridPartialSolution<P, E, D> getInitialSolution() {
+    public Grid_PartialSolution<P, E, D> getInitialSolution() {
         return null;
     }
 

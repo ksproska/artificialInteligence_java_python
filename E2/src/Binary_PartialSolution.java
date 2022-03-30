@@ -5,12 +5,12 @@ import java.util.Collections;
 import java.util.Objects;
 
 
-public class BinaryPartialSolution extends GridPartialSolution<Integer, BinaryEnum, Integer> {
+public class Binary_PartialSolution extends Grid_PartialSolution<Integer, BinaryEnum, Integer> {
     public static final Integer[] domain = new Integer[]{0, 1};
 
-    private BinaryPartialSolution() {}
+    private Binary_PartialSolution() {}
 
-    public BinaryPartialSolution(BinaryProblem binaryProblem) {
+    public Binary_PartialSolution(Binary_Problem binaryProblem) {
         super(binaryProblem);
     }
 
@@ -95,8 +95,8 @@ public class BinaryPartialSolution extends GridPartialSolution<Integer, BinaryEn
         return constraint_areAllUnique() && constraint_isHalf0AndHalf1() && constraint_areValuesRepeatedMax2TimesInARow();
     }
 
-    public BinaryPartialSolution copyBinary() {
-        var copiedItem =  new BinaryPartialSolution();
+    public Binary_PartialSolution copyBinary() {
+        var copiedItem =  new Binary_PartialSolution();
         copiedItem.gridProblem = gridProblem;
         copiedItem.partialSolution = new ArrayList<>(partialSolution);
         copiedItem.rows = new ArrayList<>();

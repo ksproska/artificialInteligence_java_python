@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class FutoshikiPartialSolution extends GridPartialSolution<Object, FutoshikiEnum, Integer> {
+public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, FutoshikiEnum, Integer> {
     public static Integer[] domain; //todo
 
-    private FutoshikiPartialSolution() {}
-    public FutoshikiPartialSolution(FutoshikiProblem futoshikiProblem) {
+    private Futoshiki_PartialSolution() {}
+    public Futoshiki_PartialSolution(Futoshiki_Problem futoshikiProblem) {
         super(futoshikiProblem);
         domain = new Integer[futoshikiProblem.gridX];
         Arrays.setAll(domain, i -> i + 1);
@@ -33,15 +33,15 @@ public class FutoshikiPartialSolution extends GridPartialSolution<Object, Futosh
             var row = rows.get(itemY);
             var value = (Integer) row.get(itemX);
             var sign = row.get(itemX + 1);
-            if(sign.equals(FutoshikiProblem.neutral)) {
+            if(sign.equals(Futoshiki_Problem.neutral)) {
                 return true;
             }
             var nextValue = row.get(itemX + 2);
             if(!(nextValue instanceof Integer)) {
                 return true;
             }
-            if(sign.equals(FutoshikiProblem.lessThan) && value < (Integer) nextValue) return true;
-            if(sign.equals(FutoshikiProblem.moreThan) && value > (Integer) nextValue) return true;
+            if(sign.equals(Futoshiki_Problem.lessThan) && value < (Integer) nextValue) return true;
+            if(sign.equals(Futoshiki_Problem.moreThan) && value > (Integer) nextValue) return true;
             return false;
         }
         return true;
@@ -52,15 +52,15 @@ public class FutoshikiPartialSolution extends GridPartialSolution<Object, Futosh
             var row = rows.get(itemY);
             var value = (Integer) row.get(itemX);
             var sign = row.get(itemX - 1);
-            if(sign.equals(FutoshikiProblem.neutral)) {
+            if(sign.equals(Futoshiki_Problem.neutral)) {
                 return true;
             }
             var prevValue = row.get(itemX - 2);
             if(!(prevValue instanceof Integer)) {
                 return true;
             }
-            if(sign.equals(FutoshikiProblem.lessThan) && (Integer) prevValue < value) return true;
-            if(sign.equals(FutoshikiProblem.moreThan) && (Integer) prevValue > value) return true;
+            if(sign.equals(Futoshiki_Problem.lessThan) && (Integer) prevValue < value) return true;
+            if(sign.equals(Futoshiki_Problem.moreThan) && (Integer) prevValue > value) return true;
             return false;
         }
         return true;
@@ -71,15 +71,15 @@ public class FutoshikiPartialSolution extends GridPartialSolution<Object, Futosh
             var column = columns.get(itemX);
             var value = (Integer) column.get(itemY);
             var sign = column.get(itemY - 1);
-            if(sign.equals(FutoshikiProblem.neutral)) {
+            if(sign.equals(Futoshiki_Problem.neutral)) {
                 return true;
             }
             var prevValue = column.get(itemY - 2);
             if(!(prevValue instanceof Integer)) {
                 return true;
             }
-            if(sign.equals(FutoshikiProblem.lessThan) && (Integer) prevValue < value) return true;
-            if(sign.equals(FutoshikiProblem.moreThan) && (Integer) prevValue > value) return true;
+            if(sign.equals(Futoshiki_Problem.lessThan) && (Integer) prevValue < value) return true;
+            if(sign.equals(Futoshiki_Problem.moreThan) && (Integer) prevValue > value) return true;
             return false;
         }
         return true;
@@ -90,15 +90,15 @@ public class FutoshikiPartialSolution extends GridPartialSolution<Object, Futosh
             var column = columns.get(itemX);
             var value = (Integer) column.get(itemY);
             var sign = column.get(itemY + 1);
-            if(sign.equals(FutoshikiProblem.neutral)) {
+            if(sign.equals(Futoshiki_Problem.neutral)) {
                 return true;
             }
             var nextValue = column.get(itemY + 2);
             if(!(nextValue instanceof Integer)) {
                 return true;
             }
-            if(sign.equals(FutoshikiProblem.lessThan) && value < (Integer) nextValue) return true;
-            if(sign.equals(FutoshikiProblem.moreThan) && value > (Integer) nextValue) return true;
+            if(sign.equals(Futoshiki_Problem.lessThan) && value < (Integer) nextValue) return true;
+            if(sign.equals(Futoshiki_Problem.moreThan) && value > (Integer) nextValue) return true;
             return false;
         }
         return true;
@@ -110,8 +110,8 @@ public class FutoshikiPartialSolution extends GridPartialSolution<Object, Futosh
                 constraint_isDownCorrect() && constraint_isLeftCorrect() && constraint_isRightCorrect();
     }
 
-    public FutoshikiPartialSolution copyFutoshiki() {
-        var copiedItem =  new FutoshikiPartialSolution();
+    public Futoshiki_PartialSolution copyFutoshiki() {
+        var copiedItem =  new Futoshiki_PartialSolution();
         copiedItem.gridProblem = gridProblem;
         copiedItem.partialSolution = new ArrayList<>(partialSolution);
         copiedItem.rows = new ArrayList<>();

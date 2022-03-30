@@ -6,8 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class BinaryProblem extends GridProblem<Integer, BinaryEnum, Integer> {
-    public BinaryProblem(BinaryEnum chosenProblem) {
+public class Binary_Problem extends Grid_Problem<Integer, BinaryEnum, Integer> {
+    public Binary_Problem(BinaryEnum chosenProblem) {
         super(chosenProblem,
                 BinaryConsts.getSize(chosenProblem)[0],
                 BinaryConsts.getSize(chosenProblem)[1]
@@ -50,7 +50,7 @@ public class BinaryProblem extends GridProblem<Integer, BinaryEnum, Integer> {
     }
 
     @Override
-    public BinaryPartialSolution getInitialSolution() {
-        return new BinaryPartialSolution(this);
+    public Binary_PartialSolution getInitialSolution() {
+        return new Binary_PartialSolution(this);
     }
 }

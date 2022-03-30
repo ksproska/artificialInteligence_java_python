@@ -1,18 +1,18 @@
 import consts.FutoshikiConsts;
 import consts.FutoshikiEnum;
 import consts.ProjectConsts;
-import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 
-public class FutoshikiProblem extends GridProblem<Object, FutoshikiEnum, Integer> {
+public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integer> {
     public final int gridX, gridY;
     public static final String neutral = "-", lessThan = "<", moreThan = ">";
 
-    public FutoshikiProblem(FutoshikiEnum chosenProblem) {
+    public Futoshiki_Problem(FutoshikiEnum chosenProblem) {
         super(chosenProblem,
                 FutoshikiConsts.getSize(chosenProblem)[0] * 2 - 1,
                 FutoshikiConsts.getSize(chosenProblem)[1] * 2 - 1
@@ -83,7 +83,7 @@ public class FutoshikiProblem extends GridProblem<Object, FutoshikiEnum, Integer
     }
 
     @Override
-    public FutoshikiPartialSolution getInitialSolution() {
-        return new FutoshikiPartialSolution(this);
+    public Futoshiki_PartialSolution getInitialSolution() {
+        return new Futoshiki_PartialSolution(this);
     }
 }

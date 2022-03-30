@@ -1,21 +1,20 @@
 import java.util.ArrayList;
-
-class BinaryCSP {
-    private final BinaryProblem cspProblem;
-    public BinaryCSP(BinaryProblem cspProblem) {
+public class Futoshiki_CSP {
+    private final Futoshiki_Problem cspProblem;
+    public Futoshiki_CSP(Futoshiki_Problem cspProblem) {
         this.cspProblem = cspProblem;
     }
 
-    public ArrayList<BinaryPartialSolution> getResults() {
-        ArrayList<BinaryPartialSolution> accumulator = new ArrayList<>();
+    public ArrayList<Futoshiki_PartialSolution> getResults() {
+        ArrayList<Futoshiki_PartialSolution> accumulator = new ArrayList<>();
         var cspProblemInitialSolution = cspProblem.getInitialSolution();
         getResultsRecursive(cspProblemInitialSolution, 0, accumulator);
         return accumulator;
     }
 
-    private void getResultsRecursive(BinaryPartialSolution cspPartialSolution,
-                                    int currentVariable,
-                                    ArrayList<BinaryPartialSolution> accumulator) {
+    private void getResultsRecursive(Futoshiki_PartialSolution cspPartialSolution,
+                                     int currentVariable,
+                                     ArrayList<Futoshiki_PartialSolution> accumulator) {
         if(cspPartialSolution.isSatisfied()) {
             if(cspPartialSolution.areConstraintsNotBrokenAfterLastChange()) {
                 accumulator.add(cspPartialSolution);
@@ -24,7 +23,7 @@ class BinaryCSP {
         }
         if(cspPartialSolution.areConstraintsNotBrokenAfterLastChange()) {
             for (var domainItem : cspPartialSolution.getDomain()) {
-                var solutionCopy = cspPartialSolution.copyBinary();
+                var solutionCopy = cspPartialSolution.copyFutoshiki();
                 solutionCopy.setNewValue(domainItem, cspProblem.getVariablesIndexes().get(currentVariable));
                 getResultsRecursive(solutionCopy, currentVariable + 1, accumulator);
             }

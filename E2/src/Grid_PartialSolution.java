@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 
-public abstract class GridPartialSolution<P, E extends Enum, D extends P> implements CspPartialSolution<P, D> {
-    public GridProblem<P, E, D> gridProblem;
+public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> implements CSP_PartialSolution<P, D> {
+    public Grid_Problem<P, E, D> gridProblem;
     public ArrayList<P> partialSolution;
     public ArrayList<ArrayList<P>> rows, columns;
     protected Integer lastChangedPosition;
     protected boolean isCorrectAfterLastChange;
     protected int itemX, itemY;
 
-    public <G extends GridProblem> GridPartialSolution(G gridProblem) {
+    public <G extends Grid_Problem> Grid_PartialSolution(G gridProblem) {
         this.gridProblem = gridProblem;
         this.partialSolution = new ArrayList<P>(gridProblem.problem);
         setRowsAndColumns(gridProblem.x, gridProblem.y);
@@ -18,7 +18,7 @@ public abstract class GridPartialSolution<P, E extends Enum, D extends P> implem
     public int getX(int position) { return position % gridProblem.x; }
     public int getY(int position) { return position / gridProblem.x; }
 
-    protected GridPartialSolution() {}
+    protected Grid_PartialSolution() {}
 
     protected void setRowsAndColumns(int x, int y) {
         rows = new ArrayList<>();
