@@ -9,5 +9,5 @@ interface CSP_PartialSolution<P, D extends P> {
     boolean checkConstraintsAfterLastChange();
     D[] getDomain();
     ArrayList<P> getPartialSolution();
-    void updateVariables(Integer variableItem);
+    boolean updateVariables(Integer variableItem);
 }

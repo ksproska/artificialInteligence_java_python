@@ -51,8 +51,9 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     }
 
     @Override
-    public void updateVariables(Integer variableItem) {
+    public boolean updateVariables(Integer variableItem) {
         System.out.println("not implemented");
+        return false;
     }
 
     @Override

@@ -29,9 +29,11 @@ class Binary_CSP {
             var solutionCopy = cspPartialSolution.copyBinary();
             var changedVariableInx = nextVariable.variableIndex;
             solutionCopy.setNewValue(domainItem, changedVariableInx);
-            solutionCopy.updateVariables(changedVariableInx);
+            boolean areValuesCorrect = solutionCopy.updateVariables(changedVariableInx);
 //            System.out.println("aft" + solutionCopy.variables);
-            getResultsRecursive(solutionCopy, accumulator);
+            if(areValuesCorrect) {
+                getResultsRecursive(solutionCopy, accumulator);
+            }
         }
     }
 }

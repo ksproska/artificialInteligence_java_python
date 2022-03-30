@@ -3,10 +3,12 @@ import java.util.ArrayList;
 public class CSP_Variable<T> {
     public final Integer variableIndex;
     private ArrayList<T> domain;
+    public boolean wasVariableUsed;
 
     public CSP_Variable(Integer variableIndex) {
         this.variableIndex = variableIndex;
         this.domain = new ArrayList<>();
+        wasVariableUsed = false;
     }
 
     public void add(T variable) {

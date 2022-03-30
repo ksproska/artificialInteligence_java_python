@@ -15,7 +15,7 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
         super(binaryProblem);
     }
 
-    public void updateVariables(Integer variableItem) {
+    public boolean updateVariables(Integer variableItem) {
         var variableX = getX(variableItem);
         var variableY = getY(variableItem);
         for (var variableInArray : variables) {
@@ -30,11 +30,16 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
                     }
                     removeNewValue(variableInArray.variableIndex);
                 }
+                if(!variableInArray.wasVariableUsed && variableInArray.getDomain().isEmpty()) {
+                    return false;
+                }
             }
             else if (variableInArray.variableIndex.equals(variableItem)) {
                 variableInArray.removeAll();
+                variableInArray.wasVariableUsed = true;
             }
         }
+        return true;
     }
 
     public CSP_Variable<Integer> getNextFreeVariable() {
@@ -144,6 +149,7 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
         copiedItem.variables = new ArrayList<>();
         for (var variab : variables) {
             var newVar = new CSP_Variable<Integer>(variab.variableIndex);
+            newVar.wasVariableUsed = variab.wasVariableUsed;
             for (var dV : variab.getDomain()) {
                 newVar.add(dV);
             }
