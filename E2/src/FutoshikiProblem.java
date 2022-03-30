@@ -3,31 +3,25 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
-public class FutoshikiProblem implements CspProblem<Integer, Integer> {
-    public final FutoshikiEnum chosenProblem;
-    public final int x, y;
+public class FutoshikiProblem extends GridProblem<FutoshikiEnum, Integer, Integer, Object> {
     public final int gridX, gridY;
-    public final ArrayList<Object> problem;
-    public final ArrayList<Integer> indexesToFill;
 
     public FutoshikiProblem(FutoshikiEnum chosenProblem) {
-        this.chosenProblem = chosenProblem;
-        this.x = FutoshikiConsts.getSize(chosenProblem)[0];
-        this.y = FutoshikiConsts.getSize(chosenProblem)[1];
+        super(chosenProblem,
+                FutoshikiConsts.getSize(chosenProblem)[0],
+                FutoshikiConsts.getSize(chosenProblem)[1]
+        );
         gridX = this.x * 2 - 1;
         gridY = this.y * 2 - 1;
-        this.problem = new ArrayList<>();
-        indexesToFill = new ArrayList<>();
         readProblem(ProjectConsts.folderPath);
         setIndexesToFill();
     }
 
     private void setIndexesToFill() {
         for (int i = 0; i < problem.size(); i++) {
-            if(problem.get(i).equals("x")) {
+            if(problem.get(i) != null && problem.get(i).equals("x")) {
                 indexesToFill.add(i);
             }
         }
@@ -82,14 +76,6 @@ public class FutoshikiProblem implements CspProblem<Integer, Integer> {
         }
         allToDisplay = allToDisplay.substring(0, allToDisplay.length() - 3);
         return allToDisplay;
-    }
-
-    @Override
-    public String toString() { return chosenProblem + "\n" + toDisplay(problem); }
-
-    @Override
-    public ArrayList<Integer> getVariables() {
-        return indexesToFill;
     }
 
     @Override
