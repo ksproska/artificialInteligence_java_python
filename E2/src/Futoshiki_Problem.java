@@ -15,7 +15,12 @@ public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integ
     public Futoshiki_Problem(FutoshikiEnum chosenProblem) {
         super(chosenProblem,
                 FutoshikiConsts.getSize(chosenProblem)[0] * 2 - 1,
-                FutoshikiConsts.getSize(chosenProblem)[1] * 2 - 1
+                FutoshikiConsts.getSize(chosenProblem)[1] * 2 - 1,
+                new ArrayList<>(){{
+                    for (int i = 0; i < FutoshikiConsts.getSize(chosenProblem)[0]; i++) {
+                        add(i + 1);
+                    }
+                }}
         );
         gridX = FutoshikiConsts.getSize(chosenProblem)[0];
         gridY = FutoshikiConsts.getSize(chosenProblem)[1];

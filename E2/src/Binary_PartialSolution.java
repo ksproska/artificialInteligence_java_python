@@ -2,6 +2,7 @@ import consts.BinaryEnum;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Objects;
 
 
@@ -12,6 +13,37 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
 
     public Binary_PartialSolution(Binary_Problem binaryProblem) {
         super(binaryProblem);
+    }
+
+    public void updateVariables(Integer variableItem) {
+        var variableX = getX(variableItem);
+        var variableY = getY(variableItem);
+        for (var variableInArray : variables) {
+            var tempX = getX(variableInArray.variableIndex);
+            var tempY = getY(variableInArray.variableIndex);
+            if((tempX == variableX || tempY == variableY) && !variableInArray.variableIndex.equals(variableItem)) {
+                for (Iterator<Integer> iterator = variableInArray.getDomain().iterator(); iterator.hasNext(); ) {
+                    Integer domainItem = iterator.next();
+                    setNewValue(domainItem, variableInArray.variableIndex);
+                    if(!isCorrectAfterLastChange) {
+                        iterator.remove();
+                    }
+                    removeNewValue(variableInArray.variableIndex);
+                }
+            }
+            else if (variableInArray.variableIndex.equals(variableItem)) {
+                variableInArray.removeAll();
+            }
+        }
+    }
+
+    public CSP_Variable<Integer> getNextFreeVariable() {
+        for (var variab : variables) {
+            if (!variab.getDomain().isEmpty()) {
+                return variab;
+            }
+        }
+        return null;
     }
 
     private boolean constraint_areAllUnique() {
@@ -109,6 +141,14 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
         }
         copiedItem.lastChangedPosition = lastChangedPosition;
         copiedItem.isCorrectAfterLastChange = isCorrectAfterLastChange;
+        copiedItem.variables = new ArrayList<>();
+        for (var variab : variables) {
+            var newVar = new CSP_Variable<Integer>(variab.variableIndex);
+            for (var dV : variab.getDomain()) {
+                newVar.add(dV);
+            }
+            copiedItem.variables.add(newVar);
+        }
         return copiedItem;
     }
 

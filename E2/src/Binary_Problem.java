@@ -4,13 +4,20 @@ import consts.ProjectConsts;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Binary_Problem extends Grid_Problem<Integer, BinaryEnum, Integer> {
+
     public Binary_Problem(BinaryEnum chosenProblem) {
         super(chosenProblem,
                 BinaryConsts.getSize(chosenProblem)[0],
-                BinaryConsts.getSize(chosenProblem)[1]
+                BinaryConsts.getSize(chosenProblem)[1],
+                new ArrayList<>(){
+                    {
+                        add(0); add(1);
+                    }
+                }
         );
 
         readProblem(ProjectConsts.folderPath);

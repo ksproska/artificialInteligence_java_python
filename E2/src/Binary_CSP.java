@@ -9,25 +9,29 @@ class Binary_CSP {
     public ArrayList<Binary_PartialSolution> getResults() {
         ArrayList<Binary_PartialSolution> accumulator = new ArrayList<>();
         var cspProblemInitialSolution = cspProblem.getInitialSolution();
-        getResultsRecursive(cspProblemInitialSolution, 0, accumulator);
+//        System.out.println(cspProblemInitialSolution.variables);
+        getResultsRecursive(cspProblemInitialSolution, accumulator);
         return accumulator;
     }
 
     private void getResultsRecursive(Binary_PartialSolution cspPartialSolution,
-                                     int currentVariable,
                                      ArrayList<Binary_PartialSolution> accumulator) {
         if(cspPartialSolution.isSatisfied()) {
-            if(cspPartialSolution.areConstraintsNotBrokenAfterLastChange()) {
-                accumulator.add(cspPartialSolution);
-            }
+            accumulator.add(cspPartialSolution);
+//            System.out.println("founded");
             return;
         }
-        if(cspPartialSolution.areConstraintsNotBrokenAfterLastChange()) {
-            for (var domainItem : cspPartialSolution.getDomain()) {
-                var solutionCopy = cspPartialSolution.copyBinary();
-                solutionCopy.setNewValue(domainItem, cspProblem.getVariablesIndexes().get(currentVariable));
-                getResultsRecursive(solutionCopy, currentVariable + 1, accumulator);
-            }
+        var nextVariable = cspPartialSolution.getNextFreeVariable();
+        if (nextVariable == null) return;
+
+//        System.out.println("xx" + nextVariable);
+        for (var domainItem : new ArrayList<>(nextVariable.getDomain())) {
+            var solutionCopy = cspPartialSolution.copyBinary();
+            var changedVariableInx = nextVariable.variableIndex;
+            solutionCopy.setNewValue(domainItem, changedVariableInx);
+            solutionCopy.updateVariables(changedVariableInx);
+//            System.out.println("aft" + solutionCopy.variables);
+            getResultsRecursive(solutionCopy, accumulator);
         }
     }
 }

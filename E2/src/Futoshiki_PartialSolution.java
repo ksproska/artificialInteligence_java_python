@@ -15,7 +15,7 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
     }
 
     public boolean constraint_areThereNoRepetitions() {
-        for (var domainItem : domain) {
+        for (var domainItem : gridProblem.overallDomain) {
             var freq = Collections.frequency(columns.get(itemX), domainItem);
             if(freq > 1) {
                 return false;
