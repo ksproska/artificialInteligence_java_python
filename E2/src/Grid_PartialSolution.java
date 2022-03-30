@@ -91,13 +91,16 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
         isCorrectAfterLastChange = true;
     }
 
-    public CSP_Variable<D> getNextFreeVariable() {
+    public CSP_Variable<D> getNextVariable() {
+        CSP_Variable<D> chosen = null;
         for (var variab : variables) {
             if (!variab.getDomain().isEmpty()) {
-                return variab;
+                if(chosen == null || variab.getDomain().size() < chosen.getDomain().size()) {
+                    chosen = variab;
+                }
             }
         }
-        return null;
+        return chosen;
     }
 
     @Override

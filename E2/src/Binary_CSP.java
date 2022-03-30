@@ -19,7 +19,7 @@ class Binary_CSP {
             accumulator.add(cspPartialSolution);
             return;
         }
-        var nextVariable = cspPartialSolution.getNextFreeVariable();
+        var nextVariable = cspPartialSolution.getNextVariable();
         if (nextVariable == null) return;
 
         for (var domainItem : new ArrayList<>(nextVariable.getDomain())) {

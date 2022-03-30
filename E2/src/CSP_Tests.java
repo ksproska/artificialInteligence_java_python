@@ -145,17 +145,17 @@ public class CSP_Tests {
         var results = futoshikiCSP.getResults();
         Assertions.assertEquals(133, results.size());
         var expected = """
-                1       3       6       2       4   <   5  \s
+                5       2       6       1       3   <   4  \s
                                         <                  \s
-                5       4       1       3       2       6  \s
+                3       4       1       2       6       5  \s
                                                         >  \s
-                2   >   1       5   <   6       3       4  \s
+                2   >   1       5   <   6       4       3  \s
                 <                               <       >  \s
-                3       6       4       1       5       2  \s
+                4       6       2       3       5       1  \s
                 <                                          \s
-                4       2   <   3       5       6       1  \s
+                6       3   <   4       5       1       2  \s
                                         >                  \s
-                6       5       2   <   4   >   1       3\s""";
+                1       5       3   <   4   >   2       6\s""";
 
         Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
     }
