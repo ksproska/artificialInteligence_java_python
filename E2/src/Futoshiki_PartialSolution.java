@@ -1,29 +1,21 @@
 import consts.FutoshikiEnum;
-
-import java.util.Arrays;
 import java.util.Collections;
 
 
 public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, FutoshikiEnum, Integer> {
-    public static Integer[] domain; //todo
 
     private Futoshiki_PartialSolution() {}
     public Futoshiki_PartialSolution(Futoshiki_Problem futoshikiProblem) {
         super(futoshikiProblem);
-        domain = new Integer[futoshikiProblem.gridX];
-        Arrays.setAll(domain, i -> i + 1);
     }
 
     public boolean constraint_areThereNoRepetitions() {
         for (var domainItem : gridProblem.overallDomain) {
             var freq = Collections.frequency(columns.get(changedItemX), domainItem);
-            if(freq > 1) {
-                return false;
-            }
+            if(freq > 1) { return false; }
+
             freq = Collections.frequency(rows.get(changedItemY), domainItem);
-            if(freq > 1) {
-                return false;
-            }
+            if(freq > 1) { return false; }
         }
         return true;
     }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import static java.util.Arrays.asList;
 
 
-public class CSP_Tests {
+public class Tests {
     static Binary_Problem binaryProblem;
     static Binary_CSP binaryCsp;
     static Futoshiki_Problem futoshikiProblem;

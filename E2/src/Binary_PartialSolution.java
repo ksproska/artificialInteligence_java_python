@@ -1,38 +1,35 @@
 import consts.BinaryEnum;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
 
 public class Binary_PartialSolution extends Grid_PartialSolution<Integer, BinaryEnum, Integer> {
-    public static final Integer[] domain = new Integer[]{0, 1};
-
     private Binary_PartialSolution() {}
 
     public Binary_PartialSolution(Binary_Problem binaryProblem) {
         super(binaryProblem);
     }
 
-    private boolean constraint_areAllUnique() {
-        if(!columns.get(changedItemX).contains(null)) {
-            for (var column : columns) {
-                if (!column.contains(null)) {
-                    var freq = Collections.frequency(columns, column);
-                    if (freq > 1) {
-                        return false;
-                    }
+    private boolean checkIfUnique(ArrayList<ArrayList<Integer>> list) {
+        for (var elem : list) {
+            if (!elem.contains(null)) {
+                var freq = Collections.frequency(list, elem);
+                if (freq > 1) {
+                    return false;
                 }
             }
         }
+        return true;
+    }
+
+    private boolean constraint_areAllUnique() {
+        if(!columns.get(changedItemX).contains(null) && !checkIfUnique(columns)) {
+            return false;
+        }
         if(!rows.get(changedItemY).contains(null)) {
-            for (var row : rows) {
-                if (!row.contains(null)) {
-                    var freq = Collections.frequency(rows, row);
-                    if (freq > 1) {
-                        return false;
-                    }
-                }
-            }
+            return checkIfUnique(rows);
         }
         return true;
     }
@@ -52,41 +49,25 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
         return true;
     }
 
-    private boolean constraint_areValuesRepeatedMax2TimesInARow() {
+    private boolean areValuesRepeatedMax2TimesInARow(ArrayList<Integer> list) {
         Integer previous = null;
         int counter = 0;
-        for (var elem : columns.get(changedItemX)) {
+        for (var elem : list) {
             if(elem != null) {
                 if(Objects.equals(previous, elem)) {
                     counter ++;
-                    if(counter > 2) {
-                        return false;
-                    }
+                    if(counter > 2) { return false; }
                 }
-                else {
-                    counter = 1;
-                }
-            }
-            previous = elem;
-        }
-
-        previous = null;
-        counter = 0;
-        for (var elem : rows.get(changedItemY)) {
-            if(elem != null) {
-                if(Objects.equals(previous, elem)) {
-                    counter ++;
-                    if(counter > 2) {
-                        return false;
-                    }
-                }
-                else {
-                    counter = 1;
-                }
+                else { counter = 1; }
             }
             previous = elem;
         }
         return true;
+    }
+
+    private boolean constraint_areValuesRepeatedMax2TimesInARow() {
+        return areValuesRepeatedMax2TimesInARow(columns.get(changedItemX)) &&
+                areValuesRepeatedMax2TimesInARow(rows.get(changedItemY));
     }
 
     @Override
