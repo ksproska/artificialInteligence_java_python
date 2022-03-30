@@ -1,3 +1,5 @@
+import consts.FutoshikiEnum;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -118,17 +120,10 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     }
 
     @Override
-    public boolean isSatisfied() {
-        throw new IllegalStateException("Method not implemented");
-    }
+    public boolean isSatisfied() { return !partialSolution.contains(null); }
 
     @Override
     public boolean checkConstraintsAfterLastChange() {
-        throw new IllegalStateException("Method not implemented");
-    }
-
-    @Override
-    public D[] getDomain() {
         throw new IllegalStateException("Method not implemented");
     }
 
@@ -141,5 +136,31 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     @Override
     public String toString() {
         return gridProblem.chosenProblem + "\n" + gridProblem.toDisplay(partialSolution) + isCorrectAfterLastChange;
+    }
+
+    public void copyTo(Grid_PartialSolution<P, E, D> copiedItem) {
+        copiedItem.gridProblem = gridProblem;
+        copiedItem.lastChangedPosition = lastChangedPosition;
+        copiedItem.isCorrectAfterLastChange = isCorrectAfterLastChange;
+
+        copiedItem.partialSolution = new ArrayList<>(partialSolution);
+        copiedItem.rows = new ArrayList<>();
+        copiedItem.columns = new ArrayList<>();
+        copiedItem.variables = new ArrayList<>();
+
+        for (var row : rows) {
+            copiedItem.rows.add(new ArrayList<>(row));
+        }
+        for (var column : columns) {
+            copiedItem.columns.add(new ArrayList<>(column));
+        }
+        for (var variab : variables) {
+            var newVar = new CSP_Variable<D>(variab.variableIndex);
+            newVar.wasVariableUsed = variab.wasVariableUsed;
+            for (var dV : variab.getDomain()) {
+                newVar.add(dV);
+            }
+            copiedItem.variables.add(newVar);
+        }
     }
 }

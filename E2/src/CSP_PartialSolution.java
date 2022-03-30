@@ -6,7 +6,6 @@ interface CSP_PartialSolution<P, D extends P> {
     boolean areConstraintsNotBrokenAfterLastChange();
     boolean isSatisfied();
     boolean checkConstraintsAfterLastChange();
-    D[] getDomain();
     ArrayList<P> getPartialSolution();
     boolean updateVariables(Integer variableItem);
 }

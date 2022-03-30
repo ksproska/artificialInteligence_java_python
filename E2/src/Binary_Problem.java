@@ -49,6 +49,25 @@ public class Binary_Problem extends Grid_Problem<Integer, BinaryEnum, Integer> {
     }
 
     @Override
+    public String toDisplay(ArrayList<Integer> grid) {
+        var allToDisplay = displaySplitter;
+        for (int i = 0; i < grid.size(); i++) {
+            if (grid.get(i) == null) {
+                allToDisplay += " ";
+            }
+            else {
+                allToDisplay += grid.get(i);
+            }
+            allToDisplay += displaySplitter;
+            if((i + 1) % x == 0) {
+                allToDisplay += "\n" + displaySplitter;
+            }
+        }
+        allToDisplay = allToDisplay.substring(0, allToDisplay.length() - 3);
+        return allToDisplay;
+    }
+
+    @Override
     public Binary_PartialSolution getInitialSolution() {
         return new Binary_PartialSolution(this);
     }

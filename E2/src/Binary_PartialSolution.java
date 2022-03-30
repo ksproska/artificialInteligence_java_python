@@ -96,33 +96,7 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
 
     public Binary_PartialSolution copyBinary() {
         var copiedItem =  new Binary_PartialSolution();
-        copiedItem.gridProblem = gridProblem;
-        copiedItem.partialSolution = new ArrayList<>(partialSolution);
-        copiedItem.rows = new ArrayList<>();
-        for (var row : rows) {
-            copiedItem.rows.add(new ArrayList<>(row));
-        }
-        copiedItem.columns = new ArrayList<>();
-        for (var column : columns) {
-            copiedItem.columns.add(new ArrayList<>(column));
-        }
-        copiedItem.lastChangedPosition = lastChangedPosition;
-        copiedItem.isCorrectAfterLastChange = isCorrectAfterLastChange;
-        copiedItem.variables = new ArrayList<>();
-        for (var variab : variables) {
-            var newVar = new CSP_Variable<Integer>(variab.variableIndex);
-            newVar.wasVariableUsed = variab.wasVariableUsed;
-            for (var dV : variab.getDomain()) {
-                newVar.add(dV);
-            }
-            copiedItem.variables.add(newVar);
-        }
+        copyTo(copiedItem);
         return copiedItem;
     }
-
-    @Override
-    public Integer[] getDomain() { return domain; }
-
-    @Override
-    public boolean isSatisfied() { return !partialSolution.contains(null); }
 }
