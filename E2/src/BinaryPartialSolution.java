@@ -72,22 +72,22 @@ class GridPartialSolution<P, E extends Enum, D extends P> implements CspPartialS
         itemY = getY(variableItem);
         rows.get(itemY).set(itemX, domainItem);
         columns.get(itemX).set(itemY, domainItem);
-        isCorrectAfterLastChange = checkConstraintsAfterLastChange();
+        isCorrectAfterLastChange = this.checkConstraintsAfterLastChange();
     }
 
     @Override
     public boolean isSatisfied() {
-        return false;
+        throw new IllegalStateException("Method not implemented");
     }
 
     @Override
     public boolean checkConstraintsAfterLastChange() {
-        return false;
+        throw new IllegalStateException("Method not implemented");
     }
 
     @Override
     public D[] getDomain() {
-        return null;
+        throw new IllegalStateException("Method not implemented");
     }
 
     @Override
@@ -187,8 +187,17 @@ class BinaryPartialSolution extends GridPartialSolution<Integer, BinaryEnum, Int
 
     @Override
     public boolean checkConstraintsAfterLastChange() {
+        System.out.println(constraint_areAllUnique());
+        System.out.println(constraint_isHalf0AndHalf1());
+        System.out.println(constraint_areValuesRepeatedMax2TimesInARow());
         return constraint_areAllUnique() && constraint_isHalf0AndHalf1() && constraint_areValuesRepeatedMax2TimesInARow();
     }
+
+//    @Override
+//    public void setNewValue(Integer domainItem, Integer variableItem) {
+//        super.setNewValue(domainItem, variableItem);
+//        isCorrectAfterLastChange = checkConstraintsAfterLastChange();
+//    }
 
     @Override
     public Integer[] getDomain() { return domain; }

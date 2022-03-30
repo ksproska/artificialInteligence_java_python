@@ -1,8 +1,9 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
-class CSP <P, D extends P, V> {
-    private final CspProblem<P, D> cspProblem;
-    public CSP(CspProblem<P, D> cspProblem) {
+class CSP <P, D extends P, R extends CspProblem<P, D>, S extends CspPartialSolution<P, D>> {
+    private final R cspProblem;
+    public CSP(R cspProblem) {
         this.cspProblem = cspProblem;
     }
 
@@ -26,6 +27,8 @@ class CSP <P, D extends P, V> {
             for (var domainItem : cspPartialSolution.getDomain()) {
                 var solutionCopy = cspPartialSolution.copy();
                 solutionCopy.setNewValue(domainItem, cspProblem.getVariablesIndexes().get(currentVariable));
+                System.out.println(solutionCopy);
+                System.out.println(currentVariable + " " + domainItem);
                 getResultsRecursive(solutionCopy, currentVariable + 1, accumulator);
             }
         }
