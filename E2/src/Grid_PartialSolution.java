@@ -11,21 +11,21 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     protected int itemX, itemY;
     public ArrayList<CSP_Variable<D>> variables;
 
-    public <G extends Grid_Problem> Grid_PartialSolution(G gridProblem) {
+    public <G extends Grid_Problem<P, E, D>> Grid_PartialSolution(G gridProblem) {
         this.gridProblem = gridProblem;
-        this.partialSolution = new ArrayList<P>(gridProblem.problem);
+        this.partialSolution = new ArrayList<>(gridProblem.problem);
         setRowsAndColumns(gridProblem.x, gridProblem.y);
         isCorrectAfterLastChange = true;
         variables = new ArrayList<>();
         for (var variableIndex : gridProblem.indexesToFill) {
-            var newVariable = new CSP_Variable<D>((Integer) variableIndex);
+            var newVariable = new CSP_Variable<D>(variableIndex);
             variables.add(newVariable);
             for (var domainItem : gridProblem.overallDomain) {
-                setNewValue((D) domainItem, (Integer) variableIndex);
+                setNewValue(domainItem, variableIndex);
                 if(isCorrectAfterLastChange) {
-                    newVariable.add((D) domainItem);
+                    newVariable.add(domainItem);
                 }
-                removeNewValue((Integer) variableIndex);
+                removeNewValue(variableIndex);
             }
         }
     }
