@@ -13,6 +13,14 @@ public abstract class Grid_Problem<P, E extends Enum, D extends P> implements CS
         this.y = y;
     }
 
+    protected void setIndexesToFill() {
+        for (int i = 0; i < problem.size(); i++) {
+            if(problem.get(i) == null) {
+                indexesToFill.add(i);
+            }
+        }
+    }
+
     @Override
     public Grid_PartialSolution<P, E, D> getInitialSolution() {
         return null;

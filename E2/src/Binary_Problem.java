@@ -41,14 +41,6 @@ public class Binary_Problem extends Grid_Problem<Integer, BinaryEnum, Integer> {
         }
     }
 
-    private void setIndexesToFill() {
-        for (int i = 0; i < problem.size(); i++) {
-            if(problem.get(i) == null) {
-                indexesToFill.add(i);
-            }
-        }
-    }
-
     @Override
     public Binary_PartialSolution getInitialSolution() {
         return new Binary_PartialSolution(this);

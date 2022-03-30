@@ -131,5 +131,5 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
     public Integer[] getDomain() { return domain; }
 
     @Override
-    public boolean isSatisfied() { return !partialSolution.contains("x"); }
+    public boolean isSatisfied() { return !partialSolution.contains(null); }
 }

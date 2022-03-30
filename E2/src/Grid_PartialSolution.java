@@ -15,6 +15,14 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
         isCorrectAfterLastChange = true;
     }
 
+    public <G extends Grid_Problem> Grid_PartialSolution(G gridProblem, ArrayList<P> partialSolution, D domainItem, Integer variableItem) {
+        this.gridProblem = gridProblem;
+        this.partialSolution = new ArrayList<P>(partialSolution);
+        setRowsAndColumns(gridProblem.x, gridProblem.y);
+        isCorrectAfterLastChange = true;
+        setNewValue(domainItem, variableItem);
+    }
+
     public int getX(int position) { return position % gridProblem.x; }
     public int getY(int position) { return position / gridProblem.x; }
 
@@ -36,6 +44,17 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
             columns.get(tempX).add(tempY, partialSolution.get(i));
         }
     }
+
+//    @Override
+//    public void removeNewValue(Integer variableItem) {
+//        lastChangedPosition = variableItem;
+//        partialSolution.set(variableItem, null);
+//        itemX = getX(variableItem);
+//        itemY = getY(variableItem);
+//        rows.get(itemY).set(itemX, null);
+//        columns.get(itemX).set(itemY, null);
+//        isCorrectAfterLastChange = this.checkConstraintsAfterLastChange();
+//    }
 
     @Override
     public void setNewValue(D domainItem, Integer variableItem) {

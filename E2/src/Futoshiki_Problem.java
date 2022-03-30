@@ -23,14 +23,6 @@ public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integ
         setIndexesToFill();
     }
 
-    private void setIndexesToFill() {
-        for (int i = 0; i < problem.size(); i++) {
-            if(problem.get(i) != null && problem.get(i).equals("x")) {
-                indexesToFill.add(i);
-            }
-        }
-    }
-
     private void readProblem(String folderPath) {
         String filename = String.format("%s\\%s_%sx%s", folderPath, "futoshiki", gridX, gridY);
         try {
@@ -45,8 +37,8 @@ public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integ
                         nextValue = Integer.valueOf(nextChar);
                     }
                     catch (NumberFormatException ignored) {}
-                    if(nextValue == "x") {
-                        nextValue = new Integer(null);
+                    if(nextValue.equals("x")) {
+                        nextValue = (Integer) null;
                     }
                     problem.add(nextValue);
                     if(rowCounter % 2 == 1 && i < gridX - 1) {
@@ -66,7 +58,10 @@ public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integ
         var allToDisplay = "";
         for (int i = 0; i < grid.size(); i++) {
             if (grid.get(i) == null
-                    || grid.get(i).equals("-")
+            ) {
+                allToDisplay += "x";
+            }
+            else if (grid.get(i).equals("-")
             ) {
                 allToDisplay += " ";
             }
