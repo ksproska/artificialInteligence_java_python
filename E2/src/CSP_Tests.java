@@ -1,13 +1,14 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
-
 import static java.util.Arrays.asList;
 
-class BinaryTests {
+
+public class CSP_Tests {
     static BinaryProblem binaryProblem;
     static BinaryCSP binaryCsp;
+    static FutoshikiProblem futoshikiProblem;
+    static FutoshikiCSP futoshikiCSP;
 
     @Test
     void testCorrections() {
@@ -27,7 +28,7 @@ class BinaryTests {
     }
 
     @Test
-    void test6x6() {
+    void testB6x6() {
         binaryProblem = new BinaryProblem(BinaryEnum.B6x6);
         binaryCsp = new BinaryCSP(binaryProblem);
         var results = binaryCsp.getResults();
@@ -45,7 +46,7 @@ class BinaryTests {
     }
 
     @Test
-    void test8x8() {
+    void testB8x8() {
         binaryProblem = new BinaryProblem(BinaryEnum.B8x8);
         binaryCsp = new BinaryCSP(binaryProblem);
         var results = binaryCsp.getResults();
@@ -65,7 +66,7 @@ class BinaryTests {
     }
 
     @Test
-    void test10x10() {
+    void testB10x10() {
         binaryProblem = new BinaryProblem(BinaryEnum.B10x10);
         binaryCsp = new BinaryCSP(binaryProblem);
         var results = binaryCsp.getResults();
@@ -85,8 +86,63 @@ class BinaryTests {
         Assertions.assertIterableEquals(expected, results.get(0).getPartialSolution());
     }
 
-//    @Test
-//    void textX() {
-//
-//    }
+    @Test
+    void testF4x4() {
+        futoshikiProblem = new FutoshikiProblem(FutoshikiEnum.F4x4);
+        futoshikiCSP = new FutoshikiCSP(futoshikiProblem);
+        var results = futoshikiCSP.getResults();
+        Assertions.assertEquals(1, results.size());
+        var expected = """
+                3   >   1       4       2  \s
+                                           \s
+                2   <   4       3   >   1  \s
+                                >          \s
+                1       3       2       4  \s
+                <                          \s
+                4       2   >   1   <   3\s""";
+
+        Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
+    }
+
+    @Test
+    void testF5x5() {
+        futoshikiProblem = new FutoshikiProblem(FutoshikiEnum.F5x5);
+        futoshikiCSP = new FutoshikiCSP(futoshikiProblem);
+        var results = futoshikiCSP.getResults();
+        Assertions.assertEquals(1, results.size());
+        var expected = """
+               2       3       1       4   <   5  \s
+                                                  \s
+               4   >   1       3   <   5       2  \s
+                                                  \s
+               1       5       4       2       3  \s
+               <                       <          \s
+               5       4   >   2       3       1  \s
+                                                  \s
+               3       2   <   5       1       4\s""";
+
+        Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
+    }
+
+    @Test
+    void testF6x6() {
+        futoshikiProblem = new FutoshikiProblem(FutoshikiEnum.F6x6);
+        futoshikiCSP = new FutoshikiCSP(futoshikiProblem);
+        var results = futoshikiCSP.getResults();
+        Assertions.assertEquals(133, results.size());
+        var expected = """
+                1       3       6       2       4   <   5  \s
+                                        <                  \s
+                5       4       1       3       2       6  \s
+                                                        >  \s
+                2   >   1       5   <   6       3       4  \s
+                <                               <       >  \s
+                3       6       4       1       5       2  \s
+                <                                          \s
+                4       2   <   3       5       6       1  \s
+                                        >                  \s
+                6       5       2   <   4   >   1       3\s""";
+
+        Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
+    }
 }
