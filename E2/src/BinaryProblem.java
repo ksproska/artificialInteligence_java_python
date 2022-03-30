@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class BinaryProblem extends GridProblem<BinaryEnum, Integer, Integer, Integer> {
+public class BinaryProblem extends GridProblem<Integer, BinaryEnum, Integer, BinaryPartialSolution> {
     public BinaryProblem(BinaryEnum chosenProblem) {
         super(chosenProblem,
                 BinaryConsts.getSize(chosenProblem)[0],
@@ -46,7 +46,7 @@ public class BinaryProblem extends GridProblem<BinaryEnum, Integer, Integer, Int
     }
 
     @Override
-    public CspPartialSolution<Integer, Integer> getInitialSolution() {
+    public BinaryPartialSolution getInitialSolution() {
         return new BinaryPartialSolution(this);
     }
 }

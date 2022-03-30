@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
-abstract class GridProblem<E extends Enum, D, T, P> implements CspProblem<D, T> {
+abstract class GridProblem<P, E extends Enum, D extends P, S extends GridPartialSolution<P, E, D>> implements CspProblem<P, D> {
     public final E chosenProblem;
     public final int x, y;
     public final ArrayList<P> problem = new ArrayList<>();
-    public final ArrayList<T> indexesToFill = new ArrayList<>();
+    public final ArrayList<Integer> indexesToFill = new ArrayList<>();
     protected String displaySplitter = " | ";
 
     protected GridProblem(E chosenProblem, int x, int y) {
@@ -14,7 +14,7 @@ abstract class GridProblem<E extends Enum, D, T, P> implements CspProblem<D, T> 
     }
 
     @Override
-    public CspPartialSolution<D, T> getInitialSolution() {
+    public S getInitialSolution() {
         return null;
     }
 
@@ -40,5 +40,5 @@ abstract class GridProblem<E extends Enum, D, T, P> implements CspProblem<D, T> 
     public String toString() { return chosenProblem + "\n" + toDisplay(problem); }
 
     @Override
-    public ArrayList<T> getVariables() { return indexesToFill; }
+    public ArrayList<Integer> getVariablesIndexes() { return indexesToFill; }
 }

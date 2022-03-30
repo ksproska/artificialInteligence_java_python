@@ -7,7 +7,7 @@ import static java.util.Arrays.asList;
 
 class BinaryTests {
     static BinaryProblem binaryProblem;
-    static CSP<Integer, Integer> csp;
+    static CSP<Integer, Integer, Integer> csp;
 
     @Test
     void testCorrections() {

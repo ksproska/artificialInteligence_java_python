@@ -2,78 +2,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
-//class GridPartialSolution<D, T> implements CspPartialSolution<D, T> {
-//    public CspProblem<D, T> cspProblem;
+class GridPartialSolution<P, E extends Enum, D extends P> implements CspPartialSolution<P, D> {
+    public GridProblem<P, E, D, GridPartialSolution<P, E, D>> gridProblem;
 //    protected static D[] domain;
-//    public ArrayList<Integer> partialSolution;
-//    public ArrayList<ArrayList<Integer>> rows, columns;
-//    private Integer lastChangedPosition;
-//    private boolean isCorrectAfterLastChange;
-//    private int itemX, itemY;
-//
-//    public int getX(int position) { return position % cspProblem.x; }
-//    public int getY(int position) { return position / cspProblem.x; }
-//
-//    private BinaryPartialSolution() {}
-//
-//    @Override
-//    public void setNewValue(D domainItem, T variableItem) {
-//
-//    }
-//
-//    @Override
-//    public boolean areConstraintsNotBrokenAfterLastChange() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isSatisfied() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean checkConstraintsAfterLastChange() {
-//        return false;
-//    }
-//
-//    @Override
-//    public D[] getDomain() {
-//        return null;
-//    }
-//
-//    @Override
-//    public CspPartialSolution<D, T> copy() {
-//        return null;
-//    }
-//
-//    @Override
-//    public ArrayList<D> getPartialSolution() {
-//        return null;
-//    }
-//}
+    public ArrayList<P> partialSolution;
+    public ArrayList<ArrayList<P>> rows, columns;
+    protected Integer lastChangedPosition;
+    protected boolean isCorrectAfterLastChange;
+    protected int itemX, itemY;
 
-class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
-    public BinaryProblem binaryProblem;
-    public static final Integer[] domain = new Integer[]{0, 1};
-    public ArrayList<Integer> partialSolution;
-    public ArrayList<ArrayList<Integer>> rows, columns;
-    private Integer lastChangedPosition;
-    private boolean isCorrectAfterLastChange;
-    private int itemX, itemY;
-
-    public int getX(int position) { return position % binaryProblem.x; }
-    public int getY(int position) { return position / binaryProblem.x; }
-
-    private BinaryPartialSolution() {}
-
-    public BinaryPartialSolution(BinaryProblem binaryProblem) {
-        this.binaryProblem = binaryProblem;
-        this.partialSolution = new ArrayList<>(binaryProblem.problem);
-        setRowsAndColumns(binaryProblem.x, binaryProblem.y);
+    public <G extends GridProblem> GridPartialSolution(G gridProblem) {
+        this.gridProblem = gridProblem;
+        this.partialSolution = new ArrayList<P>(gridProblem.problem);
+        setRowsAndColumns(gridProblem.x, gridProblem.y);
         isCorrectAfterLastChange = true;
     }
 
-    private void setRowsAndColumns(int x, int y) {
+    public int getX(int position) { return position % gridProblem.x; }
+    public int getY(int position) { return position / gridProblem.x; }
+
+    protected GridPartialSolution() {}
+
+    protected void setRowsAndColumns(int x, int y) {
         rows = new ArrayList<>();
         columns = new ArrayList<>();
         for (int i = 0; i < x; i++) {
@@ -91,9 +41,9 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
     }
 
     @Override
-    public BinaryPartialSolution copy() {
-        var copiedItem = new BinaryPartialSolution();
-        copiedItem.binaryProblem = binaryProblem;
+    public GridPartialSolution<P, E, D> copy() {
+        var copiedItem = new GridPartialSolution<P, E, D>();
+        copiedItem.gridProblem = gridProblem;
         copiedItem.partialSolution = new ArrayList<>(partialSolution);
         copiedItem.rows = new ArrayList<>();
         for (var row : rows) {
@@ -109,7 +59,7 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
     }
 
     @Override
-    public void setNewValue(Integer domainItem, Integer variableItem) {
+    public void setNewValue(D domainItem, Integer variableItem) {
         if(!isCorrectAfterLastChange) {
             throw new IllegalStateException("Solution incorrect after last change");
         }
@@ -123,6 +73,40 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
         rows.get(itemY).set(itemX, domainItem);
         columns.get(itemX).set(itemY, domainItem);
         isCorrectAfterLastChange = checkConstraintsAfterLastChange();
+    }
+
+    @Override
+    public boolean isSatisfied() {
+        return false;
+    }
+
+    @Override
+    public boolean checkConstraintsAfterLastChange() {
+        return false;
+    }
+
+    @Override
+    public D[] getDomain() {
+        return null;
+    }
+
+    @Override
+    public boolean areConstraintsNotBrokenAfterLastChange() { return isCorrectAfterLastChange; }
+
+    @Override
+    public ArrayList<P> getPartialSolution() { return partialSolution; }
+
+    @Override
+    public String toString() {
+        return gridProblem.chosenProblem + "\n" + gridProblem.toDisplay(partialSolution) + isCorrectAfterLastChange;
+    }
+}
+
+class BinaryPartialSolution extends GridPartialSolution<Integer, BinaryEnum, Integer> {
+    public static final Integer[] domain = new Integer[]{0, 1};
+
+    public BinaryPartialSolution(BinaryProblem binaryProblem) {
+        super(binaryProblem);
     }
 
     private boolean constraint_areAllUnique() {
@@ -152,13 +136,13 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
     private boolean constraint_isHalf0AndHalf1() {
         var freq0 = Collections.frequency(columns.get(itemX), 0);
         var freq1 = Collections.frequency(columns.get(itemX), 1);
-        if (freq0 > binaryProblem.y/2 || freq1 > binaryProblem.y/2) {
+        if (freq0 > gridProblem.y/2 || freq1 > gridProblem.y/2) {
             return false;
         }
 
         freq0 = Collections.frequency(rows.get(itemY), 0);
         freq1 = Collections.frequency(rows.get(itemY), 1);
-        if (freq0 > binaryProblem.x/2 || freq1 > binaryProblem.x/2) {
+        if (freq0 > gridProblem.x/2 || freq1 > gridProblem.x/2) {
             return false;
         }
         return true;
@@ -210,16 +194,5 @@ class BinaryPartialSolution implements CspPartialSolution<Integer, Integer> {
     public Integer[] getDomain() { return domain; }
 
     @Override
-    public boolean areConstraintsNotBrokenAfterLastChange() { return isCorrectAfterLastChange; }
-
-    @Override
     public boolean isSatisfied() { return !partialSolution.contains(null); }
-
-    @Override
-    public ArrayList<Integer> getPartialSolution() { return partialSolution; }
-
-    @Override
-    public String toString() {
-        return binaryProblem.chosenProblem + "\n" + binaryProblem.toDisplay(partialSolution) + isCorrectAfterLastChange;
-    }
 }
