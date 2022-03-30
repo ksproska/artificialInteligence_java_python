@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+
 public class Futoshiki_CSP {
     private final Futoshiki_Problem cspProblem;
     public Futoshiki_CSP(Futoshiki_Problem cspProblem) {
@@ -8,24 +9,26 @@ public class Futoshiki_CSP {
     public ArrayList<Futoshiki_PartialSolution> getResults() {
         ArrayList<Futoshiki_PartialSolution> accumulator = new ArrayList<>();
         var cspProblemInitialSolution = cspProblem.getInitialSolution();
-        getResultsRecursive(cspProblemInitialSolution, 0, accumulator);
+        getResultsRecursive(cspProblemInitialSolution, accumulator);
         return accumulator;
     }
 
     private void getResultsRecursive(Futoshiki_PartialSolution cspPartialSolution,
-                                     int currentVariable,
                                      ArrayList<Futoshiki_PartialSolution> accumulator) {
         if(cspPartialSolution.isSatisfied()) {
-            if(cspPartialSolution.areConstraintsNotBrokenAfterLastChange()) {
-                accumulator.add(cspPartialSolution);
-            }
+            accumulator.add(cspPartialSolution);
             return;
         }
-        if(cspPartialSolution.areConstraintsNotBrokenAfterLastChange()) {
-            for (var domainItem : cspPartialSolution.getDomain()) {
-                var solutionCopy = cspPartialSolution.copyFutoshiki();
-                solutionCopy.setNewValue(domainItem, cspProblem.getVariablesIndexes().get(currentVariable));
-                getResultsRecursive(solutionCopy, currentVariable + 1, accumulator);
+        var nextVariable = cspPartialSolution.getNextFreeVariable();
+        if (nextVariable == null) return;
+
+        for (var domainItem : new ArrayList<>(nextVariable.getDomain())) {
+            var solutionCopy = cspPartialSolution.copyFutoshiki();
+            var changedVariableInx = nextVariable.variableIndex;
+            solutionCopy.setNewValue(domainItem, changedVariableInx);
+            boolean areValuesCorrect = solutionCopy.updateVariables(changedVariableInx);
+            if(areValuesCorrect) {
+                getResultsRecursive(solutionCopy, accumulator);
             }
         }
     }

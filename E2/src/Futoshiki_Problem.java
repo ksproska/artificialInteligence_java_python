@@ -1,7 +1,6 @@
 import consts.FutoshikiConsts;
 import consts.FutoshikiEnum;
 import consts.ProjectConsts;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

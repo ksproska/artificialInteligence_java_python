@@ -1,8 +1,8 @@
 import consts.FutoshikiEnum;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+
 
 public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, FutoshikiEnum, Integer> {
     public static Integer[] domain; //todo
@@ -124,6 +124,15 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
         }
         copiedItem.lastChangedPosition = lastChangedPosition;
         copiedItem.isCorrectAfterLastChange = isCorrectAfterLastChange;
+        copiedItem.variables = new ArrayList<>();
+        for (var variab : variables) {
+            var newVar = new CSP_Variable<Integer>(variab.variableIndex);
+            newVar.wasVariableUsed = variab.wasVariableUsed;
+            for (var dV : variab.getDomain()) {
+                newVar.add(dV);
+            }
+            copiedItem.variables.add(newVar);
+        }
         return copiedItem;
     }
 

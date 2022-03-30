@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+
 public abstract class Grid_Problem<P, E extends Enum, D extends P> implements CSP_Problem<P, D> {
     public final E chosenProblem;
     public final ArrayList<D> overallDomain;

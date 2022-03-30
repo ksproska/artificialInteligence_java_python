@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Iterator;
+
 
 public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> implements CSP_PartialSolution<P, D> {
     public Grid_Problem<P, E, D> gridProblem;
@@ -52,8 +54,30 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
 
     @Override
     public boolean updateVariables(Integer variableItem) {
-        System.out.println("not implemented");
-        return false;
+        var variableX = getX(variableItem);
+        var variableY = getY(variableItem);
+        for (var variableInArray : variables) {
+            var tempX = getX(variableInArray.variableIndex);
+            var tempY = getY(variableInArray.variableIndex);
+            if((tempX == variableX || tempY == variableY) && !variableInArray.variableIndex.equals(variableItem)) {
+                for (Iterator<D> iterator = variableInArray.getDomain().iterator(); iterator.hasNext(); ) {
+                    D domainItem = iterator.next();
+                    setNewValue(domainItem, variableInArray.variableIndex);
+                    if(!isCorrectAfterLastChange) {
+                        iterator.remove();
+                    }
+                    removeNewValue(variableInArray.variableIndex);
+                }
+                if(!variableInArray.wasVariableUsed && variableInArray.getDomain().isEmpty()) {
+                    return false;
+                }
+            }
+            else if (variableInArray.variableIndex.equals(variableItem)) {
+                variableInArray.removeAll();
+                variableInArray.wasVariableUsed = true;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -65,6 +89,15 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
         rows.get(itemY).set(itemX, null);
         columns.get(itemX).set(itemY, null);
         isCorrectAfterLastChange = true;
+    }
+
+    public CSP_Variable<D> getNextFreeVariable() {
+        for (var variab : variables) {
+            if (!variab.getDomain().isEmpty()) {
+                return variab;
+            }
+        }
+        return null;
     }
 
     @Override
