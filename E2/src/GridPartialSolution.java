@@ -42,9 +42,9 @@ public abstract class GridPartialSolution<P, E extends Enum, D extends P> implem
         if(!isCorrectAfterLastChange) {
             throw new IllegalStateException("Solution incorrect after last change");
         }
-        if(partialSolution.get(variableItem) != null) {
-            throw new IllegalArgumentException("Value already set at variableItem: " + variableItem);
-        }
+//        if(partialSolution.get(variableItem) != null) {
+//            throw new IllegalArgumentException("Value already set at variableItem: " + variableItem);
+//        }
         lastChangedPosition = variableItem;
         partialSolution.set(variableItem, domainItem);
         itemX = getX(variableItem);
