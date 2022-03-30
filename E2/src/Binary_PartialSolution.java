@@ -1,5 +1,5 @@
 import consts.BinaryEnum;
-import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
     }
 
     private boolean constraint_areAllUnique() {
-        if(!columns.get(itemX).contains(null)) {
+        if(!columns.get(changedItemX).contains(null)) {
             for (var column : columns) {
                 if (!column.contains(null)) {
                     var freq = Collections.frequency(columns, column);
@@ -24,7 +24,7 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
                 }
             }
         }
-        if(!rows.get(itemY).contains(null)) {
+        if(!rows.get(changedItemY).contains(null)) {
             for (var row : rows) {
                 if (!row.contains(null)) {
                     var freq = Collections.frequency(rows, row);
@@ -38,14 +38,14 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
     }
 
     private boolean constraint_isHalf0AndHalf1() {
-        var freq0 = Collections.frequency(columns.get(itemX), 0);
-        var freq1 = Collections.frequency(columns.get(itemX), 1);
+        var freq0 = Collections.frequency(columns.get(changedItemX), 0);
+        var freq1 = Collections.frequency(columns.get(changedItemX), 1);
         if (freq0 > gridProblem.y/2 || freq1 > gridProblem.y/2) {
             return false;
         }
 
-        freq0 = Collections.frequency(rows.get(itemY), 0);
-        freq1 = Collections.frequency(rows.get(itemY), 1);
+        freq0 = Collections.frequency(rows.get(changedItemY), 0);
+        freq1 = Collections.frequency(rows.get(changedItemY), 1);
         if (freq0 > gridProblem.x/2 || freq1 > gridProblem.x/2) {
             return false;
         }
@@ -55,7 +55,7 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
     private boolean constraint_areValuesRepeatedMax2TimesInARow() {
         Integer previous = null;
         int counter = 0;
-        for (var elem : columns.get(itemX)) {
+        for (var elem : columns.get(changedItemX)) {
             if(elem != null) {
                 if(Objects.equals(previous, elem)) {
                     counter ++;
@@ -72,7 +72,7 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
 
         previous = null;
         counter = 0;
-        for (var elem : rows.get(itemY)) {
+        for (var elem : rows.get(changedItemY)) {
             if(elem != null) {
                 if(Objects.equals(previous, elem)) {
                     counter ++;
