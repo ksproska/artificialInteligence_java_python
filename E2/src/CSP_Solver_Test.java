@@ -15,30 +15,41 @@ public class CSP_Solver_Test {
     @Test
     void testCorrectionsB6x6() {
         binaryProblem = new Binary_Problem(BinaryEnum.B6x6);
-        var suggestion = new Binary_PartialSolution(binaryProblem);
-        suggestion.setNewValueAtIndexOf(0, 0);
-        suggestion.setNewValueAtIndexOf(1, 6);
-        suggestion.setNewValueAtIndexOf(0, 18);
-        suggestion.setNewValueAtIndexOf(1, 24);
-
-        suggestion.setNewValueAtIndexOf(0, 5);
-        suggestion.setNewValueAtIndexOf(0, 17);
-        suggestion.setNewValueAtIndexOf(0, 23);
-        suggestion.setNewValueAtIndexOf(1, 29);
-        suggestion.setNewValueAtIndexOf(1, 35);
-        Assertions.assertFalse(suggestion.areConstraintsNotBrokenAfterLastChange());
+        var partialSolution = new Binary_PartialSolution(binaryProblem);
+        partialSolution.setNewValueAtIndexOf(0, 0);
+        Assertions.assertTrue(partialSolution.areConstraintsNotBrokenAfterLastChange());
+        partialSolution.setNewValueAtIndexOf(1, 6);
+        Assertions.assertTrue(partialSolution.areConstraintsNotBrokenAfterLastChange());
+        partialSolution.setNewValueAtIndexOf(0, 18);
+        Assertions.assertTrue(partialSolution.areConstraintsNotBrokenAfterLastChange());
+        partialSolution.setNewValueAtIndexOf(1, 24);
+        Assertions.assertTrue(partialSolution.areConstraintsNotBrokenAfterLastChange());
+        partialSolution.setNewValueAtIndexOf(0, 5);
+        Assertions.assertTrue(partialSolution.areConstraintsNotBrokenAfterLastChange());
+        partialSolution.setNewValueAtIndexOf(0, 17);
+        Assertions.assertTrue(partialSolution.areConstraintsNotBrokenAfterLastChange());
+        partialSolution.setNewValueAtIndexOf(0, 23);
+        Assertions.assertTrue(partialSolution.areConstraintsNotBrokenAfterLastChange());
+        partialSolution.setNewValueAtIndexOf(1, 29);
+        Assertions.assertTrue(partialSolution.areConstraintsNotBrokenAfterLastChange());
+        partialSolution.setNewValueAtIndexOf(1, 35);
+        Assertions.assertFalse(partialSolution.areConstraintsNotBrokenAfterLastChange());
     }
 
     @Test
     void testCorrectionsF4x4() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F4x4);
-        var solution = futoshikiProblem.getInitialPartialSolution();
-        solution.setNewValueAtIndexOf(4, 4);
-        solution.setNewValueAtIndexOf(2, 20);
-        solution.setNewValueAtIndexOf(2, 32);
-        solution.setNewValueAtIndexOf(1, 46);
-        solution.setNewValueAtIndexOf(1, 48);
-        Assertions.assertFalse(solution.areConstraintsNotBrokenAfterLastChange());
+        var partialSolution = futoshikiProblem.getInitialPartialSolution();
+        partialSolution.setNewValueAtIndexOf(4, 4);
+        Assertions.assertTrue(partialSolution.areConstraintsNotBrokenAfterLastChange());
+        partialSolution.setNewValueAtIndexOf(2, 20);
+        Assertions.assertTrue(partialSolution.areConstraintsNotBrokenAfterLastChange());
+        partialSolution.setNewValueAtIndexOf(2, 32);
+        Assertions.assertTrue(partialSolution.areConstraintsNotBrokenAfterLastChange());
+        partialSolution.setNewValueAtIndexOf(1, 46);
+        Assertions.assertTrue(partialSolution.areConstraintsNotBrokenAfterLastChange());
+        partialSolution.setNewValueAtIndexOf(1, 48);
+        Assertions.assertFalse(partialSolution.areConstraintsNotBrokenAfterLastChange());
     }
 
     @Test
