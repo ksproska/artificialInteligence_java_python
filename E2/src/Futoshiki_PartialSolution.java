@@ -20,59 +20,56 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
         return true;
     }
 
+    private boolean areCorrectOrder(Integer valuePrev, Object sign, Integer valueNext) {
+        if(sign.equals(Futoshiki_Problem.lessThan) && valuePrev < valueNext) return true;
+        if(sign.equals(Futoshiki_Problem.moreThan) && valuePrev > valueNext) return true;
+        return false;
+    }
+
     public boolean constraint_isRightCorrect() {
         if(changedItemX + 1 < gridProblem.x) {
-            var row = rows.get(changedItemY);
-            var value = (Integer) row.get(changedItemX);
-            var sign = row.get(changedItemX + 1);
-            if(sign.equals(Futoshiki_Problem.neutral)) {
-                return true;
-            }
-            var nextValue = row.get(changedItemX + 2);
-            if(!(nextValue instanceof Integer)) {
-                return true;
-            }
-            if(sign.equals(Futoshiki_Problem.lessThan) && value < (Integer) nextValue) return true;
-            if(sign.equals(Futoshiki_Problem.moreThan) && value > (Integer) nextValue) return true;
-            return false;
+            var list = rows.get(changedItemY);
+            var valuePrev = (Integer) list.get(changedItemX);
+
+            var sign = list.get(changedItemX + 1);
+            if(sign.equals(Futoshiki_Problem.neutral)) { return true; }
+
+            var valueNext = list.get(changedItemX + 2);
+            if(!(valueNext instanceof Integer)) { return true; }
+
+            return areCorrectOrder(valuePrev, sign, (Integer) valueNext);
         }
         return true;
     }
 
     public boolean constraint_isLeftCorrect() {
         if(0 < changedItemX) {
-            var row = rows.get(changedItemY);
-            var value = (Integer) row.get(changedItemX);
-            var sign = row.get(changedItemX - 1);
-            if(sign.equals(Futoshiki_Problem.neutral)) {
-                return true;
-            }
-            var prevValue = row.get(changedItemX - 2);
-            if(!(prevValue instanceof Integer)) {
-                return true;
-            }
-            if(sign.equals(Futoshiki_Problem.lessThan) && (Integer) prevValue < value) return true;
-            if(sign.equals(Futoshiki_Problem.moreThan) && (Integer) prevValue > value) return true;
-            return false;
+            var list = rows.get(changedItemY);
+            var valueNext = (Integer) list.get(changedItemX);
+
+            var sign = list.get(changedItemX - 1);
+            if(sign.equals(Futoshiki_Problem.neutral)) { return true; }
+
+            var valuePrev = list.get(changedItemX - 2);
+            if(!(valuePrev instanceof Integer)) { return true; }
+
+            return areCorrectOrder((Integer) valuePrev, sign, valueNext);
         }
         return true;
     }
 
     public boolean constraint_isUpCorrect() {
         if(0 < changedItemY) {
-            var column = columns.get(changedItemX);
-            var value = (Integer) column.get(changedItemY);
-            var sign = column.get(changedItemY - 1);
-            if(sign.equals(Futoshiki_Problem.neutral)) {
-                return true;
-            }
-            var prevValue = column.get(changedItemY - 2);
-            if(!(prevValue instanceof Integer)) {
-                return true;
-            }
-            if(sign.equals(Futoshiki_Problem.lessThan) && (Integer) prevValue < value) return true;
-            if(sign.equals(Futoshiki_Problem.moreThan) && (Integer) prevValue > value) return true;
-            return false;
+            var list = columns.get(changedItemX);
+            var valueNext = (Integer) list.get(changedItemY);
+
+            var sign = list.get(changedItemY - 1);
+            if(sign.equals(Futoshiki_Problem.neutral)) { return true; }
+
+            var valuePrev = list.get(changedItemY - 2);
+            if(!(valuePrev instanceof Integer)) { return true; }
+
+            return areCorrectOrder((Integer) valuePrev, sign, valueNext);
         }
         return true;
     }
@@ -80,18 +77,15 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
     public boolean constraint_isDownCorrect() {
         if(changedItemY + 1 < gridProblem.y) {
             var column = columns.get(changedItemX);
-            var value = (Integer) column.get(changedItemY);
+            var valuePrev = (Integer) column.get(changedItemY);
+
             var sign = column.get(changedItemY + 1);
-            if(sign.equals(Futoshiki_Problem.neutral)) {
-                return true;
-            }
-            var nextValue = column.get(changedItemY + 2);
-            if(!(nextValue instanceof Integer)) {
-                return true;
-            }
-            if(sign.equals(Futoshiki_Problem.lessThan) && value < (Integer) nextValue) return true;
-            if(sign.equals(Futoshiki_Problem.moreThan) && value > (Integer) nextValue) return true;
-            return false;
+            if(sign.equals(Futoshiki_Problem.neutral)) { return true; }
+
+            var valueNext = column.get(changedItemY + 2);
+            if(!(valueNext instanceof Integer)) { return true; }
+
+            return areCorrectOrder(valuePrev, sign, (Integer) valueNext);
         }
         return true;
     }
