@@ -22,8 +22,13 @@ class Binary_CSP {
         var nextVariable = cspPartialSolution.getNextVariable();
         if (nextVariable == null) return;
 
-        for (var domainItem : new ArrayList<>(nextVariable.getDomain())) {
-            var solutionCopy = cspPartialSolution.copyBinary();
+        var searchedDomain = new ArrayList<>(nextVariable.getDomain());
+        for (int i = 0; i < searchedDomain.size(); i++) {
+            var domainItem = searchedDomain.get(i);
+            var solutionCopy = cspPartialSolution;
+            if(i != searchedDomain.size() - 1) {
+                solutionCopy = cspPartialSolution.copyBinary();
+            }
             var changedVariableInx = nextVariable.variableIndex;
             solutionCopy.setNewValue(domainItem, changedVariableInx);
             boolean areValuesCorrect = solutionCopy.updateVariables(changedVariableInx);
