@@ -1,16 +1,15 @@
 import java.util.ArrayList;
 
+
 interface CSP_PartialSolution<P, D extends P> {
-    void removeValue(Integer variableItem);
-
-    CSP_Variable<D> getNextVariable();
-
-    boolean setNewValue(D domainItem, Integer variableIndex);
-    boolean areConstraintsNotBrokenAfterLastChange();
     boolean isSatisfied();
+    <T extends CSP_PartialSolution<P, D>> T deepClone();
+    CSP_Variable<D> getNextVariable();
+    boolean setNewValueAtIndexOf(D domainItem, Integer variableIndex);
     boolean checkConstraintsAfterLastChange();
-    ArrayList<P> getPartialSolution();
+    void removeValueAtIndexOf(Integer variableItem);
     boolean updateVariables(Integer variableItem);
 
-    <T extends CSP_PartialSolution<P, D>> T deepClone();
+    ArrayList<P> getPartialSolution();
+    boolean areConstraintsNotBrokenAfterLastChange();
 }

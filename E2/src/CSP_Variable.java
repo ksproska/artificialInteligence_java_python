@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+
 public class CSP_Variable<T> {
     public final Integer variableIndex;
     private ArrayList<T> domain;

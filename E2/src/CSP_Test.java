@@ -16,16 +16,16 @@ public class CSP_Test {
     void testCorrectionsB6x6() {
         binaryProblem = new Binary_Problem(BinaryEnum.B6x6);
         var suggestion = new Binary_PartialSolution(binaryProblem);
-        suggestion.setNewValue(0, 0);
-        suggestion.setNewValue(1, 6);
-        suggestion.setNewValue(0, 18);
-        suggestion.setNewValue(1, 24);
+        suggestion.setNewValueAtIndexOf(0, 0);
+        suggestion.setNewValueAtIndexOf(1, 6);
+        suggestion.setNewValueAtIndexOf(0, 18);
+        suggestion.setNewValueAtIndexOf(1, 24);
 
-        suggestion.setNewValue(0, 5);
-        suggestion.setNewValue(0, 17);
-        suggestion.setNewValue(0, 23);
-        suggestion.setNewValue(1, 29);
-        suggestion.setNewValue(1, 35);
+        suggestion.setNewValueAtIndexOf(0, 5);
+        suggestion.setNewValueAtIndexOf(0, 17);
+        suggestion.setNewValueAtIndexOf(0, 23);
+        suggestion.setNewValueAtIndexOf(1, 29);
+        suggestion.setNewValueAtIndexOf(1, 35);
         Assertions.assertFalse(suggestion.areConstraintsNotBrokenAfterLastChange());
     }
 
@@ -33,11 +33,11 @@ public class CSP_Test {
     void testCorrectionsF4x4() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F4x4);
         var solution = futoshikiProblem.getInitialSolution();
-        solution.setNewValue(4, 4);
-        solution.setNewValue(2, 20);
-        solution.setNewValue(2, 32);
-        solution.setNewValue(1, 46);
-        solution.setNewValue(1, 48);
+        solution.setNewValueAtIndexOf(4, 4);
+        solution.setNewValueAtIndexOf(2, 20);
+        solution.setNewValueAtIndexOf(2, 32);
+        solution.setNewValueAtIndexOf(1, 46);
+        solution.setNewValueAtIndexOf(1, 48);
         Assertions.assertFalse(solution.areConstraintsNotBrokenAfterLastChange());
     }
 

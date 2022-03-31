@@ -24,11 +24,11 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
             var newVariable = new CSP_Variable<D>(variableIndex);
             cspVariables.add(newVariable);
             for (var domainItem : gridProblem.overallDomain) {
-                var isCorrectAfterLastChange = setNewValue(domainItem, variableIndex);
+                var isCorrectAfterLastChange = setNewValueAtIndexOf(domainItem, variableIndex);
                 if(isCorrectAfterLastChange) {
                     newVariable.add(domainItem);
                 }
-                removeValue(variableIndex);
+                removeValueAtIndexOf(variableIndex);
             }
         }
     }
@@ -78,11 +78,11 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
                     && !cspNextVariable.variableIndex.equals(variableIndex)) {
                 for (Iterator<D> domainIterator = cspNextVariable.getDomain().iterator(); domainIterator.hasNext(); ) {
                     D domainItem = domainIterator.next();
-                    var isCorrect = setNewValue(domainItem, cspNextVariable.variableIndex);
+                    var isCorrect = setNewValueAtIndexOf(domainItem, cspNextVariable.variableIndex);
                     if(!isCorrect) {
                         domainIterator.remove();
                     }
-                    removeValue(cspNextVariable.variableIndex);
+                    removeValueAtIndexOf(cspNextVariable.variableIndex);
                 }
                 if(!cspNextVariable.wasVariableUsed && cspNextVariable.getDomain().isEmpty()) {
                     return false;
@@ -97,7 +97,7 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     }
 
     @Override
-    public void removeValue(Integer variableItem) {
+    public void removeValueAtIndexOf(Integer variableItem) {
         partialSolution.set(variableItem, null);
         changedItemX = getX(variableItem);
         changedItemY = getY(variableItem);
@@ -108,10 +108,10 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     @Override
     public CSP_Variable<D> getNextVariable() {
         CSP_Variable<D> chosen = null;
-        for (var variab : cspVariables) {
-            if (!variab.getDomain().isEmpty()) {
-                if(chosen == null || variab.getDomain().size() < chosen.getDomain().size()) {
-                    chosen = variab;
+        for (var cspVariable : cspVariables) {
+            if (!cspVariable.getDomain().isEmpty()) {
+                if(chosen == null || cspVariable.getDomain().size() < chosen.getDomain().size()) {
+                    chosen = cspVariable;
                 }
             }
         }
@@ -119,7 +119,7 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     }
 
     @Override
-    public boolean setNewValue(D domainItem, Integer variableItem) {
+    public boolean setNewValueAtIndexOf(D domainItem, Integer variableItem) {
         if(partialSolution.get(variableItem) != null) {
             throw new IllegalArgumentException("Value already set at variableItem: " + variableItem);
         }

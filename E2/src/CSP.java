@@ -30,7 +30,7 @@ public class CSP<P, D extends P, T extends CSP_Problem<P, D>, S extends CSP_Part
                 solutionCopy = (S) cspPartialSolution.deepClone();
             }
             var changedVariableInx = nextVariable.variableIndex;
-            solutionCopy.setNewValue(domainItem, changedVariableInx);
+            solutionCopy.setNewValueAtIndexOf(domainItem, changedVariableInx);
             boolean areValuesCorrect = solutionCopy.updateVariables(changedVariableInx);
             if(areValuesCorrect) {
                 getResultsRecursive(solutionCopy, accumulator);
