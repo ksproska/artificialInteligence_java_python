@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import static java.util.Arrays.asList;
 
 
-public class Tests {
+public class CSP_Test {
     static Binary_Problem binaryProblem;
-    static Binary_CSP binaryCsp;
     static Futoshiki_Problem futoshikiProblem;
-    static Futoshiki_CSP futoshikiCSP;
+    static CSP<Binary_Problem, Binary_PartialSolution> binaryCsp;
+    static CSP<Futoshiki_Problem, Futoshiki_PartialSolution> futoshikiCSP;
 
     @Test
     void testCorrectionsB6x6() {
@@ -44,7 +44,7 @@ public class Tests {
     @Test
     void testB6x6() {
         binaryProblem = new Binary_Problem(BinaryEnum.B6x6);
-        binaryCsp = new Binary_CSP(binaryProblem);
+        binaryCsp = new CSP<>(binaryProblem);
         var results = binaryCsp.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
@@ -62,7 +62,7 @@ public class Tests {
     @Test
     void testB8x8() {
         binaryProblem = new Binary_Problem(BinaryEnum.B8x8);
-        binaryCsp = new Binary_CSP(binaryProblem);
+        binaryCsp = new CSP<>(binaryProblem);
         var results = binaryCsp.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
@@ -82,7 +82,7 @@ public class Tests {
     @Test
     void testB10x10() {
         binaryProblem = new Binary_Problem(BinaryEnum.B10x10);
-        binaryCsp = new Binary_CSP(binaryProblem);
+        binaryCsp = new CSP<>(binaryProblem);
         var results = binaryCsp.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
@@ -103,7 +103,7 @@ public class Tests {
     @Test
     void testF4x4() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F4x4);
-        futoshikiCSP = new Futoshiki_CSP(futoshikiProblem);
+        futoshikiCSP = new CSP<>(futoshikiProblem);
         var results = futoshikiCSP.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = """
@@ -121,7 +121,7 @@ public class Tests {
     @Test
     void testF5x5() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F5x5);
-        futoshikiCSP = new Futoshiki_CSP(futoshikiProblem);
+        futoshikiCSP = new CSP<>(futoshikiProblem);
         var results = futoshikiCSP.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = """
@@ -141,7 +141,7 @@ public class Tests {
     @Test
     void testF6x6() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F6x6);
-        futoshikiCSP = new Futoshiki_CSP(futoshikiProblem);
+        futoshikiCSP = new CSP<>(futoshikiProblem);
         var results = futoshikiCSP.getResults();
         Assertions.assertEquals(133, results.size());
         var expected = """

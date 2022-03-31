@@ -102,7 +102,8 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
                 constraint_isDownCorrect() && constraint_isLeftCorrect() && constraint_isRightCorrect();
     }
 
-    public Futoshiki_PartialSolution copyFutoshiki() {
+    @Override
+    public Futoshiki_PartialSolution deepClone() {
         var copiedItem =  new Futoshiki_PartialSolution();
         copyTo(copiedItem);
         return copiedItem;

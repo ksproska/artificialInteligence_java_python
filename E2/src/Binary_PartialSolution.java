@@ -75,7 +75,8 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
         return constraint_areAllUnique() && constraint_isHalf0AndHalf1() && constraint_areValuesRepeatedMax2TimesInARow();
     }
 
-    public Binary_PartialSolution copyBinary() {
+    @Override
+    public Binary_PartialSolution deepClone() {
         var copiedItem =  new Binary_PartialSolution();
         copyTo(copiedItem);
         return copiedItem;

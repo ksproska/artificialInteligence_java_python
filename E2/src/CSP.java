@@ -1,20 +1,20 @@
 import java.util.ArrayList;
 
-public class Futoshiki_CSP {
-    private final Futoshiki_Problem cspProblem;
-    public Futoshiki_CSP(Futoshiki_Problem cspProblem) {
+public class CSP<T extends CSP_Problem, S extends CSP_PartialSolution> {
+    private final T cspProblem;
+    public CSP(T cspProblem) {
         this.cspProblem = cspProblem;
     }
 
-    public ArrayList<Futoshiki_PartialSolution> getResults() {
-        ArrayList<Futoshiki_PartialSolution> accumulator = new ArrayList<>();
+    public ArrayList<S> getResults() {
+        ArrayList<S> accumulator = new ArrayList<>();
         var cspProblemInitialSolution = cspProblem.getInitialSolution();
-        getResultsRecursive(cspProblemInitialSolution, accumulator);
+        getResultsRecursive((S) cspProblemInitialSolution, accumulator);
         return accumulator;
     }
 
-    private void getResultsRecursive(Futoshiki_PartialSolution cspPartialSolution,
-                                     ArrayList<Futoshiki_PartialSolution> accumulator) {
+    private void getResultsRecursive(S cspPartialSolution,
+                                     ArrayList<S> accumulator) {
         if(cspPartialSolution.isSatisfied()) {
             accumulator.add(cspPartialSolution);
             return;
@@ -27,7 +27,7 @@ public class Futoshiki_CSP {
             var domainItem = searchedDomain.get(i);
             var solutionCopy = cspPartialSolution;
             if(i != searchedDomain.size() - 1) {
-                solutionCopy = cspPartialSolution.copyFutoshiki();
+                solutionCopy = (S) cspPartialSolution.deepClone();
             }
             var changedVariableInx = nextVariable.variableIndex;
             solutionCopy.setNewValue(domainItem, changedVariableInx);

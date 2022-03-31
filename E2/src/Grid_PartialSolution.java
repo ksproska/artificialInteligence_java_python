@@ -90,6 +90,7 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
         columns.get(changedItemX).set(changedItemY, null);
     }
 
+    @Override
     public CSP_Variable<D> getNextVariable() {
         CSP_Variable<D> chosen = null;
         for (var variab : variables) {
