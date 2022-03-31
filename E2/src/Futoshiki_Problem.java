@@ -61,21 +61,11 @@ public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integ
     public String toDisplay(ArrayList<Object> grid) {
         var allToDisplay = "";
         for (int i = 0; i < grid.size(); i++) {
-            if (grid.get(i) == null
-            ) {
-                allToDisplay += "x";
-            }
-            else if (grid.get(i).equals("-")
-            ) {
-                allToDisplay += " ";
-            }
-            else {
-                allToDisplay += grid.get(i);
-            }
+            if (grid.get(i) == null ) { allToDisplay += "x"; }
+            else if (grid.get(i).equals("-") ) { allToDisplay += " "; }
+            else { allToDisplay += grid.get(i); }
             allToDisplay += "   ";
-            if((i + 1) % x == 0) {
-                allToDisplay += "\n";
-            }
+            if((i + 1) % x == 0) { allToDisplay += "\n"; }
         }
         allToDisplay = allToDisplay.substring(0, allToDisplay.length() - 3);
         return allToDisplay;

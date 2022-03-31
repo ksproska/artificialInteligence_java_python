@@ -7,7 +7,9 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     public ArrayList<P> partialSolution;
     public ArrayList<ArrayList<P>> rows, columns;
     protected int changedItemX, changedItemY;
-    public ArrayList<CSP_Variable<D>> variables;
+    public ArrayList<CSP_Variable<D>> cspVariables;
+
+    protected Grid_PartialSolution() {}
 
     public <G extends Grid_Problem<P, E, D>> Grid_PartialSolution(G gridProblem) {
         this.gridProblem = gridProblem;
@@ -17,10 +19,10 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     }
 
     private void setupVariables() {
-        variables = new ArrayList<>();
+        cspVariables = new ArrayList<>();
         for (var variableIndex : gridProblem.indexesToFill) {
             var newVariable = new CSP_Variable<D>(variableIndex);
-            variables.add(newVariable);
+            cspVariables.add(newVariable);
             for (var domainItem : gridProblem.overallDomain) {
                 var isCorrectAfterLastChange = setNewValue(domainItem, variableIndex);
                 if(isCorrectAfterLastChange) {
@@ -34,17 +36,11 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     public int getX(int position) { return position % gridProblem.x; }
     public int getY(int position) { return position / gridProblem.x; }
 
-    protected Grid_PartialSolution() {}
-
     protected void setRowsAndColumns(int x, int y) {
         rows = new ArrayList<>();
         columns = new ArrayList<>();
-        for (int i = 0; i < x; i++) {
-            columns.add(new ArrayList<>());
-        }
-        for (int i = 0; i < y; i++) {
-            rows.add(new ArrayList<>());
-        }
+        for (int i = 0; i < x; i++) { columns.add(new ArrayList<>()); }
+        for (int i = 0; i < y; i++) { rows.add(new ArrayList<>()); }
         for (int i = 0; i < this.partialSolution.size(); i++) {
             var tempX = getX(i);
             var tempY = getY(i);
@@ -53,29 +49,48 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
         }
     }
 
+    public <Q> ArrayList<ArrayList<Q>> copyListOfLists(ArrayList<ArrayList<Q>> listOfLists) {
+        var copied = new ArrayList<ArrayList<Q>>();
+        for (var list : listOfLists) { copied.add(new ArrayList<>(list)); }
+        return copied;
+    }
+
+    public void copyTo(Grid_PartialSolution<P, E, D> copiedItem) {
+        copiedItem.gridProblem = gridProblem;
+        copiedItem.partialSolution = new ArrayList<>(partialSolution);
+        copiedItem.rows = copyListOfLists(rows);
+        copiedItem.columns = copyListOfLists(columns);
+        copiedItem.cspVariables = new ArrayList<>() {{
+            for (var variable : cspVariables) {
+                add(new CSP_Variable<>(variable));
+            }
+        }};
+    }
+
     @Override
-    public boolean updateVariables(Integer variableItem) {
-        var variableX = getX(variableItem);
-        var variableY = getY(variableItem);
-        for (var variableInArray : variables) {
-            var tempX = getX(variableInArray.variableIndex);
-            var tempY = getY(variableInArray.variableIndex);
-            if((tempX == variableX || tempY == variableY) && !variableInArray.variableIndex.equals(variableItem)) {
-                for (Iterator<D> iterator = variableInArray.getDomain().iterator(); iterator.hasNext(); ) {
-                    D domainItem = iterator.next();
-                    var isCorrectAfterLastChange = setNewValue(domainItem, variableInArray.variableIndex);
-                    if(!isCorrectAfterLastChange) {
-                        iterator.remove();
+    public boolean updateVariables(Integer variableIndex) {
+        var variableX = getX(variableIndex);
+        var variableY = getY(variableIndex);
+        for (var cspNextVariable : cspVariables) {
+            var nextX = getX(cspNextVariable.variableIndex);
+            var nextY = getY(cspNextVariable.variableIndex);
+            if((nextX == variableX || nextY == variableY)
+                    && !cspNextVariable.variableIndex.equals(variableIndex)) {
+                for (Iterator<D> domainIterator = cspNextVariable.getDomain().iterator(); domainIterator.hasNext(); ) {
+                    D domainItem = domainIterator.next();
+                    var isCorrect = setNewValue(domainItem, cspNextVariable.variableIndex);
+                    if(!isCorrect) {
+                        domainIterator.remove();
                     }
-                    removeValue(variableInArray.variableIndex);
+                    removeValue(cspNextVariable.variableIndex);
                 }
-                if(!variableInArray.wasVariableUsed && variableInArray.getDomain().isEmpty()) {
+                if(!cspNextVariable.wasVariableUsed && cspNextVariable.getDomain().isEmpty()) {
                     return false;
                 }
             }
-            else if (variableInArray.variableIndex.equals(variableItem)) {
-                variableInArray.removeAll();
-                variableInArray.wasVariableUsed = true;
+            else if (cspNextVariable.variableIndex.equals(variableIndex)) {
+                cspNextVariable.removeAll();
+                cspNextVariable.wasVariableUsed = true;
             }
         }
         return true;
@@ -93,7 +108,7 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     @Override
     public CSP_Variable<D> getNextVariable() {
         CSP_Variable<D> chosen = null;
-        for (var variab : variables) {
+        for (var variab : cspVariables) {
             if (!variab.getDomain().isEmpty()) {
                 if(chosen == null || variab.getDomain().size() < chosen.getDomain().size()) {
                     chosen = variab;
@@ -120,9 +135,6 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     public boolean isSatisfied() { return !partialSolution.contains(null); }
 
     @Override
-    public boolean checkConstraintsAfterLastChange() { throw new IllegalStateException("Method not implemented"); }
-
-    @Override
     public boolean areConstraintsNotBrokenAfterLastChange() { return this.checkConstraintsAfterLastChange(); }
 
     @Override
@@ -133,23 +145,6 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
         return gridProblem.chosenProblem + "\n" + gridProblem.toDisplay(partialSolution) + areConstraintsNotBrokenAfterLastChange();
     }
 
-    public <Q> ArrayList<ArrayList<Q>> copyListOfLists(ArrayList<ArrayList<Q>> listOfLists) {
-        var copied = new ArrayList<ArrayList<Q>>();
-        for (var list : listOfLists) {
-            copied.add(new ArrayList<>(list));
-        }
-        return copied;
-    }
-
-    public void copyTo(Grid_PartialSolution<P, E, D> copiedItem) {
-        copiedItem.gridProblem = gridProblem;
-        copiedItem.partialSolution = new ArrayList<>(partialSolution);
-        copiedItem.rows = copyListOfLists(rows);
-        copiedItem.columns = copyListOfLists(columns);
-        copiedItem.variables = new ArrayList<>() {{
-            for (var variable : variables) {
-                add(new CSP_Variable<>(variable));
-            }
-        }};
-    }
+    @Override
+    public boolean checkConstraintsAfterLastChange() { throw new IllegalStateException("Method not implemented"); }
 }

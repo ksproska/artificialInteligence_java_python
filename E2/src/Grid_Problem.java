@@ -18,14 +18,9 @@ public abstract class Grid_Problem<P, E extends Enum, D extends P> implements CS
 
     protected void setIndexesToFill() {
         for (int i = 0; i < problem.size(); i++) {
-            if(problem.get(i) == null) {
-                indexesToFill.add(i);
-            }
+            if(problem.get(i) == null) { indexesToFill.add(i); }
         }
     }
-
-    @Override
-    public Grid_PartialSolution<P, E, D> getInitialSolution() { throw new IllegalStateException("not implemented"); }
 
     public String toDisplay(ArrayList<P> grid) { throw new IllegalStateException("not implemented"); }
 

@@ -9,8 +9,8 @@ import static java.util.Arrays.asList;
 public class CSP_Test {
     static Binary_Problem binaryProblem;
     static Futoshiki_Problem futoshikiProblem;
-    static CSP<Binary_Problem, Binary_PartialSolution> binaryCsp;
-    static CSP<Futoshiki_Problem, Futoshiki_PartialSolution> futoshikiCSP;
+    static CSP<Integer, Integer, Binary_Problem, Binary_PartialSolution> binaryCsp;
+    static CSP<Object, Integer, Futoshiki_Problem, Futoshiki_PartialSolution> futoshikiCSP;
 
     @Test
     void testCorrectionsB6x6() {

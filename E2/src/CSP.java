@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class CSP<T extends CSP_Problem, S extends CSP_PartialSolution> {
+public class CSP<P, D extends P, T extends CSP_Problem<P, D>, S extends CSP_PartialSolution<P, D>> {
     private final T cspProblem;
     public CSP(T cspProblem) {
         this.cspProblem = cspProblem;

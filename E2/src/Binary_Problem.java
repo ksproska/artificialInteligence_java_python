@@ -13,11 +13,7 @@ public class Binary_Problem extends Grid_Problem<Integer, BinaryEnum, Integer> {
         super(chosenProblem,
                 BinaryConsts.getSize(chosenProblem)[0],
                 BinaryConsts.getSize(chosenProblem)[1],
-                new ArrayList<>(){
-                    {
-                        add(0); add(1);
-                    }
-                }
+                new ArrayList<>(){ { add(0); add(1); } }
         );
 
         readProblem(ProjectConsts.folderPath);
@@ -52,16 +48,10 @@ public class Binary_Problem extends Grid_Problem<Integer, BinaryEnum, Integer> {
     public String toDisplay(ArrayList<Integer> grid) {
         var allToDisplay = displaySplitter;
         for (int i = 0; i < grid.size(); i++) {
-            if (grid.get(i) == null) {
-                allToDisplay += " ";
-            }
-            else {
-                allToDisplay += grid.get(i);
-            }
+            if (grid.get(i) == null) { allToDisplay += " "; }
+            else { allToDisplay += grid.get(i); }
             allToDisplay += displaySplitter;
-            if((i + 1) % x == 0) {
-                allToDisplay += "\n" + displaySplitter;
-            }
+            if((i + 1) % x == 0) { allToDisplay += "\n" + displaySplitter; }
         }
         allToDisplay = allToDisplay.substring(0, allToDisplay.length() - 3);
         return allToDisplay;
