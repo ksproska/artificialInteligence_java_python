@@ -1,4 +1,6 @@
 import consts.FutoshikiEnum;
+
+import java.util.ArrayList;
 import java.util.Collections;
 
 
@@ -26,18 +28,34 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
         return false;
     }
 
+    private boolean isNextCorrect(ArrayList<Object> list, int index) {
+        var valuePrev = (Integer) list.get(index);
+
+        var sign = list.get(index + 1);
+        if(sign.equals(Futoshiki_Problem.neutral)) { return true; }
+
+        var valueNext = list.get(index + 2);
+        if(!(valueNext instanceof Integer)) { return true; }
+
+        return areCorrectOrder(valuePrev, sign, (Integer) valueNext);
+    }
+
+    private boolean isPrevCorrect(ArrayList<Object> list, int index) {
+        var valueNext = (Integer) list.get(index);
+
+        var sign = list.get(index - 1);
+        if(sign.equals(Futoshiki_Problem.neutral)) { return true; }
+
+        var valuePrev = list.get(index - 2);
+        if(!(valuePrev instanceof Integer)) { return true; }
+
+        return areCorrectOrder((Integer) valuePrev, sign, valueNext);
+    }
+
     public boolean constraint_isRightCorrect() {
         if(changedItemX + 1 < gridProblem.x) {
             var list = rows.get(changedItemY);
-            var valuePrev = (Integer) list.get(changedItemX);
-
-            var sign = list.get(changedItemX + 1);
-            if(sign.equals(Futoshiki_Problem.neutral)) { return true; }
-
-            var valueNext = list.get(changedItemX + 2);
-            if(!(valueNext instanceof Integer)) { return true; }
-
-            return areCorrectOrder(valuePrev, sign, (Integer) valueNext);
+            return isNextCorrect(list, changedItemX);
         }
         return true;
     }
@@ -45,15 +63,7 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
     public boolean constraint_isLeftCorrect() {
         if(0 < changedItemX) {
             var list = rows.get(changedItemY);
-            var valueNext = (Integer) list.get(changedItemX);
-
-            var sign = list.get(changedItemX - 1);
-            if(sign.equals(Futoshiki_Problem.neutral)) { return true; }
-
-            var valuePrev = list.get(changedItemX - 2);
-            if(!(valuePrev instanceof Integer)) { return true; }
-
-            return areCorrectOrder((Integer) valuePrev, sign, valueNext);
+            return isPrevCorrect(list, changedItemX);
         }
         return true;
     }
@@ -61,39 +71,24 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
     public boolean constraint_isUpCorrect() {
         if(0 < changedItemY) {
             var list = columns.get(changedItemX);
-            var valueNext = (Integer) list.get(changedItemY);
-
-            var sign = list.get(changedItemY - 1);
-            if(sign.equals(Futoshiki_Problem.neutral)) { return true; }
-
-            var valuePrev = list.get(changedItemY - 2);
-            if(!(valuePrev instanceof Integer)) { return true; }
-
-            return areCorrectOrder((Integer) valuePrev, sign, valueNext);
+            return isPrevCorrect(list, changedItemY);
         }
         return true;
     }
 
     public boolean constraint_isDownCorrect() {
         if(changedItemY + 1 < gridProblem.y) {
-            var column = columns.get(changedItemX);
-            var valuePrev = (Integer) column.get(changedItemY);
-
-            var sign = column.get(changedItemY + 1);
-            if(sign.equals(Futoshiki_Problem.neutral)) { return true; }
-
-            var valueNext = column.get(changedItemY + 2);
-            if(!(valueNext instanceof Integer)) { return true; }
-
-            return areCorrectOrder(valuePrev, sign, (Integer) valueNext);
+            var list = columns.get(changedItemX);
+            return isNextCorrect(list, changedItemY);
         }
         return true;
     }
 
     @Override
     public boolean checkConstraintsAfterLastChange() {
-        return constraint_areThereNoRepetitions() && constraint_isUpCorrect() &&
-                constraint_isDownCorrect() && constraint_isLeftCorrect() && constraint_isRightCorrect();
+        return constraint_areThereNoRepetitions() &&
+                constraint_isUpCorrect() && constraint_isDownCorrect() &&
+                constraint_isLeftCorrect() && constraint_isRightCorrect();
     }
 
     @Override
