@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class CSP_BacktrackingSolver <P, D extends P, T extends CSP_Problem<P, D>, S extends CSP_PartialSolution<P, D>> {
+public class CSP_BacktrackingSolver <P, D extends P, T extends CSP_Problem<P, D>, S extends CSP_PartialSolution<P, D>> implements CSP_Solver<P, D, T, S> {
     private final T cspProblem;
     public CSP_BacktrackingSolver(T cspProblem) {
         this.cspProblem = cspProblem;
