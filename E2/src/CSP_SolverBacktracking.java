@@ -1,12 +1,14 @@
 import java.util.ArrayList;
 
-public class CSP_BacktrackingSolver <P, D extends P, T extends CSP_Problem<P, D>, S extends CSP_PartialSolution<P, D>> implements CSP_Solver<P, D, T, S> {
+public class CSP_SolverBacktracking<P, D extends P, T extends CSP_Problem<P, D>, S extends CSP_PartialSolution<P, D>> implements CSP_Solver<P, D, T, S> {
     private final T cspProblem;
-    public CSP_BacktrackingSolver(T cspProblem) {
+    private int stepsCounter;
+    public CSP_SolverBacktracking(T cspProblem) {
         this.cspProblem = cspProblem;
     }
 
     public ArrayList<S> getResults() {
+        stepsCounter = 0;
         ArrayList<S> accumulator = new ArrayList<>();
         var initialPartialSolution = cspProblem.getInitialPartialSolution();
 
@@ -27,6 +29,7 @@ public class CSP_BacktrackingSolver <P, D extends P, T extends CSP_Problem<P, D>
         var nextVariable = cspPartialSolution.getCspVariables().get(currentVariableInx);
 
         for (var domainItem : cspProblem.getDomain()) {
+            stepsCounter += 1;
             var changedVariableInx = nextVariable.variableIndex;
             cspPartialSolution.setNewValueAtIndexOf(domainItem, changedVariableInx);
 //            System.out.println("vi:" + changedVariableInx + " d: " + domainItem);
@@ -37,5 +40,10 @@ public class CSP_BacktrackingSolver <P, D extends P, T extends CSP_Problem<P, D>
             }
             cspPartialSolution.removeValueAtIndexOf(changedVariableInx);
         }
+    }
+
+    @Override
+    public int getStepsCounter() {
+        return stepsCounter;
     }
 }

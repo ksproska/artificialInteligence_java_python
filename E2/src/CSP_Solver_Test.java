@@ -44,7 +44,7 @@ public class CSP_Solver_Test {
     @Test
     void testBinaryBacktracking6x6() {
         binaryProblem = new Binary_Problem(BinaryEnum.B6x6);
-        binaryCSPSolver = new CSP_BacktrackingSolver<>(binaryProblem);
+        binaryCSPSolver = new CSP_SolverBacktracking<>(binaryProblem);
         var results = binaryCSPSolver.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
@@ -57,12 +57,13 @@ public class CSP_Solver_Test {
 
         ));
         Assertions.assertIterableEquals(expected, results.get(0).getPartialSolution());
+        Assertions.assertEquals(256, binaryCSPSolver.getStepsCounter());
     }
 
     @Test
     void testBinaryBacktracking8x8() {
         binaryProblem = new Binary_Problem(BinaryEnum.B8x8);
-        binaryCSPSolver = new CSP_BacktrackingSolver<>(binaryProblem);
+        binaryCSPSolver = new CSP_SolverBacktracking<>(binaryProblem);
         var results = binaryCSPSolver.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
@@ -77,12 +78,13 @@ public class CSP_Solver_Test {
 
         ));
         Assertions.assertIterableEquals(expected, results.get(0).getPartialSolution());
+        Assertions.assertEquals(1496, binaryCSPSolver.getStepsCounter());
     }
 
     @Test
     void testBinaryBacktracking10x10() {
         binaryProblem = new Binary_Problem(BinaryEnum.B10x10);
-        binaryCSPSolver = new CSP_BacktrackingSolver<>(binaryProblem);
+        binaryCSPSolver = new CSP_SolverBacktracking<>(binaryProblem);
         var results = binaryCSPSolver.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
@@ -98,12 +100,13 @@ public class CSP_Solver_Test {
                 0, 1, 0, 1, 0, 0, 1, 0, 1, 1
         ));
         Assertions.assertIterableEquals(expected, results.get(0).getPartialSolution());
+        Assertions.assertEquals(896, binaryCSPSolver.getStepsCounter());
     }
 
     @Test
     void testFutoshikiBacktracking4x4() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F4x4);
-        futoshikiCSPSolver = new CSP_BacktrackingSolver<>(futoshikiProblem);
+        futoshikiCSPSolver = new CSP_SolverBacktracking<>(futoshikiProblem);
         var results = futoshikiCSPSolver.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = """
@@ -116,12 +119,13 @@ public class CSP_Solver_Test {
                 4       2   >   1   <   3\s""";
 
         Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
+        Assertions.assertEquals(864, futoshikiCSPSolver.getStepsCounter());
     }
 
     @Test
     void testFutoshikiBacktracking5x5() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F5x5);
-        futoshikiCSPSolver = new CSP_BacktrackingSolver<>(futoshikiProblem);
+        futoshikiCSPSolver = new CSP_SolverBacktracking<>(futoshikiProblem);
         var results = futoshikiCSPSolver.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = """
@@ -136,12 +140,13 @@ public class CSP_Solver_Test {
                3       2   <   5       1       4\s""";
 
         Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
+        Assertions.assertEquals(1190, futoshikiCSPSolver.getStepsCounter());
     }
 
     @Test
     void testFutoshikiBacktracking6x6() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F6x6);
-        futoshikiCSPSolver = new CSP_BacktrackingSolver<>(futoshikiProblem);
+        futoshikiCSPSolver = new CSP_SolverBacktracking<>(futoshikiProblem);
         var results = futoshikiCSPSolver.getResults();
         Assertions.assertEquals(133, results.size());
         var expected = """
@@ -158,5 +163,6 @@ public class CSP_Solver_Test {
                6       5       2   <   4   >   1       3\s""";
 
         Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
+        Assertions.assertEquals(20837934, futoshikiCSPSolver.getStepsCounter());
     }
 }
