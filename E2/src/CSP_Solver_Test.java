@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import static java.util.Arrays.asList;
 
 
-public class CSP_Test {
+public class CSP_Solver_Test {
     static Binary_Problem binaryProblem;
     static Futoshiki_Problem futoshikiProblem;
-    static CSP<Integer, Integer, Binary_Problem, Binary_PartialSolution> binaryCsp;
-    static CSP<Object, Integer, Futoshiki_Problem, Futoshiki_PartialSolution> futoshikiCSP;
+    static CSP_Solver<Integer, Integer, Binary_Problem, Binary_PartialSolution> binaryCspBacktracking;
+    static CSP_Solver<Object, Integer, Futoshiki_Problem, Futoshiki_PartialSolution> futoshikiCSPBacktracking;
 
     @Test
     void testCorrectionsB6x6() {
@@ -32,7 +32,7 @@ public class CSP_Test {
     @Test
     void testCorrectionsF4x4() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F4x4);
-        var solution = futoshikiProblem.getInitialSolution();
+        var solution = futoshikiProblem.getInitialPartialSolution();
         solution.setNewValueAtIndexOf(4, 4);
         solution.setNewValueAtIndexOf(2, 20);
         solution.setNewValueAtIndexOf(2, 32);
@@ -44,8 +44,8 @@ public class CSP_Test {
     @Test
     void testB6x6() {
         binaryProblem = new Binary_Problem(BinaryEnum.B6x6);
-        binaryCsp = new CSP<>(binaryProblem);
-        var results = binaryCsp.getResults();
+        binaryCspBacktracking = new CSP_Solver<>(binaryProblem);
+        var results = binaryCspBacktracking.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
                 0, 1, 0, 1, 1, 0,
@@ -62,8 +62,8 @@ public class CSP_Test {
     @Test
     void testB8x8() {
         binaryProblem = new Binary_Problem(BinaryEnum.B8x8);
-        binaryCsp = new CSP<>(binaryProblem);
-        var results = binaryCsp.getResults();
+        binaryCspBacktracking = new CSP_Solver<>(binaryProblem);
+        var results = binaryCspBacktracking.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
                 1, 1, 0, 0, 1, 0, 1, 0,
@@ -82,8 +82,8 @@ public class CSP_Test {
     @Test
     void testB10x10() {
         binaryProblem = new Binary_Problem(BinaryEnum.B10x10);
-        binaryCsp = new CSP<>(binaryProblem);
-        var results = binaryCsp.getResults();
+        binaryCspBacktracking = new CSP_Solver<>(binaryProblem);
+        var results = binaryCspBacktracking.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
                 0, 1, 1, 0, 0, 1, 0, 1, 0, 1,
@@ -103,8 +103,8 @@ public class CSP_Test {
     @Test
     void testF4x4() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F4x4);
-        futoshikiCSP = new CSP<>(futoshikiProblem);
-        var results = futoshikiCSP.getResults();
+        futoshikiCSPBacktracking = new CSP_Solver<>(futoshikiProblem);
+        var results = futoshikiCSPBacktracking.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = """
                 3   >   1       4       2  \s
@@ -121,8 +121,8 @@ public class CSP_Test {
     @Test
     void testF5x5() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F5x5);
-        futoshikiCSP = new CSP<>(futoshikiProblem);
-        var results = futoshikiCSP.getResults();
+        futoshikiCSPBacktracking = new CSP_Solver<>(futoshikiProblem);
+        var results = futoshikiCSPBacktracking.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = """
                2       3       1       4   <   5  \s
@@ -141,8 +141,8 @@ public class CSP_Test {
     @Test
     void testF6x6() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F6x6);
-        futoshikiCSP = new CSP<>(futoshikiProblem);
-        var results = futoshikiCSP.getResults();
+        futoshikiCSPBacktracking = new CSP_Solver<>(futoshikiProblem);
+        var results = futoshikiCSPBacktracking.getResults();
         Assertions.assertEquals(133, results.size());
         var expected = """
                 5       2       6       1       3   <   4  \s

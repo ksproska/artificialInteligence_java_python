@@ -1,3 +1,3 @@
 public interface CSP_Problem<P, D extends P> {
-    <T extends CSP_PartialSolution<P, D>> T getInitialSolution();
+    <T extends CSP_PartialSolution<P, D>> T getInitialPartialSolution();
 }

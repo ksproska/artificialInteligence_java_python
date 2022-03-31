@@ -72,7 +72,7 @@ public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integ
     }
 
     @Override
-    public Futoshiki_PartialSolution getInitialSolution() {
+    public Futoshiki_PartialSolution getInitialPartialSolution() {
         return new Futoshiki_PartialSolution(this);
     }
 }

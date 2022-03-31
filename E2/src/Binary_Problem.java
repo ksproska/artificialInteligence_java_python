@@ -58,7 +58,7 @@ public class Binary_Problem extends Grid_Problem<Integer, BinaryEnum, Integer> {
     }
 
     @Override
-    public Binary_PartialSolution getInitialSolution() {
+    public Binary_PartialSolution getInitialPartialSolution() {
         return new Binary_PartialSolution(this);
     }
 }

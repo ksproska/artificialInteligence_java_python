@@ -76,7 +76,7 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
             var nextY = getY(cspNextVariable.variableIndex);
             if((nextX == variableX || nextY == variableY)
                     && !cspNextVariable.variableIndex.equals(variableIndex)) {
-                for (Iterator<D> domainIterator = cspNextVariable.getDomain().iterator(); domainIterator.hasNext(); ) {
+                for (Iterator<D> domainIterator = cspNextVariable.getVariableDomain().iterator(); domainIterator.hasNext(); ) {
                     D domainItem = domainIterator.next();
                     var isCorrect = setNewValueAtIndexOf(domainItem, cspNextVariable.variableIndex);
                     if(!isCorrect) {
@@ -84,7 +84,7 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
                     }
                     removeValueAtIndexOf(cspNextVariable.variableIndex);
                 }
-                if(!cspNextVariable.wasVariableUsed && cspNextVariable.getDomain().isEmpty()) {
+                if(!cspNextVariable.wasVariableUsed && cspNextVariable.getVariableDomain().isEmpty()) {
                     return false;
                 }
             }
@@ -109,8 +109,8 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
     public CSP_Variable<D> getNextVariable() {
         CSP_Variable<D> chosen = null;
         for (var cspVariable : cspVariables) {
-            if (!cspVariable.getDomain().isEmpty()) {
-                if(chosen == null || cspVariable.getDomain().size() < chosen.getDomain().size()) {
+            if (!cspVariable.getVariableDomain().isEmpty()) {
+                if(chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
                     chosen = cspVariable;
                 }
             }

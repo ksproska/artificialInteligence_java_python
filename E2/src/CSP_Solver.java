@@ -1,15 +1,15 @@
 import java.util.ArrayList;
 
-public class CSP<P, D extends P, T extends CSP_Problem<P, D>, S extends CSP_PartialSolution<P, D>> {
+public class CSP_Solver<P, D extends P, T extends CSP_Problem<P, D>, S extends CSP_PartialSolution<P, D>> {
     private final T cspProblem;
-    public CSP(T cspProblem) {
+    public CSP_Solver(T cspProblem) {
         this.cspProblem = cspProblem;
     }
 
     public ArrayList<S> getResults() {
         ArrayList<S> accumulator = new ArrayList<>();
-        var cspProblemInitialSolution = cspProblem.getInitialSolution();
-        getResultsRecursive((S) cspProblemInitialSolution, accumulator);
+        var initialPartialSolution = cspProblem.getInitialPartialSolution();
+        getResultsRecursive((S) initialPartialSolution, accumulator);
         return accumulator;
     }
 
@@ -22,7 +22,7 @@ public class CSP<P, D extends P, T extends CSP_Problem<P, D>, S extends CSP_Part
         var nextVariable = cspPartialSolution.getNextVariable();
         if (nextVariable == null) return;
 
-        var searchedDomain = new ArrayList<>(nextVariable.getDomain());
+        var searchedDomain = new ArrayList<>(nextVariable.getVariableDomain());
         for (int i = 0; i < searchedDomain.size(); i++) {
             var domainItem = searchedDomain.get(i);
             var solutionCopy = cspPartialSolution;
