@@ -8,6 +8,9 @@ interface CSP_PartialSolution<P, D extends P> {
     boolean setNewValueAtIndexOf(D domainItem, Integer variableIndex);
     boolean checkConstraintsAfterLastChange();
     void removeValueAtIndexOf(Integer variableItem);
+
+    ArrayList<CSP_Variable<D>> getCspVariables();
+
     boolean updateVariables(Integer variableItem);
 
     ArrayList<P> getPartialSolution();

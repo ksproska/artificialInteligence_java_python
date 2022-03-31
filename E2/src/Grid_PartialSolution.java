@@ -18,6 +18,11 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
         setupVariables();
     }
 
+    @Override
+    public ArrayList<CSP_Variable<D>> getCspVariables() {
+        return cspVariables;
+    }
+
     private void setupVariables() {
         cspVariables = new ArrayList<>();
         for (var variableIndex : gridProblem.indexesToFill) {

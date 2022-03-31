@@ -9,8 +9,8 @@ import static java.util.Arrays.asList;
 public class CSP_Solver_Test {
     static Binary_Problem binaryProblem;
     static Futoshiki_Problem futoshikiProblem;
-    static CSP_Solver<Integer, Integer, Binary_Problem, Binary_PartialSolution> binaryCspBacktracking;
-    static CSP_Solver<Object, Integer, Futoshiki_Problem, Futoshiki_PartialSolution> futoshikiCSPBacktracking;
+    static CSP_BacktrackingSolver<Integer, Integer, Binary_Problem, Binary_PartialSolution> binaryCspBacktracking;
+    static CSP_BacktrackingSolver<Object, Integer, Futoshiki_Problem, Futoshiki_PartialSolution> futoshikiCSPBacktracking;
 
     @Test
     void testCorrectionsB6x6() {
@@ -44,7 +44,7 @@ public class CSP_Solver_Test {
     @Test
     void testB6x6() {
         binaryProblem = new Binary_Problem(BinaryEnum.B6x6);
-        binaryCspBacktracking = new CSP_Solver<>(binaryProblem);
+        binaryCspBacktracking = new CSP_BacktrackingSolver<>(binaryProblem);
         var results = binaryCspBacktracking.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
@@ -62,7 +62,7 @@ public class CSP_Solver_Test {
     @Test
     void testB8x8() {
         binaryProblem = new Binary_Problem(BinaryEnum.B8x8);
-        binaryCspBacktracking = new CSP_Solver<>(binaryProblem);
+        binaryCspBacktracking = new CSP_BacktrackingSolver<>(binaryProblem);
         var results = binaryCspBacktracking.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
@@ -82,7 +82,7 @@ public class CSP_Solver_Test {
     @Test
     void testB10x10() {
         binaryProblem = new Binary_Problem(BinaryEnum.B10x10);
-        binaryCspBacktracking = new CSP_Solver<>(binaryProblem);
+        binaryCspBacktracking = new CSP_BacktrackingSolver<>(binaryProblem);
         var results = binaryCspBacktracking.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
@@ -103,7 +103,7 @@ public class CSP_Solver_Test {
     @Test
     void testF4x4() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F4x4);
-        futoshikiCSPBacktracking = new CSP_Solver<>(futoshikiProblem);
+        futoshikiCSPBacktracking = new CSP_BacktrackingSolver<>(futoshikiProblem);
         var results = futoshikiCSPBacktracking.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = """
@@ -121,7 +121,7 @@ public class CSP_Solver_Test {
     @Test
     void testF5x5() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F5x5);
-        futoshikiCSPBacktracking = new CSP_Solver<>(futoshikiProblem);
+        futoshikiCSPBacktracking = new CSP_BacktrackingSolver<>(futoshikiProblem);
         var results = futoshikiCSPBacktracking.getResults();
         Assertions.assertEquals(1, results.size());
         var expected = """
@@ -141,21 +141,21 @@ public class CSP_Solver_Test {
     @Test
     void testF6x6() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F6x6);
-        futoshikiCSPBacktracking = new CSP_Solver<>(futoshikiProblem);
+        futoshikiCSPBacktracking = new CSP_BacktrackingSolver<>(futoshikiProblem);
         var results = futoshikiCSPBacktracking.getResults();
         Assertions.assertEquals(133, results.size());
         var expected = """
-                5       2       6       1       3   <   4  \s
-                                        <                  \s
-                3       4       1       2       6       5  \s
-                                                        >  \s
-                2   >   1       5   <   6       4       3  \s
-                <                               <       >  \s
-                4       6       2       3       5       1  \s
-                <                                          \s
-                6       3   <   4       5       1       2  \s
-                                        >                  \s
-                1       5       3   <   4   >   2       6\s""";
+               1       3       6       2       4   <   5  \s
+                                       <                  \s
+               5       4       1       3       2       6  \s
+                                                       >  \s
+               2   >   1       5   <   6       3       4  \s
+               <                               <       >  \s
+               3       6       4       1       5       2  \s
+               <                                          \s
+               4       2   <   3       5       6       1  \s
+                                       >                  \s
+               6       5       2   <   4   >   1       3\s""";
 
         Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
     }

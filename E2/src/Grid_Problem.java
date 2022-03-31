@@ -27,4 +27,8 @@ public abstract class Grid_Problem<P, E extends Enum, D extends P> implements CS
     @Override
     public String toString() { return chosenProblem + "\n" + toDisplay(problem); }
 
+    @Override
+    public ArrayList<D> getDomain() {
+        return overallDomain;
+    }
 }
