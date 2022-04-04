@@ -31,10 +31,9 @@ public class CSP_SolverBacktracking<P, D extends P, T extends CSP_Problem<P, D>,
         for (var domainItem : cspProblem.getDomain()) {
             stepsCounter += 1;
             var changedVariableInx = nextVariable.variableIndex;
-            cspPartialSolution.setNewValueAtIndexOf(domainItem, changedVariableInx);
+            boolean areValuesCorrect = cspPartialSolution.setNewValueAtIndexOf(domainItem, changedVariableInx);
 //            System.out.println("vi:" + changedVariableInx + " d: " + domainItem);
 //            System.out.println(cspPartialSolution);
-            boolean areValuesCorrect = cspPartialSolution.checkConstraintsAfterLastChange();
             if(areValuesCorrect) {
                 getResultsRecursive(cspPartialSolution, accumulator, currentVariableInx + 1);
             }
