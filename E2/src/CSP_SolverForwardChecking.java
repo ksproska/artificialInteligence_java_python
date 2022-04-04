@@ -29,7 +29,8 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
             returnsCounter++;
             return;
         }
-        var nextVariable = cspPartialSolution.getNextVariable();
+        var nextVariableInx = cspPartialSolution.getNextVariableIndex(chosenHeuristic, 0); //todo
+        var nextVariable = cspPartialSolution.getCspVariables().get(nextVariableInx);
         if (nextVariable == null) {
             returnsCounter++;
             if(accumulator.isEmpty()) { tillFirstReturnsCounter++; }

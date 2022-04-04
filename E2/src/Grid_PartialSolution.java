@@ -113,16 +113,8 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P, H ext
     }
 
     @Override
-    public CSP_Variable<D> getNextVariable() {
-        CSP_Variable<D> chosen = null;
-        for (var cspVariable : cspVariables) {
-            if (!cspVariable.getVariableDomain().isEmpty()) {
-                if(chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
-                    chosen = cspVariable;
-                }
-            }
-        }
-        return chosen;
+    public Integer getNextVariableIndex(H chosenHeuristic, Integer variableIndex) {
+        throw new IllegalStateException("Method not implemented");
     }
 
     @Override

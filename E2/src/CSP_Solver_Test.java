@@ -58,7 +58,7 @@ public class CSP_Solver_Test {
     void testBinaryBacktracking6x6() {
         binaryProblem = new Binary_Problem(BinaryEnum.B6x6);
         binaryCSPSolver = new CSP_SolverBacktracking<>(binaryProblem);
-        var results = binaryCSPSolver.getResults(BinaryHeuristicEnum.BH_SMALLEST_DOMAIN_FIRST);
+        var results = binaryCSPSolver.getResults(BinaryHeuristicEnum.BH_IN_ORDER);
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
                 0, 1, 0, 1, 1, 0,
@@ -80,7 +80,7 @@ public class CSP_Solver_Test {
     void testBinaryBacktracking8x8() {
         binaryProblem = new Binary_Problem(BinaryEnum.B8x8);
         binaryCSPSolver = new CSP_SolverBacktracking<>(binaryProblem);
-        var results = binaryCSPSolver.getResults(BinaryHeuristicEnum.BH_SMALLEST_DOMAIN_FIRST);
+        var results = binaryCSPSolver.getResults(BinaryHeuristicEnum.BH_IN_ORDER);
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
                 1, 1, 0, 0, 1, 0, 1, 0,
@@ -104,7 +104,7 @@ public class CSP_Solver_Test {
     void testBinaryBacktracking10x10() {
         binaryProblem = new Binary_Problem(BinaryEnum.B10x10);
         binaryCSPSolver = new CSP_SolverBacktracking<>(binaryProblem);
-        var results = binaryCSPSolver.getResults(BinaryHeuristicEnum.BH_SMALLEST_DOMAIN_FIRST);
+        var results = binaryCSPSolver.getResults(BinaryHeuristicEnum.BH_IN_ORDER);
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
                 0, 1, 1, 0, 0, 1, 0, 1, 0, 1,
@@ -129,7 +129,7 @@ public class CSP_Solver_Test {
     void testFutoshikiBacktracking4x4() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F4x4);
         futoshikiCSPSolver = new CSP_SolverBacktracking<>(futoshikiProblem);
-        var results = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_SMALLEST_DOMAIN_FIRST);
+        var results = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_IN_ORDER);
         Assertions.assertEquals(1, results.size());
         var expected = """
                 3   >   1       4       2  \s
@@ -151,7 +151,7 @@ public class CSP_Solver_Test {
     void testFutoshikiBacktracking5x5() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F5x5);
         futoshikiCSPSolver = new CSP_SolverBacktracking<>(futoshikiProblem);
-        var results = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_SMALLEST_DOMAIN_FIRST);
+        var results = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_IN_ORDER);
         Assertions.assertEquals(1, results.size());
         var expected = """
                2       3       1       4   <   5  \s
@@ -175,7 +175,7 @@ public class CSP_Solver_Test {
     void testFutoshikiBacktracking6x6() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F6x6);
         futoshikiCSPSolver = new CSP_SolverBacktracking<>(futoshikiProblem);
-        var results = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_SMALLEST_DOMAIN_FIRST);
+        var results = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_IN_ORDER);
         Assertions.assertEquals(133, results.size());
         var expected = """
                1       3       6       2       4   <   5  \s

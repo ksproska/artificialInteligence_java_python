@@ -82,4 +82,23 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
         copyTo(copiedItem);
         return copiedItem;
     }
+
+    @Override
+    public Integer getNextVariableIndex(BinaryHeuristicEnum chosenHeuristic, Integer variableIndex) {
+        if(chosenHeuristic == BinaryHeuristicEnum.BH_IN_ORDER) {
+            if(cspVariables.size() <= variableIndex) return null;
+            return variableIndex + 1;
+        }
+        else {
+            CSP_Variable<Integer> chosen = null;
+            for (var cspVariable : cspVariables) {
+                if (!cspVariable.getVariableDomain().isEmpty()) {
+                    if(chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
+                        chosen = cspVariable;
+                    }
+                }
+            }
+            return cspVariables.indexOf(chosen);
+        }
+    }
 }

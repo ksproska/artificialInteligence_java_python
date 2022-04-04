@@ -93,6 +93,25 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
     }
 
     @Override
+    public Integer getNextVariableIndex(FutoshikiHeuristicEnum chosenHeuristic, Integer variableIndex) {
+        if(chosenHeuristic == FutoshikiHeuristicEnum.FH_IN_ORDER) {
+            if(cspVariables.size() <= variableIndex) return null;
+            return variableIndex + 1;
+        }
+        else {
+            CSP_Variable<Integer> chosen = null;
+            for (var cspVariable : cspVariables) {
+                if (!cspVariable.getVariableDomain().isEmpty()) {
+                    if(chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
+                        chosen = cspVariable;
+                    }
+                }
+            }
+            return cspVariables.indexOf(chosen);
+        }
+    }
+
+    @Override
     public Futoshiki_PartialSolution deepClone() {
         var copiedItem =  new Futoshiki_PartialSolution();
         copyTo(copiedItem);

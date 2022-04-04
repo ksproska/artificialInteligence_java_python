@@ -18,36 +18,43 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
         tillFirstVisitedNodesCounter = 0;
         ArrayList<S> accumulator = new ArrayList<>();
         var initialPartialSolution = cspProblem.getInitialPartialSolution();
-
-        getResultsRecursive((S) initialPartialSolution, accumulator, 0);
+        var firstVariableInx = initialPartialSolution.getNextVariableIndex(chosenHeuristic, -1);
+//        System.out.println(firstVariable);
+        getResultsRecursive((S) initialPartialSolution, accumulator, firstVariableInx);
         return accumulator;
     }
 
     private void getResultsRecursive(S cspPartialSolution,
                                      ArrayList<S> accumulator,
-                                     int currentVariableInx) {
+                                     Integer currentVariableInx) {
         if(cspPartialSolution.isSatisfied()) {
             accumulator.add(cspPartialSolution.deepClone());
             returnsCounter++;
             return;
         }
-        if(cspPartialSolution.getCspVariables().size() <= currentVariableInx) {
+        if(currentVariableInx == null) {
             returnsCounter++;
             if(accumulator.isEmpty()) { tillFirstReturnsCounter++; }
             return;
         }
-        var nextVariable = cspPartialSolution.getCspVariables().get(currentVariableInx);
+        var currentVariable = cspPartialSolution.getCspVariables().get(currentVariableInx);
         for (var domainItem : cspProblem.getDomain()) {
             visitedNodesCounter++;
             if(accumulator.isEmpty()) { tillFirstVisitedNodesCounter++; }
-            var changedVariableInx = nextVariable.variableIndex;
+            var changedVariableInx = currentVariable.variableIndex;
             boolean areValuesCorrect = cspPartialSolution.setNewValueAtIndexOf(domainItem, changedVariableInx);
 //            System.out.println("\nvi:" + changedVariableInx + " d: " + domainItem);
 //            System.out.println(cspPartialSolution);
 //            System.out.println("ALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter);
 //            System.out.println("TILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter);
             if(areValuesCorrect) {
-                getResultsRecursive(cspPartialSolution, accumulator, currentVariableInx + 1);
+                var nextVariableIndex = cspPartialSolution.getNextVariableIndex(chosenHeuristic, currentVariableInx);
+                if (nextVariableIndex == null) {
+                    getResultsRecursive(cspPartialSolution, accumulator, null);
+                }
+                else {
+                    getResultsRecursive(cspPartialSolution, accumulator, nextVariableIndex);
+                }
             }
             cspPartialSolution.removeValueAtIndexOf(changedVariableInx);
         }

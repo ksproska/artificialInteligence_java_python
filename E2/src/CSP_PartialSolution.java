@@ -7,7 +7,7 @@ import java.util.ArrayList;
 interface CSP_PartialSolution<P, D extends P, H extends HeuristicEnum> {
     boolean isSatisfied();
     <T extends CSP_PartialSolution<P, D, H>> T deepClone();
-    CSP_Variable<D> getNextVariable();
+    Integer getNextVariableIndex(H chosenHeuristic, Integer variableIndex);
     boolean setNewValueAtIndexOf(D domainItem, Integer variableIndex);
     boolean checkConstraintsAfterLastChange();
     void removeValueAtIndexOf(Integer variableItem);
