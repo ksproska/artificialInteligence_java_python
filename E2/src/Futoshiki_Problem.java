@@ -72,6 +72,29 @@ public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integ
     }
 
     @Override
+    public String toDisplay(ArrayList<Object> grid, int changedItemInx) {
+        var allToDisplay = "";
+        for (int i = 0; i < grid.size(); i++) {
+            if(!indexesToFill.contains(i)) {
+                allToDisplay += this.ANSI_GREEN;
+            }
+            if(i == changedItemInx) {
+                allToDisplay += this.ANSI_RED;
+            }
+            if (grid.get(i) == null ) { allToDisplay += this.ANSI_YELLOW + "x" + this.ANSI_RESET; }
+            else if (grid.get(i).equals("-") ) { allToDisplay += " "; }
+            else { allToDisplay += grid.get(i); }
+            if(!indexesToFill.contains(i) || i == changedItemInx) {
+                allToDisplay += this.ANSI_RESET;
+            }
+            allToDisplay += "   ";
+            if((i + 1) % x == 0) { allToDisplay += "\n"; }
+        }
+        allToDisplay = allToDisplay.substring(0, allToDisplay.length() - 3);
+        return allToDisplay;
+    }
+
+    @Override
     public Futoshiki_PartialSolution getInitialPartialSolution() {
         return new Futoshiki_PartialSolution(this);
     }

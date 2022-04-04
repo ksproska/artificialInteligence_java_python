@@ -147,7 +147,7 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
 
     @Override
     public String toString() {
-        return gridProblem.chosenProblem + "\n" + gridProblem.toDisplay(partialSolution) + areConstraintsNotBrokenAfterLastChange();
+        return gridProblem.chosenProblem + "\n" + gridProblem.toDisplay(partialSolution, changedItemY * gridProblem.x + changedItemX) + areConstraintsNotBrokenAfterLastChange();
     }
 
     @Override

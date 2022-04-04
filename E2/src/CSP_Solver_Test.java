@@ -68,7 +68,9 @@ public class CSP_Solver_Test {
 
         ));
         Assertions.assertIterableEquals(expected, results.get(0).getPartialSolution());
-        Assertions.assertEquals(256, binaryCSPSolver.getStepsCounter());
+        Assertions.assertEquals(256, binaryCSPSolver.getVisitedNodesCounter());
+        Assertions.assertEquals(76, binaryCSPSolver.getTillFirstVisitedNodesCounter());
+        Assertions.assertEquals(129, binaryCSPSolver.getReturnsCounter());
     }
 
     @Test
@@ -89,7 +91,8 @@ public class CSP_Solver_Test {
 
         ));
         Assertions.assertIterableEquals(expected, results.get(0).getPartialSolution());
-        Assertions.assertEquals(1496, binaryCSPSolver.getStepsCounter());
+        Assertions.assertEquals(1496, binaryCSPSolver.getVisitedNodesCounter());
+        Assertions.assertEquals(1095, binaryCSPSolver.getTillFirstVisitedNodesCounter());
     }
 
     @Test
@@ -111,7 +114,8 @@ public class CSP_Solver_Test {
                 0, 1, 0, 1, 0, 0, 1, 0, 1, 1
         ));
         Assertions.assertIterableEquals(expected, results.get(0).getPartialSolution());
-        Assertions.assertEquals(896, binaryCSPSolver.getStepsCounter());
+        Assertions.assertEquals(896, binaryCSPSolver.getVisitedNodesCounter());
+        Assertions.assertEquals(452, binaryCSPSolver.getTillFirstVisitedNodesCounter());
     }
 
     @Test
@@ -130,7 +134,8 @@ public class CSP_Solver_Test {
                 4       2   >   1   <   3\s""";
 
         Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
-        Assertions.assertEquals(864, futoshikiCSPSolver.getStepsCounter());
+        Assertions.assertEquals(864, futoshikiCSPSolver.getVisitedNodesCounter());
+        Assertions.assertEquals(265, futoshikiCSPSolver.getTillFirstVisitedNodesCounter());
     }
 
     @Test
@@ -151,7 +156,8 @@ public class CSP_Solver_Test {
                3       2   <   5       1       4\s""";
 
         Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
-        Assertions.assertEquals(1190, futoshikiCSPSolver.getStepsCounter());
+        Assertions.assertEquals(1190, futoshikiCSPSolver.getVisitedNodesCounter());
+        Assertions.assertEquals(296, futoshikiCSPSolver.getTillFirstVisitedNodesCounter());
     }
 
     @Test
@@ -174,6 +180,8 @@ public class CSP_Solver_Test {
                6       5       2   <   4   >   1       3\s""";
 
         Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
-        Assertions.assertEquals(20837934, futoshikiCSPSolver.getStepsCounter());
+        Assertions.assertEquals(20837934, futoshikiCSPSolver.getVisitedNodesCounter());
+        Assertions.assertEquals(1025184, futoshikiCSPSolver.getTillFirstVisitedNodesCounter());
+        Assertions.assertEquals(3473122, futoshikiCSPSolver.getReturnsCounter());
     }
 }
