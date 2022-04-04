@@ -1,5 +1,7 @@
 import consts.BinaryEnum;
+import consts.BinaryHeuristicEnum;
 import consts.FutoshikiEnum;
+import consts.FutoshikiHeuristicEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -9,8 +11,8 @@ import static java.util.Arrays.asList;
 public class CSP_Solver_Test {
     static Binary_Problem binaryProblem;
     static Futoshiki_Problem futoshikiProblem;
-    static CSP_Solver<Integer, Integer, Binary_Problem, Binary_PartialSolution> binaryCSPSolver;
-    static CSP_Solver<Object, Integer, Futoshiki_Problem, Futoshiki_PartialSolution> futoshikiCSPSolver;
+    static CSP_Solver<Integer, Integer, BinaryHeuristicEnum, Binary_Problem, Binary_PartialSolution> binaryCSPSolver;
+    static CSP_Solver<Object, Integer, FutoshikiHeuristicEnum, Futoshiki_Problem, Futoshiki_PartialSolution> futoshikiCSPSolver;
 
     @Test
     void testCorrectionsB6x6() {
@@ -56,7 +58,7 @@ public class CSP_Solver_Test {
     void testBinaryBacktracking6x6() {
         binaryProblem = new Binary_Problem(BinaryEnum.B6x6);
         binaryCSPSolver = new CSP_SolverBacktracking<>(binaryProblem);
-        var results = binaryCSPSolver.getResults();
+        var results = binaryCSPSolver.getResults(BinaryHeuristicEnum.BH_SMALLEST_DOMAIN_FIRST);
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
                 0, 1, 0, 1, 1, 0,
@@ -78,7 +80,7 @@ public class CSP_Solver_Test {
     void testBinaryBacktracking8x8() {
         binaryProblem = new Binary_Problem(BinaryEnum.B8x8);
         binaryCSPSolver = new CSP_SolverBacktracking<>(binaryProblem);
-        var results = binaryCSPSolver.getResults();
+        var results = binaryCSPSolver.getResults(BinaryHeuristicEnum.BH_SMALLEST_DOMAIN_FIRST);
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
                 1, 1, 0, 0, 1, 0, 1, 0,
@@ -102,7 +104,7 @@ public class CSP_Solver_Test {
     void testBinaryBacktracking10x10() {
         binaryProblem = new Binary_Problem(BinaryEnum.B10x10);
         binaryCSPSolver = new CSP_SolverBacktracking<>(binaryProblem);
-        var results = binaryCSPSolver.getResults();
+        var results = binaryCSPSolver.getResults(BinaryHeuristicEnum.BH_SMALLEST_DOMAIN_FIRST);
         Assertions.assertEquals(1, results.size());
         var expected = new ArrayList<Integer>(asList(
                 0, 1, 1, 0, 0, 1, 0, 1, 0, 1,
@@ -127,7 +129,7 @@ public class CSP_Solver_Test {
     void testFutoshikiBacktracking4x4() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F4x4);
         futoshikiCSPSolver = new CSP_SolverBacktracking<>(futoshikiProblem);
-        var results = futoshikiCSPSolver.getResults();
+        var results = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_SMALLEST_DOMAIN_FIRST);
         Assertions.assertEquals(1, results.size());
         var expected = """
                 3   >   1       4       2  \s
@@ -149,7 +151,7 @@ public class CSP_Solver_Test {
     void testFutoshikiBacktracking5x5() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F5x5);
         futoshikiCSPSolver = new CSP_SolverBacktracking<>(futoshikiProblem);
-        var results = futoshikiCSPSolver.getResults();
+        var results = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_SMALLEST_DOMAIN_FIRST);
         Assertions.assertEquals(1, results.size());
         var expected = """
                2       3       1       4   <   5  \s
@@ -173,7 +175,7 @@ public class CSP_Solver_Test {
     void testFutoshikiBacktracking6x6() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F6x6);
         futoshikiCSPSolver = new CSP_SolverBacktracking<>(futoshikiProblem);
-        var results = futoshikiCSPSolver.getResults();
+        var results = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_SMALLEST_DOMAIN_FIRST);
         Assertions.assertEquals(133, results.size());
         var expected = """
                1       3       6       2       4   <   5  \s
