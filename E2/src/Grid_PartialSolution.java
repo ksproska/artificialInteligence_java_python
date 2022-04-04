@@ -78,11 +78,17 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P, H ext
     public boolean updateVariables(Integer variableIndex) {
         var variableX = getX(variableIndex);
         var variableY = getY(variableIndex);
+        var wasThereEmptyDomain = false;
         for (var cspNextVariable : cspVariables) {
             var nextX = getX(cspNextVariable.variableIndex);
             var nextY = getY(cspNextVariable.variableIndex);
-            if((nextX == variableX || nextY == variableY)
-                    && !cspNextVariable.variableIndex.equals(variableIndex)) {
+//            System.out.println("rem: " + variableIndex);
+//            System.out.println("csp: " + cspNextVariable.variableIndex);
+            if (cspNextVariable.variableIndex.equals(variableIndex)) {
+                cspNextVariable.removeAll();
+                cspNextVariable.wasVariableUsed = true;
+            }
+            else if(nextX == variableX || nextY == variableY) {
                 for (Iterator<D> domainIterator = cspNextVariable.getVariableDomain().iterator(); domainIterator.hasNext(); ) {
                     D domainItem = domainIterator.next();
                     var isCorrect = setNewValueAtIndexOf(domainItem, cspNextVariable.variableIndex);
@@ -92,13 +98,10 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P, H ext
                     removeValueAtIndexOf(cspNextVariable.variableIndex);
                 }
                 if(!cspNextVariable.wasVariableUsed && cspNextVariable.getVariableDomain().isEmpty()) {
-                    return false;
+                    wasThereEmptyDomain = true;
                 }
             }
-            else if (cspNextVariable.variableIndex.equals(variableIndex)) {
-                cspNextVariable.removeAll();
-                cspNextVariable.wasVariableUsed = true;
-            }
+
         }
         return true;
     }

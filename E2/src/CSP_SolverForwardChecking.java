@@ -18,43 +18,47 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
         tillFirstVisitedNodesCounter = 0;
         ArrayList<S> accumulator = new ArrayList<>();
         var initialPartialSolution = cspProblem.getInitialPartialSolution();
-        getResultsRecursive((S) initialPartialSolution, accumulator);
+        var firstVariableInx = initialPartialSolution.getNextVariableIndex(chosenHeuristic, -1);
+        getResultsRecursive((S) initialPartialSolution, accumulator, firstVariableInx);
         return accumulator;
     }
 
     private void getResultsRecursive(S cspPartialSolution,
-                                     ArrayList<S> accumulator) {
+                                     ArrayList<S> accumulator,
+                                     Integer currentVariableInx) {
         if(cspPartialSolution.isSatisfied()) {
-            accumulator.add(cspPartialSolution);
+            accumulator.add(cspPartialSolution.deepClone());
             returnsCounter++;
             return;
         }
-        var nextVariableInx = cspPartialSolution.getNextVariableIndex(chosenHeuristic, 0); //todo
-        var nextVariable = cspPartialSolution.getCspVariables().get(nextVariableInx);
-        if (nextVariable == null) {
+        if (currentVariableInx == null) {
             returnsCounter++;
             if(accumulator.isEmpty()) { tillFirstReturnsCounter++; }
             return;
         }
-
+        var nextVariable = cspPartialSolution.getCspVariables().get(currentVariableInx);
+        nextVariable = new CSP_Variable<D>(nextVariable);
         var searchedDomain = new ArrayList<>(nextVariable.getVariableDomain());
         for (int i = 0; i < searchedDomain.size(); i++) {
             visitedNodesCounter += 1;
             if(accumulator.isEmpty()) { tillFirstVisitedNodesCounter++; }
             var domainItem = searchedDomain.get(i);
-            var solutionCopy = cspPartialSolution;
-            if(i != searchedDomain.size() - 1) {
-                solutionCopy = (S) cspPartialSolution.deepClone();
-            }
+            var solutionCopy = (S) cspPartialSolution.deepClone();
+
             var changedVariableInx = nextVariable.variableIndex;
-            solutionCopy.setNewValueAtIndexOf(domainItem, changedVariableInx);
-            boolean areValuesCorrect = solutionCopy.updateVariables(changedVariableInx);
+            boolean areValuesCorrect = solutionCopy.setNewValueAtIndexOf(domainItem, changedVariableInx);
+
 //            System.out.println("\nvi:" + changedVariableInx + " d: " + domainItem);
-//            System.out.println(cspPartialSolution);
+//            System.out.println(solutionCopy);
 //            System.out.println("ALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter);
 //            System.out.println("TILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter);
+
+            solutionCopy.updateVariables(changedVariableInx);
             if(areValuesCorrect) {
-                getResultsRecursive(solutionCopy, accumulator);
+                var nextVariableIndex = solutionCopy.getNextVariableIndex(chosenHeuristic, currentVariableInx);
+                getResultsRecursive(solutionCopy, accumulator, nextVariableIndex);
+                solutionCopy.removeValueAtIndexOf(changedVariableInx);
+//                cspPartialSolution.setVariableReleased(changedVariableInx);
             }
         }
         returnsCounter++;
@@ -72,4 +76,12 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
 
     @Override
     public int getTillFirstReturnsCounter() { return tillFirstReturnsCounter; }
+
+    @Override
+    public String toString() {
+        return "HEURISTIC:  " + chosenHeuristic + "\n" +
+                cspProblem +
+                "\nALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter +
+                "\nTILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter + "\n";
+    }
 }

@@ -60,33 +60,28 @@ public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integ
     }
 
     public String toDisplay(ArrayList<Object> grid) {
-        var allToDisplay = "";
-        for (int i = 0; i < grid.size(); i++) {
-            if (grid.get(i) == null ) { allToDisplay += "x"; }
-            else if (grid.get(i).equals("-") ) { allToDisplay += " "; }
-            else { allToDisplay += grid.get(i); }
-            allToDisplay += "   ";
-            if((i + 1) % x == 0) { allToDisplay += "\n"; }
-        }
-        allToDisplay = allToDisplay.substring(0, allToDisplay.length() - 3);
-        return allToDisplay;
+        return toDisplay(grid, -1);
     }
 
     @Override
     public String toDisplay(ArrayList<Object> grid, int changedItemInx) {
         var allToDisplay = "";
         for (int i = 0; i < grid.size(); i++) {
-            if(!indexesToFill.contains(i)) {
-                allToDisplay += this.ANSI_GREEN;
+            if(Futoshiki_Problem.lessThan.equals(grid.get(i)) || Futoshiki_Problem.moreThan.equals(grid.get(i))) {
+                allToDisplay += ANSI_PURPLE;
             }
-            if(i == changedItemInx) {
-                allToDisplay += this.ANSI_RED;
+            else if(i == changedItemInx) {
+                allToDisplay += ANSI_RED;
             }
-            if (grid.get(i) == null ) { allToDisplay += this.ANSI_YELLOW + "x" + this.ANSI_RESET; }
+            else if(!indexesToFill.contains(i)) {
+                allToDisplay += ANSI_GREEN;
+            }
+
+            if (grid.get(i) == null ) { allToDisplay += ANSI_YELLOW + "x" + ANSI_RESET; }
             else if (grid.get(i).equals("-") ) { allToDisplay += " "; }
             else { allToDisplay += grid.get(i); }
             if(!indexesToFill.contains(i) || i == changedItemInx) {
-                allToDisplay += this.ANSI_RESET;
+                allToDisplay += ANSI_RESET;
             }
             allToDisplay += "   ";
             if((i + 1) % x == 0) { allToDisplay += "\n"; }

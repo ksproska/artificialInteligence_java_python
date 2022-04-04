@@ -1,3 +1,4 @@
+import consts.BinaryHeuristicEnum;
 import consts.FutoshikiEnum;
 import consts.FutoshikiHeuristicEnum;
 
@@ -92,22 +93,83 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
                 constraint_isLeftCorrect() && constraint_isRightCorrect();
     }
 
+    private int countConstraints(Integer variableIndex) {
+        var countConstraints = 0;
+        if(getX(variableIndex) + 1 < gridProblem.x) {
+            var list = rows.get(getY(variableIndex));
+            if(!Futoshiki_Problem.neutral.equals(list.get(getX(variableIndex) + 1))) {
+                countConstraints ++;
+            }
+        }
+        if(0 < getX(variableIndex)) {
+            var list = rows.get(getY(variableIndex));
+            if(!Futoshiki_Problem.neutral.equals(list.get(getX(variableIndex) - 1))) {
+                countConstraints ++;
+            }
+        }
+        if(getY(variableIndex) + 1 < gridProblem.y) {
+            var list = columns.get(getX(variableIndex));
+            if(!Futoshiki_Problem.neutral.equals(list.get(getY(variableIndex) + 1))) {
+                countConstraints ++;
+            }
+        }
+        if(0 < getY(variableIndex)) {
+            var list = columns.get(getX(variableIndex));
+            if(!Futoshiki_Problem.neutral.equals(list.get(getY(variableIndex) - 1))) {
+                countConstraints ++;
+            }
+        }
+//        var colLessThan = Collections.frequency(columns.get(getX(variableIndex)), Futoshiki_Problem.lessThan);
+//        var colMoreThan = Collections.frequency(columns.get(getX(variableIndex)), Futoshiki_Problem.moreThan);
+//        var rowLessThan = Collections.frequency(rows.get(getY(variableIndex)), Futoshiki_Problem.lessThan);
+//        var rowMoreThan = Collections.frequency(rows.get(getY(variableIndex)), Futoshiki_Problem.moreThan);
+        return countConstraints;
+    }
+
     @Override
     public Integer getNextVariableIndex(FutoshikiHeuristicEnum chosenHeuristic, Integer variableIndex) {
         if(chosenHeuristic == FutoshikiHeuristicEnum.FH_IN_ORDER) {
             if(cspVariables.size() <= variableIndex) return null;
             return variableIndex + 1;
         }
-        else {
+        else if (chosenHeuristic == FutoshikiHeuristicEnum.FH_MOST_CONSTRAINTS) {
             CSP_Variable<Integer> chosen = null;
+            Integer chosenCounter = null;
             for (var cspVariable : cspVariables) {
-                if (!cspVariable.getVariableDomain().isEmpty()) {
-                    if(chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
+//                System.out.println(chosen);
+                if (!cspVariable.wasVariableUsed) {
+                    if (chosen == null) {
                         chosen = cspVariable;
+                        chosenCounter = countConstraints(chosen.variableIndex);
+//                        System.out.println(chosenCounter);
+                    } else {
+                        var nextCount = countConstraints(cspVariable.variableIndex);
+                        if (nextCount > chosenCounter) {
+                            chosen = cspVariable;
+                            chosenCounter = nextCount;
+                        }
                     }
                 }
             }
+            if (chosen == null) return null;
             return cspVariables.indexOf(chosen);
+        }
+        else if(chosenHeuristic == FutoshikiHeuristicEnum.FH_BIGGEST_DOMAIN) {
+            CSP_Variable<Integer> chosen = null;
+            for (var cspVariable : cspVariables) {
+                if (!cspVariable.wasVariableUsed) {
+                    if (!cspVariable.getVariableDomain().isEmpty()) {
+                        if (chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
+                            chosen = cspVariable;
+                        }
+                    }
+                }
+            }
+            if (chosen == null) return null;
+            return cspVariables.indexOf(chosen);
+        }
+        else {
+            throw new IllegalStateException("Wrong enum: " + chosenHeuristic);
         }
     }
 

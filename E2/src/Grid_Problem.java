@@ -14,6 +14,7 @@ public abstract class Grid_Problem<P, E extends Enum, D extends P, H extends Heu
     public static final String ANSI_GREEN  = "\033[0;92m";
     public static final String ANSI_RED  = "\033[1;91m";
     public static final String ANSI_YELLOW = "\033[0;93m";
+    public static final String ANSI_PURPLE = "\033[1;95m";
 
     protected Grid_Problem(E chosenProblem, int x, int y, ArrayList<D> overallDomain) {
         this.chosenProblem = chosenProblem;

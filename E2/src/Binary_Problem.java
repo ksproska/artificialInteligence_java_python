@@ -47,21 +47,7 @@ public class Binary_Problem extends Grid_Problem<Integer, BinaryEnum, Integer, B
 
     @Override
     public String toDisplay(ArrayList<Integer> grid) {
-        var allToDisplay = displaySplitter;
-        for (int i = 0; i < grid.size(); i++) {
-            if(!indexesToFill.contains(i)) {
-                allToDisplay += this.ANSI_GREEN;
-            }
-            if (grid.get(i) == null) { allToDisplay += " "; }
-            else { allToDisplay += grid.get(i); }
-            if(!indexesToFill.contains(i)) {
-                allToDisplay += this.ANSI_RESET;
-            }
-            allToDisplay += displaySplitter;
-            if((i + 1) % x == 0) { allToDisplay += "\n" + displaySplitter; }
-        }
-        allToDisplay = allToDisplay.substring(0, allToDisplay.length() - 3);
-        return allToDisplay;
+        return toDisplay(grid, -1);
     }
 
     @Override
