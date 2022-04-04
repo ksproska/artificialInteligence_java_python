@@ -104,6 +104,24 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P, H ext
     }
 
     @Override
+    public void setVariableUsed(Integer variableIndex) {
+        for (var cspNextVariable : cspVariables) {
+            if (cspNextVariable.variableIndex.equals(variableIndex)) {
+                cspNextVariable.wasVariableUsed = true;
+            }
+        }
+    }
+
+    @Override
+    public void setVariableReleased(Integer variableIndex) {
+        for (var cspNextVariable : cspVariables) {
+            if (cspNextVariable.variableIndex.equals(variableIndex)) {
+                cspNextVariable.wasVariableUsed = false;
+            }
+        }
+    }
+
+    @Override
     public void removeValueAtIndexOf(Integer variableItem) {
         partialSolution.set(variableItem, null);
         changedItemX = getX(variableItem);

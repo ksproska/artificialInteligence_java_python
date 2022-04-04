@@ -10,6 +10,10 @@ interface CSP_PartialSolution<P, D extends P, H extends HeuristicEnum> {
     Integer getNextVariableIndex(H chosenHeuristic, Integer variableIndex);
     boolean setNewValueAtIndexOf(D domainItem, Integer variableIndex);
     boolean checkConstraintsAfterLastChange();
+
+    void setVariableUsed(Integer variableIndex);
+    void setVariableReleased(Integer variableIndex);
+
     void removeValueAtIndexOf(Integer variableItem);
 
     ArrayList<CSP_Variable<D>> getCspVariables();

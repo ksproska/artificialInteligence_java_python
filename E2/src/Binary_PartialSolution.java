@@ -83,11 +83,37 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
         return copiedItem;
     }
 
+    private int countFilledAround(Integer variableIndex) {
+        var colEmpty = Collections.frequency(columns.get(getX(variableIndex)), null);
+        var rowEmpty = Collections.frequency(rows.get(getY(variableIndex)), null);
+        return colEmpty + rowEmpty;
+    }
+
     @Override
     public Integer getNextVariableIndex(BinaryHeuristicEnum chosenHeuristic, Integer variableIndex) {
         if(chosenHeuristic == BinaryHeuristicEnum.BH_IN_ORDER) {
             if(cspVariables.size() <= variableIndex) return null;
             return variableIndex + 1;
+        }
+        else if (chosenHeuristic == BinaryHeuristicEnum.BH_MOST_AROUND) {
+            CSP_Variable<Integer> chosen = null;
+            Integer chosenCounter = null;
+            for (var cspVariable : cspVariables) {
+                if (!cspVariable.wasVariableUsed) {
+                    if (chosen == null) {
+                        chosen = cspVariable;
+                        chosenCounter = countFilledAround(chosen.variableIndex);
+                    } else {
+                        var nextCount = countFilledAround(cspVariable.variableIndex);
+                        if (nextCount < chosenCounter) {
+                            chosen = cspVariable;
+                            chosenCounter = nextCount;
+                        }
+                    }
+                }
+            }
+            if (chosen == null) return null;
+            return cspVariables.indexOf(chosen);
         }
         else {
             CSP_Variable<Integer> chosen = null;

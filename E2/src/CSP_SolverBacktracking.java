@@ -1,6 +1,7 @@
 import consts.HeuristicEnum;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T extends CSP_Problem<P, D, E>, S extends CSP_PartialSolution<P, D, E>> implements CSP_Solver<P, D, E, T, S> {
     private final T cspProblem;
@@ -38,15 +39,18 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
             return;
         }
         var currentVariable = cspPartialSolution.getCspVariables().get(currentVariableInx);
+//        System.out.println(currentVariable.variableIndex);
         for (var domainItem : cspProblem.getDomain()) {
             visitedNodesCounter++;
             if(accumulator.isEmpty()) { tillFirstVisitedNodesCounter++; }
             var changedVariableInx = currentVariable.variableIndex;
             boolean areValuesCorrect = cspPartialSolution.setNewValueAtIndexOf(domainItem, changedVariableInx);
+            cspPartialSolution.setVariableUsed(changedVariableInx);
 //            System.out.println("\nvi:" + changedVariableInx + " d: " + domainItem);
 //            System.out.println(cspPartialSolution);
 //            System.out.println("ALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter);
 //            System.out.println("TILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter);
+
             if(areValuesCorrect) {
                 var nextVariableIndex = cspPartialSolution.getNextVariableIndex(chosenHeuristic, currentVariableInx);
                 if (nextVariableIndex == null) {
@@ -57,6 +61,7 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
                 }
             }
             cspPartialSolution.removeValueAtIndexOf(changedVariableInx);
+            cspPartialSolution.setVariableReleased(changedVariableInx);
         }
         returnsCounter++;
         if(accumulator.isEmpty()) { tillFirstReturnsCounter++; }
@@ -73,4 +78,12 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
 
     @Override
     public int getTillFirstReturnsCounter() { return tillFirstReturnsCounter; }
+
+    @Override
+    public String toString() {
+        return "HEURISTIC:  " + chosenHeuristic + "\n" +
+                cspProblem +
+                "\nALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter +
+                "\nTILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter + "\n";
+    }
 }
