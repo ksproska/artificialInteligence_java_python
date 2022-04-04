@@ -25,18 +25,14 @@ public class CSP_SolverForwardChecking<P, D extends P, T extends CSP_Problem<P, 
         var nextVariable = cspPartialSolution.getNextVariable();
         if (nextVariable == null) {
             returnsCounter++;
-            if(accumulator.isEmpty()) {
-                tillFirstReturnsCounter++;
-            }
+            if(accumulator.isEmpty()) { tillFirstReturnsCounter++; }
             return;
         }
 
         var searchedDomain = new ArrayList<>(nextVariable.getVariableDomain());
         for (int i = 0; i < searchedDomain.size(); i++) {
             visitedNodesCounter += 1;
-            if(accumulator.isEmpty()) {
-                tillFirstVisitedNodesCounter++;
-            }
+            if(accumulator.isEmpty()) { tillFirstVisitedNodesCounter++; }
             var domainItem = searchedDomain.get(i);
             var solutionCopy = cspPartialSolution;
             if(i != searchedDomain.size() - 1) {
@@ -54,9 +50,7 @@ public class CSP_SolverForwardChecking<P, D extends P, T extends CSP_Problem<P, 
             }
         }
         returnsCounter++;
-        if(accumulator.isEmpty()) {
-            tillFirstReturnsCounter++;
-        }
+        if(accumulator.isEmpty()) { tillFirstReturnsCounter++; }
     }
 
     @Override

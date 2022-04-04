@@ -26,17 +26,13 @@ public class CSP_SolverBacktracking<P, D extends P, T extends CSP_Problem<P, D>,
         }
         if(cspPartialSolution.getCspVariables().size() <= currentVariableInx) {
             returnsCounter++;
-            if(accumulator.isEmpty()) {
-                tillFirstReturnsCounter++;
-            }
+            if(accumulator.isEmpty()) { tillFirstReturnsCounter++; }
             return;
         }
         var nextVariable = cspPartialSolution.getCspVariables().get(currentVariableInx);
         for (var domainItem : cspProblem.getDomain()) {
             visitedNodesCounter++;
-            if(accumulator.isEmpty()) {
-                tillFirstVisitedNodesCounter++;
-            }
+            if(accumulator.isEmpty()) { tillFirstVisitedNodesCounter++; }
             var changedVariableInx = nextVariable.variableIndex;
             boolean areValuesCorrect = cspPartialSolution.setNewValueAtIndexOf(domainItem, changedVariableInx);
 //            System.out.println("\nvi:" + changedVariableInx + " d: " + domainItem);
@@ -49,9 +45,7 @@ public class CSP_SolverBacktracking<P, D extends P, T extends CSP_Problem<P, D>,
             cspPartialSolution.removeValueAtIndexOf(changedVariableInx);
         }
         returnsCounter++;
-        if(accumulator.isEmpty()) {
-            tillFirstReturnsCounter++;
-        }
+        if(accumulator.isEmpty()) { tillFirstReturnsCounter++; }
     }
 
     @Override
@@ -64,5 +58,5 @@ public class CSP_SolverBacktracking<P, D extends P, T extends CSP_Problem<P, D>,
     public int getReturnsCounter() { return returnsCounter; }
 
     @Override
-    public int getTillFirstReturnsCounter() { return 0; }
+    public int getTillFirstReturnsCounter() { return tillFirstReturnsCounter; }
 }
