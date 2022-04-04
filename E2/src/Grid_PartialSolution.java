@@ -162,7 +162,7 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P, H ext
 
     @Override
     public String toString() {
-        return gridProblem.chosenProblem + "\n" + gridProblem.toDisplay(partialSolution, changedItemY * gridProblem.x + changedItemX) + areConstraintsNotBrokenAfterLastChange();
+        return "Problem:\t" + gridProblem.chosenProblem + "\n" + gridProblem.toDisplay(partialSolution, changedItemY * gridProblem.x + changedItemX) + "is correct: " + areConstraintsNotBrokenAfterLastChange();
     }
 
     @Override

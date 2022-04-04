@@ -115,7 +115,7 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
             if (chosen == null) return null;
             return cspVariables.indexOf(chosen);
         }
-        else if(chosenHeuristic == BinaryHeuristicEnum.BH_BIGGEST_DOMAIN) {
+        else if(chosenHeuristic == BinaryHeuristicEnum.BH_SMALLEST_DOMAIN) {
             CSP_Variable<Integer> chosen = null;
             for (var cspVariable : cspVariables) {
                 if (!cspVariable.getVariableDomain().isEmpty()) {

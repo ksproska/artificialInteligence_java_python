@@ -140,7 +140,7 @@ public class CSP_Solver_Test {
                 <                          \s
                 4       2   >   1   <   3\s""";
 
-        Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
+        Assertions.assertEquals(expected, futoshikiProblem.getSimpleDisplay(results.get(0).getPartialSolution()));
         Assertions.assertEquals(864, futoshikiCSPSolver.getVisitedNodesCounter());
         Assertions.assertEquals(265, futoshikiCSPSolver.getTillFirstVisitedNodesCounter());
         Assertions.assertEquals(217, futoshikiCSPSolver.getReturnsCounter());
@@ -164,7 +164,7 @@ public class CSP_Solver_Test {
                                                   \s
                3       2   <   5       1       4\s""";
 
-        Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
+        Assertions.assertEquals(expected, futoshikiProblem.getSimpleDisplay(results.get(0).getPartialSolution()));
         Assertions.assertEquals(1190, futoshikiCSPSolver.getVisitedNodesCounter());
         Assertions.assertEquals(296, futoshikiCSPSolver.getTillFirstVisitedNodesCounter());
         Assertions.assertEquals(239, futoshikiCSPSolver.getReturnsCounter());
@@ -190,7 +190,7 @@ public class CSP_Solver_Test {
                                        >                  \s
                6       5       2   <   4   >   1       3\s""";
 
-        Assertions.assertEquals(expected, futoshikiProblem.toDisplay(results.get(0).getPartialSolution()));
+        Assertions.assertEquals(expected, futoshikiProblem.getSimpleDisplay(results.get(0).getPartialSolution()));
         Assertions.assertEquals(20837934, futoshikiCSPSolver.getVisitedNodesCounter());
         Assertions.assertEquals(1025184, futoshikiCSPSolver.getTillFirstVisitedNodesCounter());
         Assertions.assertEquals(3473122, futoshikiCSPSolver.getReturnsCounter());

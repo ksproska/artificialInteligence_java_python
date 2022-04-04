@@ -9,6 +9,7 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
         this.cspProblem = cspProblem;
     }
     private E chosenHeuristic;
+    private ArrayList<S> accumulator;
 
     public ArrayList<S> getResults(E chosenHeuristic) {
         this.chosenHeuristic = chosenHeuristic;
@@ -16,15 +17,14 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
         tillFirstReturnsCounter = 0;
         returnsCounter = 0;
         tillFirstVisitedNodesCounter = 0;
-        ArrayList<S> accumulator = new ArrayList<>();
+        accumulator = new ArrayList<>();
         var initialPartialSolution = cspProblem.getInitialPartialSolution();
         var firstVariableInx = initialPartialSolution.getNextVariableIndex(chosenHeuristic, -1);
-        getResultsRecursive((S) initialPartialSolution, accumulator, firstVariableInx);
+        getResultsRecursive((S) initialPartialSolution, firstVariableInx);
         return accumulator;
     }
 
     private void getResultsRecursive(S cspPartialSolution,
-                                     ArrayList<S> accumulator,
                                      Integer currentVariableInx) {
         if(cspPartialSolution.isSatisfied()) {
             accumulator.add(cspPartialSolution.deepClone());
@@ -48,15 +48,15 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
             var changedVariableInx = nextVariable.variableIndex;
             boolean areValuesCorrect = solutionCopy.setNewValueAtIndexOf(domainItem, changedVariableInx);
 
-//            System.out.println("\nvi:" + changedVariableInx + " d: " + domainItem);
-//            System.out.println(solutionCopy);
-//            System.out.println("ALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter);
-//            System.out.println("TILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter);
+            System.out.println("\nvi:" + changedVariableInx + " d: " + domainItem);
+            System.out.println(solutionCopy);
+            System.out.println("ALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter);
+            System.out.println("TILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter);
 
             solutionCopy.updateVariables(changedVariableInx);
             if(areValuesCorrect) {
                 var nextVariableIndex = solutionCopy.getNextVariableIndex(chosenHeuristic, currentVariableInx);
-                getResultsRecursive(solutionCopy, accumulator, nextVariableIndex);
+                getResultsRecursive(solutionCopy, nextVariableIndex);
                 solutionCopy.removeValueAtIndexOf(changedVariableInx);
 //                cspPartialSolution.setVariableReleased(changedVariableInx);
             }
@@ -79,8 +79,10 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
 
     @Override
     public String toString() {
-        return "HEURISTIC:  " + chosenHeuristic + "\n" +
-                cspProblem +
+        return "CSP_Solver: Forward checking" +
+                "\nHEURISTIC:  " + chosenHeuristic +
+//                "\n" + accumulator.get(0) +
+//                "\nFound:      1/" + accumulator.size() +
                 "\nALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter +
                 "\nTILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter + "\n";
     }

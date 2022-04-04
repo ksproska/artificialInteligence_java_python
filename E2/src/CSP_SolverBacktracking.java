@@ -1,7 +1,6 @@
 import consts.HeuristicEnum;
-
 import java.util.ArrayList;
-import java.util.Scanner;
+
 
 public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T extends CSP_Problem<P, D, E>, S extends CSP_PartialSolution<P, D, E>> implements CSP_Solver<P, D, E, T, S> {
     private final T cspProblem;
@@ -10,6 +9,7 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
         this.cspProblem = cspProblem;
     }
     private E chosenHeuristic;
+    private ArrayList<S> accumulator;
 
     public ArrayList<S> getResults(E chosenHeuristic) {
         this.chosenHeuristic = chosenHeuristic;
@@ -17,16 +17,14 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
         tillFirstReturnsCounter = 0;
         returnsCounter = 0;
         tillFirstVisitedNodesCounter = 0;
-        ArrayList<S> accumulator = new ArrayList<>();
+        accumulator = new ArrayList<>();
         var initialPartialSolution = cspProblem.getInitialPartialSolution();
         var firstVariableInx = initialPartialSolution.getNextVariableIndex(chosenHeuristic, -1);
-//        System.out.println(firstVariable);
-        getResultsRecursive((S) initialPartialSolution, accumulator, firstVariableInx);
+        getResultsRecursive((S) initialPartialSolution, firstVariableInx);
         return accumulator;
     }
 
     private void getResultsRecursive(S cspPartialSolution,
-                                     ArrayList<S> accumulator,
                                      Integer currentVariableInx) {
         if(cspPartialSolution.isSatisfied()) {
             accumulator.add(cspPartialSolution.deepClone());
@@ -54,10 +52,10 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
             if(areValuesCorrect) {
                 var nextVariableIndex = cspPartialSolution.getNextVariableIndex(chosenHeuristic, currentVariableInx);
                 if (nextVariableIndex == null) {
-                    getResultsRecursive(cspPartialSolution, accumulator, null);
+                    getResultsRecursive(cspPartialSolution, null);
                 }
                 else {
-                    getResultsRecursive(cspPartialSolution, accumulator, nextVariableIndex);
+                    getResultsRecursive(cspPartialSolution, nextVariableIndex);
                 }
             }
             cspPartialSolution.removeValueAtIndexOf(changedVariableInx);
@@ -81,8 +79,10 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
 
     @Override
     public String toString() {
-        return "HEURISTIC:  " + chosenHeuristic + "\n" +
-                cspProblem +
+        return "CSP_Solver: Backtracking" +
+                "\nHEURISTIC:  " + chosenHeuristic +
+//                "\n" + accumulator.get(0) +
+//                "\nFound:      1/" + accumulator.size() +
                 "\nALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter +
                 "\nTILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter + "\n";
     }

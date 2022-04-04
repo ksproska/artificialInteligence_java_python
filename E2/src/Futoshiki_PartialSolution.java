@@ -1,4 +1,3 @@
-import consts.BinaryHeuristicEnum;
 import consts.FutoshikiEnum;
 import consts.FutoshikiHeuristicEnum;
 
@@ -154,7 +153,7 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
             if (chosen == null) return null;
             return cspVariables.indexOf(chosen);
         }
-        else if(chosenHeuristic == FutoshikiHeuristicEnum.FH_BIGGEST_DOMAIN) {
+        else if(chosenHeuristic == FutoshikiHeuristicEnum.FH_SMALLEST_DOMAIN) {
             CSP_Variable<Integer> chosen = null;
             for (var cspVariable : cspVariables) {
                 if (!cspVariable.wasVariableUsed) {

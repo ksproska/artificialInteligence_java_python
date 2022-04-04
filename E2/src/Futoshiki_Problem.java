@@ -59,6 +59,19 @@ public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integ
         }
     }
 
+    public String getSimpleDisplay(ArrayList<Object> grid) {
+        var allToDisplay = "";
+        for (int i = 0; i < grid.size(); i++) {
+            if (grid.get(i) == null ) { allToDisplay += ANSI_YELLOW + "x" + ANSI_RESET; }
+            else if (grid.get(i).equals("-") ) { allToDisplay += " "; }
+            else { allToDisplay += grid.get(i); }
+            allToDisplay += "   ";
+            if((i + 1) % x == 0) { allToDisplay += "\n"; }
+        }
+        allToDisplay = allToDisplay.substring(0, allToDisplay.length() - 3);
+        return allToDisplay;
+    }
+
     public String toDisplay(ArrayList<Object> grid) {
         return toDisplay(grid, -1);
     }
@@ -86,7 +99,7 @@ public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integ
             allToDisplay += "   ";
             if((i + 1) % x == 0) { allToDisplay += "\n"; }
         }
-        allToDisplay = allToDisplay.substring(0, allToDisplay.length() - 3);
+        allToDisplay = allToDisplay.substring(0, allToDisplay.length() - 3) + "\n";
         return allToDisplay;
     }
 
