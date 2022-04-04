@@ -1,5 +1,6 @@
 import consts.BinaryConsts;
 import consts.BinaryEnum;
+import consts.BinaryHeuristicEnum;
 import consts.ProjectConsts;
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
-public class Binary_Problem extends Grid_Problem<Integer, BinaryEnum, Integer> {
+public class Binary_Problem extends Grid_Problem<Integer, BinaryEnum, Integer, BinaryHeuristicEnum> {
 
     public Binary_Problem(BinaryEnum chosenProblem) {
         super(chosenProblem,

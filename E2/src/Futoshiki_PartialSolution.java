@@ -1,9 +1,11 @@
 import consts.FutoshikiEnum;
+import consts.FutoshikiHeuristicEnum;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
 
-public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, FutoshikiEnum, Integer> {
+public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, FutoshikiEnum, Integer, FutoshikiHeuristicEnum> {
 
     private Futoshiki_PartialSolution() {}
     public Futoshiki_PartialSolution(Futoshiki_Problem futoshikiProblem) {

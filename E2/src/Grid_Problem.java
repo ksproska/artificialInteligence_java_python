@@ -1,7 +1,9 @@
+import consts.HeuristicEnum;
+
 import java.util.ArrayList;
 
 
-public abstract class Grid_Problem<P, E extends Enum, D extends P> implements CSP_Problem<P, D> {
+public abstract class Grid_Problem<P, E extends Enum, D extends P, H extends HeuristicEnum> implements CSP_Problem<P, D, H> {
     public final E chosenProblem;
     public final ArrayList<D> overallDomain;
     public final int x, y;

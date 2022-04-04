@@ -1,10 +1,12 @@
 import consts.BinaryEnum;
+import consts.BinaryHeuristicEnum;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
 
-public class Binary_PartialSolution extends Grid_PartialSolution<Integer, BinaryEnum, Integer> {
+public class Binary_PartialSolution extends Grid_PartialSolution<Integer, BinaryEnum, Integer, BinaryHeuristicEnum> {
     private Binary_PartialSolution() {}
 
     public Binary_PartialSolution(Binary_Problem binaryProblem) {

@@ -1,9 +1,11 @@
+import consts.HeuristicEnum;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> implements CSP_PartialSolution<P, D> {
-    public Grid_Problem<P, E, D> gridProblem;
+public abstract class Grid_PartialSolution<P, E extends Enum, D extends P, H extends HeuristicEnum> implements CSP_PartialSolution<P, D, H> {
+    public Grid_Problem<P, E, D, H> gridProblem;
     public ArrayList<P> partialSolution;
     public ArrayList<ArrayList<P>> rows, columns;
     protected int changedItemX, changedItemY;
@@ -11,7 +13,7 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
 
     protected Grid_PartialSolution() {}
 
-    public <G extends Grid_Problem<P, E, D>> Grid_PartialSolution(G gridProblem) {
+    public <G extends Grid_Problem<P, E, D, H>> Grid_PartialSolution(G gridProblem) {
         this.gridProblem = gridProblem;
         this.partialSolution = new ArrayList<>(gridProblem.problem);
         setRowsAndColumns(gridProblem.x, gridProblem.y);
@@ -60,7 +62,7 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P> imple
         return copied;
     }
 
-    public void copyTo(Grid_PartialSolution<P, E, D> copiedItem) {
+    public void copyTo(Grid_PartialSolution<P, E, D, H> copiedItem) {
         copiedItem.gridProblem = gridProblem;
         copiedItem.partialSolution = new ArrayList<>(partialSolution);
         copiedItem.rows = copyListOfLists(rows);

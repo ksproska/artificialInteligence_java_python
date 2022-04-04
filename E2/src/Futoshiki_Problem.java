@@ -1,5 +1,6 @@
 import consts.FutoshikiConsts;
 import consts.FutoshikiEnum;
+import consts.FutoshikiHeuristicEnum;
 import consts.ProjectConsts;
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
-public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integer> {
+public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integer, FutoshikiHeuristicEnum> {
     public final int gridX, gridY;
     public static final String neutral = "-", lessThan = "<", moreThan = ">";
 
