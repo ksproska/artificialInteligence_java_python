@@ -22,6 +22,10 @@ public class CSP_Variable<T> {
     public void removeAll() { variableDomain = new ArrayList<>(); }
     public ArrayList<T> getVariableDomain() { return variableDomain; }
 
+    public void setVariableDomain(ArrayList<T> variableDomain) {
+        this.variableDomain = variableDomain;
+    }
+
     @Override
     public String toString() { return variableIndex + ":" + variableDomain; }
 }

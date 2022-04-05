@@ -83,7 +83,7 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
         return copiedItem;
     }
 
-    private int countFilledAround(Integer variableIndex) {
+    private int countFilledRowsAndCols(Integer variableIndex) {
         var colEmpty = Collections.frequency(columns.get(getX(variableIndex)), null);
         var rowEmpty = Collections.frequency(rows.get(getY(variableIndex)), null);
         return colEmpty + rowEmpty;
@@ -103,9 +103,9 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
                     if (!cspVariable.wasVariableUsed) {
                         if (chosen == null) {
                             chosen = cspVariable;
-                            chosenCounter = countFilledAround(chosen.variableIndex);
+                            chosenCounter = countFilledRowsAndCols(chosen.variableIndex);
                         } else {
-                            var nextCount = countFilledAround(cspVariable.variableIndex);
+                            var nextCount = countFilledRowsAndCols(cspVariable.variableIndex);
                             if (nextCount < chosenCounter) {
                                 chosen = cspVariable;
                                 chosenCounter = nextCount;

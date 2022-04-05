@@ -46,14 +46,14 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
             var solutionCopy = (S) cspPartialSolution.deepClone();
 
             var changedVariableInx = nextVariable.variableIndex;
-            boolean areValuesCorrect = solutionCopy.setNewValueAtIndexOf(domainItem, changedVariableInx);
+            solutionCopy.setNewValueAtIndexOf(domainItem, changedVariableInx);
 
 //            System.out.println("\nvi:" + changedVariableInx + " d: " + domainItem);
 //            System.out.println(solutionCopy);
 //            System.out.println("ALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter);
 //            System.out.println("TILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter);
 
-            solutionCopy.updateVariables(changedVariableInx);
+            boolean areValuesCorrect = solutionCopy.updateVariables(changedVariableInx);
             if(areValuesCorrect) {
                 var nextVariableIndex = solutionCopy.getNextVariableIndex(chosenHeuristic, currentVariableInx);
                 getResultsRecursive(solutionCopy, nextVariableIndex);

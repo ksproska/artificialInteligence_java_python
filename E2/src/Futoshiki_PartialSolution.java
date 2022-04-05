@@ -2,6 +2,7 @@ import consts.FutoshikiEnum;
 import consts.FutoshikiHeuristicEnum;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 
@@ -92,37 +93,50 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
                 constraint_isLeftCorrect() && constraint_isRightCorrect();
     }
 
-    private int countConstraints(Integer variableIndex) {
-        var countConstraints = 0;
+    private int[] countConstraints(Integer variableIndex) {
+        var countLessConstraints = 0;
+        var countMoreConstraints = 0;
         if(getX(variableIndex) + 1 < gridProblem.x) {
             var list = rows.get(getY(variableIndex));
-            if(!Futoshiki_Problem.neutral.equals(list.get(getX(variableIndex) + 1))) {
-                countConstraints ++;
+            var next = list.get(getX(variableIndex) + 1);
+            if(Futoshiki_Problem.lessThan.equals(next)) {
+                countLessConstraints ++;
+            }
+            if(Futoshiki_Problem.moreThan.equals(next)) {
+                countMoreConstraints ++;
             }
         }
         if(0 < getX(variableIndex)) {
             var list = rows.get(getY(variableIndex));
-            if(!Futoshiki_Problem.neutral.equals(list.get(getX(variableIndex) - 1))) {
-                countConstraints ++;
+            var prev = list.get(getX(variableIndex) - 1);
+            if(Futoshiki_Problem.lessThan.equals(prev)) {
+                countMoreConstraints ++;
+            }
+            if(Futoshiki_Problem.moreThan.equals(prev)) {
+                countLessConstraints ++;
             }
         }
         if(getY(variableIndex) + 1 < gridProblem.y) {
             var list = columns.get(getX(variableIndex));
-            if(!Futoshiki_Problem.neutral.equals(list.get(getY(variableIndex) + 1))) {
-                countConstraints ++;
+            var next = list.get(getY(variableIndex) + 1);
+            if(Futoshiki_Problem.lessThan.equals(next)) {
+                countLessConstraints ++;
+            }
+            if(Futoshiki_Problem.moreThan.equals(next)) {
+                countMoreConstraints ++;
             }
         }
         if(0 < getY(variableIndex)) {
             var list = columns.get(getX(variableIndex));
-            if(!Futoshiki_Problem.neutral.equals(list.get(getY(variableIndex) - 1))) {
-                countConstraints ++;
+            var prev = list.get(getY(variableIndex) - 1);
+            if(Futoshiki_Problem.lessThan.equals(prev)) {
+                countMoreConstraints ++;
+            }
+            if(Futoshiki_Problem.moreThan.equals(prev)) {
+                countLessConstraints ++;
             }
         }
-//        var colLessThan = Collections.frequency(columns.get(getX(variableIndex)), Futoshiki_Problem.lessThan);
-//        var colMoreThan = Collections.frequency(columns.get(getX(variableIndex)), Futoshiki_Problem.moreThan);
-//        var rowLessThan = Collections.frequency(rows.get(getY(variableIndex)), Futoshiki_Problem.lessThan);
-//        var rowMoreThan = Collections.frequency(rows.get(getY(variableIndex)), Futoshiki_Problem.moreThan);
-        return countConstraints;
+        return new int[]{countLessConstraints, countMoreConstraints};
     }
 
     @Override
@@ -140,10 +154,10 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
                     if (!cspVariable.wasVariableUsed) {
                         if (chosen == null) {
                             chosen = cspVariable;
-                            chosenCounter = countConstraints(chosen.variableIndex);
+                            chosenCounter = Arrays.stream(countConstraints(chosen.variableIndex)).sum();
 //                        System.out.println(chosenCounter);
                         } else {
-                            var nextCount = countConstraints(cspVariable.variableIndex);
+                            var nextCount = Arrays.stream(countConstraints(cspVariable.variableIndex)).sum();
                             if (nextCount > chosenCounter) {
                                 chosen = cspVariable;
                                 chosenCounter = nextCount;
@@ -152,6 +166,33 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
                     }
                 }
                 if (chosen == null) return null;
+                return cspVariables.indexOf(chosen);
+            }
+            case FH_MOST_CONSTRAINTS_AND_CHANGE_DOMAIN_ORDER -> {
+                CSP_Variable<Integer> chosen = null;
+                int[] chosenCounter = null;
+                for (var cspVariable : cspVariables) {
+//                System.out.println(chosen);
+                    if (!cspVariable.wasVariableUsed) {
+                        if (chosen == null) {
+                            chosen = cspVariable;
+                            chosenCounter = countConstraints(chosen.variableIndex);
+//                        System.out.println(chosenCounter);
+                        } else {
+                            var nextCount = countConstraints(cspVariable.variableIndex);
+                            if (Arrays.stream(nextCount).sum() > Arrays.stream(chosenCounter).sum()) {
+                                chosen = cspVariable;
+                                chosenCounter = nextCount;
+                            }
+                        }
+                    }
+                }
+                if (chosen == null) return null;
+//                System.out.println(Arrays.toString(chosenCounter));
+                if(chosenCounter[0] < chosenCounter[1]) {
+                    Collections.reverse(chosen.getVariableDomain());
+//                    System.out.println(chosen.getVariableDomain());
+                }
                 return cspVariables.indexOf(chosen);
             }
             case FH_SMALLEST_DOMAIN -> {
@@ -166,6 +207,27 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
                     }
                 }
                 if (chosen == null) return null;
+                return cspVariables.indexOf(chosen);
+            }
+            case FH_SMALLEST_DOMAIN_AND_CHANGE_DOMAIN_ORDER -> {
+                CSP_Variable<Integer> chosen = null;
+                for (var cspVariable : cspVariables) {
+                    if (!cspVariable.wasVariableUsed) {
+                        if (!cspVariable.getVariableDomain().isEmpty()) {
+                            if (chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
+                                chosen = cspVariable;
+                            }
+                        }
+                    }
+                }
+                if (chosen == null) return null;
+                if(chosen.getVariableDomain().size() > 1) {
+                    var chosenCounter = countConstraints(chosen.variableIndex);
+                    if(chosenCounter[0] < chosenCounter[1]) {
+                        Collections.reverse(chosen.getVariableDomain());
+//                    System.out.println(chosen.getVariableDomain());
+                    }
+                }
                 return cspVariables.indexOf(chosen);
             }
         }

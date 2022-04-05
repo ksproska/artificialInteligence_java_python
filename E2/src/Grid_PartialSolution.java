@@ -101,9 +101,8 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P, H ext
                     wasThereEmptyDomain = true;
                 }
             }
-
         }
-        return true;
+        return !wasThereEmptyDomain;
     }
 
     @Override
