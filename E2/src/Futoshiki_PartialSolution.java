@@ -141,6 +141,7 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
 
     @Override
     public Integer getNextVariableIndex(FutoshikiHeuristicEnum chosenHeuristic, Integer variableIndex) {
+//        System.out.println(chosenHeuristic);
         switch (chosenHeuristic) {
             case FH_IN_ORDER -> {
                 if(cspVariables.size() <= variableIndex) return null;
@@ -197,6 +198,7 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
             }
             case FH_SMALLEST_DOMAIN -> {
                 CSP_Variable<Integer> chosen = null;
+//                System.out.println(cspVariables);
                 for (var cspVariable : cspVariables) {
                     if (!cspVariable.wasVariableUsed) {
                         if (!cspVariable.getVariableDomain().isEmpty()) {
@@ -207,6 +209,7 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
                     }
                 }
                 if (chosen == null) return null;
+//                System.out.println("next: " + chosen);
                 return cspVariables.indexOf(chosen);
             }
             case FH_SMALLEST_DOMAIN_AND_CHANGE_DOMAIN_ORDER -> {

@@ -5,6 +5,8 @@ public class CSP_Variable<T> {
     public final Integer variableIndex;
     private ArrayList<T> variableDomain;
     public boolean wasVariableUsed;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_GREEN  = "\033[0;92m";
 
     public CSP_Variable(Integer variableIndex) {
         this.variableIndex = variableIndex;
@@ -27,5 +29,5 @@ public class CSP_Variable<T> {
     }
 
     @Override
-    public String toString() { return variableIndex + ":" + variableDomain; }
+    public String toString() { return ANSI_GREEN + variableIndex + ANSI_RESET + ":" + variableDomain; }
 }

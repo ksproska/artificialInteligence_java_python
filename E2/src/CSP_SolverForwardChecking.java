@@ -1,6 +1,7 @@
 import consts.HeuristicEnum;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, T extends CSP_Problem<P, D, E>, S extends CSP_PartialSolution<P, D, E>> implements CSP_Solver<P, D, E, T, S> {
     private final T cspProblem;
@@ -19,6 +20,7 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
         tillFirstVisitedNodesCounter = 0;
         accumulator = new ArrayList<>();
         var initialPartialSolution = cspProblem.getInitialPartialSolution();
+        initialPartialSolution.updateAllVariables();
         var firstVariableInx = initialPartialSolution.getNextVariableIndex(chosenHeuristic, -1);
         getResultsRecursive((S) initialPartialSolution, firstVariableInx);
         return accumulator;
@@ -39,6 +41,8 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
         var nextVariable = cspPartialSolution.getCspVariables().get(currentVariableInx);
         nextVariable = new CSP_Variable<D>(nextVariable);
         var searchedDomain = new ArrayList<>(nextVariable.getVariableDomain());
+//        System.out.println(cspPartialSolution.getCspVariables());
+//        System.out.println(nextVariable);
         for (int i = 0; i < searchedDomain.size(); i++) {
             visitedNodesCounter += 1;
             if(accumulator.isEmpty()) { tillFirstVisitedNodesCounter++; }
@@ -52,6 +56,12 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
 //            System.out.println(solutionCopy);
 //            System.out.println("ALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter);
 //            System.out.println("TILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter);
+
+//            try {
+//                TimeUnit.SECONDS.sleep(5);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
 
             boolean areValuesCorrect = solutionCopy.updateVariables(changedVariableInx);
             if(areValuesCorrect) {

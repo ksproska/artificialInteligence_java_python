@@ -30,6 +30,16 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P, H ext
         for (var variableIndex : gridProblem.indexesToFill) {
             var newVariable = new CSP_Variable<D>(variableIndex);
             cspVariables.add(newVariable);
+            newVariable.setVariableDomain(new ArrayList<>(gridProblem.overallDomain));
+        }
+    }
+
+    @Override
+    public void updateAllVariables() {
+        cspVariables = new ArrayList<>();
+        for (var variableIndex : gridProblem.indexesToFill) {
+            var newVariable = new CSP_Variable<D>(variableIndex);
+            cspVariables.add(newVariable);
             for (var domainItem : gridProblem.overallDomain) {
                 var isCorrectAfterLastChange = setNewValueAtIndexOf(domainItem, variableIndex);
                 if(isCorrectAfterLastChange) {
