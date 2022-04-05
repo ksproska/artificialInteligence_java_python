@@ -7,10 +7,15 @@ import java.util.Collections;
 
 
 public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, FutoshikiEnum, Integer, FutoshikiHeuristicEnum> {
+    private ArrayList<int[]> constraintsAround;
 
     private Futoshiki_PartialSolution() {}
     public Futoshiki_PartialSolution(Futoshiki_Problem futoshikiProblem) {
         super(futoshikiProblem);
+        constraintsAround = new ArrayList<>();
+        for (var variable : cspVariables) {
+            constraintsAround.add(countConstraints(variable.variableIndex));
+        }
     }
 
     public boolean constraint_areThereNoRepetitions() {
@@ -151,15 +156,14 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
     private CSP_Variable<Integer> getMostConstraintsVariable() {
         CSP_Variable<Integer> chosen = null;
         Integer chosenCounter = null;
-        for (var cspVariable : cspVariables) {
-//                System.out.println(chosen);
+        for (int i = 0; i < cspVariables.size(); i++) {
+            var cspVariable = cspVariables.get(i);
             if (!cspVariable.wasVariableUsed) {
                 if (chosen == null) {
                     chosen = cspVariable;
-                    chosenCounter = Arrays.stream(countConstraints(chosen.variableIndex)).sum();
-//                        System.out.println(chosenCounter);
+                    chosenCounter = Arrays.stream(constraintsAround.get(i)).sum();
                 } else {
-                    var nextCount = Arrays.stream(countConstraints(cspVariable.variableIndex)).sum();
+                    var nextCount = Arrays.stream(constraintsAround.get(i)).sum();
                     if (nextCount > chosenCounter) {
                         chosen = cspVariable;
                         chosenCounter = nextCount;
@@ -172,10 +176,14 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
 
     @Override
     public Integer getNextVariableIndex(FutoshikiHeuristicEnum chosenHeuristic, Integer variableIndex) {
-//        System.out.println(chosenHeuristic);
         switch (chosenHeuristic) {
             case FH_IN_ORDER -> {
-                if(cspVariables.size() <= variableIndex) return null;
+                if(cspVariables.size() <= variableIndex + 1) return null;
+                return variableIndex + 1;
+            }
+            case FH_IN_ORDER_AND_CHANGE_DOMAIN_ORDER -> {
+                if(cspVariables.size() <= variableIndex + 1) return null;
+                changeDomainOrder(cspVariables.get(variableIndex + 1));
                 return variableIndex + 1;
             }
             case FH_MOST_CONSTRAINTS -> {
@@ -208,6 +216,7 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
     public Futoshiki_PartialSolution deepClone() {
         var copiedItem =  new Futoshiki_PartialSolution();
         copyTo(copiedItem);
+        copiedItem.constraintsAround = new ArrayList<>(this.constraintsAround);
         return copiedItem;
     }
 }

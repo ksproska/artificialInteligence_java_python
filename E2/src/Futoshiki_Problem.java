@@ -72,9 +72,7 @@ public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integ
         return allToDisplay;
     }
 
-    public String toDisplay(ArrayList<Object> grid) {
-        return toDisplay(grid, -1);
-    }
+    public String toDisplay(ArrayList<Object> grid) { return toDisplay(grid, -1); }
 
     @Override
     public String toDisplay(ArrayList<Object> grid, int changedItemInx) {
@@ -104,7 +102,5 @@ public class Futoshiki_Problem extends Grid_Problem<Object, FutoshikiEnum, Integ
     }
 
     @Override
-    public Futoshiki_PartialSolution getInitialPartialSolution() {
-        return new Futoshiki_PartialSolution(this);
-    }
+    public Futoshiki_PartialSolution getInitialPartialSolution() { return new Futoshiki_PartialSolution(this); }
 }

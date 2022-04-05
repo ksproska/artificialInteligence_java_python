@@ -107,8 +107,6 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P, H ext
         for (var cspNextVariable : cspVariables) {
             var nextX = getX(cspNextVariable.variableIndex);
             var nextY = getY(cspNextVariable.variableIndex);
-//            System.out.println("rem: " + variableIndex);
-//            System.out.println("csp: " + cspNextVariable.variableIndex);
             if (cspNextVariable.variableIndex.equals(variableIndex)) {
                 cspNextVariable.removeAll();
                 cspNextVariable.wasVariableUsed = true;
@@ -158,11 +156,6 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P, H ext
     }
 
     @Override
-    public Integer getNextVariableIndex(H chosenHeuristic, Integer variableIndex) {
-        throw new IllegalStateException("Method not implemented");
-    }
-
-    @Override
     public boolean setNewValueAtIndexOf(D domainItem, Integer variableItem) {
         if(partialSolution.get(variableItem) != null) {
             throw new IllegalArgumentException("Value already set at variableItem: " + variableItem);
@@ -191,4 +184,7 @@ public abstract class Grid_PartialSolution<P, E extends Enum, D extends P, H ext
 
     @Override
     public boolean checkConstraintsAfterLastChange() { throw new IllegalStateException("Method not implemented"); }
+
+    @Override
+    public Integer getNextVariableIndex(H chosenHeuristic, Integer variableIndex) { throw new IllegalStateException("Method not implemented"); }
 }

@@ -29,15 +29,12 @@ public abstract class Grid_Problem<P, E extends Enum, D extends P, H extends Heu
         }
     }
 
-    public String toDisplay(ArrayList<P> grid) { throw new IllegalStateException("not implemented"); }
-
     @Override
     public String toString() { return chosenProblem + "\n" + toDisplay(problem); }
 
     @Override
-    public ArrayList<D> getDomain() {
-        return overallDomain;
-    }
+    public ArrayList<D> getDomain() { return overallDomain; }
 
+    public String toDisplay(ArrayList<P> grid) { throw new IllegalStateException("not implemented"); }
     public String toDisplay(ArrayList<P> grid, int changedItemInx) { throw new IllegalStateException("not implemented"); }
 }
