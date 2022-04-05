@@ -1,4 +1,7 @@
 import consts.HeuristicEnum;
+
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 
 
@@ -10,6 +13,7 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
     }
     private E chosenHeuristic;
     private ArrayList<S> accumulator;
+    private Duration timeCounter;
 
     public ArrayList<S> getResults(E chosenHeuristic) {
         this.chosenHeuristic = chosenHeuristic;
@@ -18,9 +22,12 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
         returnsCounter = 0;
         tillFirstVisitedNodesCounter = 0;
         accumulator = new ArrayList<>();
+        Instant start = Instant.now();
         var initialPartialSolution = cspProblem.getInitialPartialSolution();
         var firstVariableInx = initialPartialSolution.getNextVariableIndex(chosenHeuristic, -1);
         getResultsRecursive((S) initialPartialSolution, firstVariableInx);
+        Instant end = Instant.now();
+        timeCounter = Duration.between(start, end);
         return accumulator;
     }
 
@@ -83,6 +90,7 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
 //                "\n" + accumulator.get(0) +
 //                "\nFound:      1/" + accumulator.size() +
                 "\nALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter +
-                "\nTILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter + "\n";
+                "\nTILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter +
+                "\nDURATION:   " + timeCounter.toMillis()*0.001 + " sec" + "\n";
     }
 }

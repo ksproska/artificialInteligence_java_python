@@ -1,7 +1,10 @@
 import consts.HeuristicEnum;
+import org.junit.rules.Stopwatch;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+
 
 public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, T extends CSP_Problem<P, D, E>, S extends CSP_PartialSolution<P, D, E>> implements CSP_Solver<P, D, E, T, S> {
     private final T cspProblem;
@@ -11,6 +14,7 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
     }
     private E chosenHeuristic;
     private ArrayList<S> accumulator;
+    private Duration timeCounter;
 
     public ArrayList<S> getResults(E chosenHeuristic) {
         this.chosenHeuristic = chosenHeuristic;
@@ -19,10 +23,13 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
         returnsCounter = 0;
         tillFirstVisitedNodesCounter = 0;
         accumulator = new ArrayList<>();
+        Instant start = Instant.now();
         var initialPartialSolution = cspProblem.getInitialPartialSolution();
         initialPartialSolution.updateAllVariables();
         var firstVariableInx = initialPartialSolution.getNextVariableIndex(chosenHeuristic, -1);
         getResultsRecursive((S) initialPartialSolution, firstVariableInx);
+        Instant end = Instant.now();
+        timeCounter = Duration.between(start, end);
         return accumulator;
     }
 
@@ -41,9 +48,6 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
         var nextVariable = cspPartialSolution.getCspVariables().get(currentVariableInx);
         nextVariable = new CSP_Variable<D>(nextVariable);
         var searchedDomain = new ArrayList<>(nextVariable.getVariableDomain());
-//        System.out.println(cspPartialSolution.getCspVariables());
-//        System.out.println(nextVariable);
-//        System.out.println(searchedDomain);
         for (int i = 0; i < searchedDomain.size(); i++) {
             visitedNodesCounter += 1;
             if(accumulator.isEmpty()) { tillFirstVisitedNodesCounter++; }
@@ -95,6 +99,7 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
 //                "\n" + accumulator.get(0) +
 //                "\nFound:      1/" + accumulator.size() +
                 "\nALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter +
-                "\nTILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter + "\n";
+                "\nTILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter +
+                "\nDURATION:   " + timeCounter.toMillis()*0.001 + " sec" + "\n";
     }
 }
