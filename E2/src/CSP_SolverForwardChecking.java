@@ -48,10 +48,10 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
             var changedVariableInx = nextVariable.variableIndex;
             boolean areValuesCorrect = solutionCopy.setNewValueAtIndexOf(domainItem, changedVariableInx);
 
-            System.out.println("\nvi:" + changedVariableInx + " d: " + domainItem);
-            System.out.println(solutionCopy);
-            System.out.println("ALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter);
-            System.out.println("TILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter);
+//            System.out.println("\nvi:" + changedVariableInx + " d: " + domainItem);
+//            System.out.println(solutionCopy);
+//            System.out.println("ALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter);
+//            System.out.println("TILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter);
 
             solutionCopy.updateVariables(changedVariableInx);
             if(areValuesCorrect) {

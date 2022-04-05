@@ -91,45 +91,47 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
 
     @Override
     public Integer getNextVariableIndex(BinaryHeuristicEnum chosenHeuristic, Integer variableIndex) {
-        if(chosenHeuristic == BinaryHeuristicEnum.BH_IN_ORDER) {
-            if(cspVariables.size() <= variableIndex) return null;
-            return variableIndex + 1;
-        }
-        else if (chosenHeuristic == BinaryHeuristicEnum.BH_MOST_AROUND) {
-            CSP_Variable<Integer> chosen = null;
-            Integer chosenCounter = null;
-            for (var cspVariable : cspVariables) {
-                if (!cspVariable.wasVariableUsed) {
-                    if (chosen == null) {
-                        chosen = cspVariable;
-                        chosenCounter = countFilledAround(chosen.variableIndex);
-                    } else {
-                        var nextCount = countFilledAround(cspVariable.variableIndex);
-                        if (nextCount < chosenCounter) {
+        switch (chosenHeuristic) {
+            case BH_IN_ORDER -> {
+                if(cspVariables.size() <= variableIndex) return null;
+                return variableIndex + 1;
+            }
+            case BH_MOST_AROUND -> {
+                CSP_Variable<Integer> chosen = null;
+                Integer chosenCounter = null;
+                for (var cspVariable : cspVariables) {
+                    if (!cspVariable.wasVariableUsed) {
+                        if (chosen == null) {
                             chosen = cspVariable;
-                            chosenCounter = nextCount;
+                            chosenCounter = countFilledAround(chosen.variableIndex);
+                        } else {
+                            var nextCount = countFilledAround(cspVariable.variableIndex);
+                            if (nextCount < chosenCounter) {
+                                chosen = cspVariable;
+                                chosenCounter = nextCount;
+                            }
                         }
                     }
                 }
+                if (chosen == null) return null;
+                return cspVariables.indexOf(chosen);
             }
-            if (chosen == null) return null;
-            return cspVariables.indexOf(chosen);
-        }
-        else if(chosenHeuristic == BinaryHeuristicEnum.BH_SMALLEST_DOMAIN) {
-            CSP_Variable<Integer> chosen = null;
-            for (var cspVariable : cspVariables) {
-                if (!cspVariable.getVariableDomain().isEmpty()) {
-                    if(chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
-                        chosen = cspVariable;
+            case BH_SMALLEST_DOMAIN -> {
+                CSP_Variable<Integer> chosen = null;
+                for (var cspVariable : cspVariables) {
+                    if (!cspVariable.getVariableDomain().isEmpty()) {
+                        if(chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
+                            chosen = cspVariable;
+                        }
                     }
                 }
+                if (chosen == null) return null;
+                return cspVariables.indexOf(chosen);
             }
-//            System.out.println("next: " + cspVariables.indexOf(chosen));
-            if (chosen == null) return null;
-            return cspVariables.indexOf(chosen);
+            case BH_LEAST_BALANCED -> {
+                //todo
+            }
         }
-        else {
-            throw new IllegalStateException("Wrong enum: " + chosenHeuristic);
-        }
+        throw new IllegalStateException("Wrong enum: " + chosenHeuristic);
     }
 }

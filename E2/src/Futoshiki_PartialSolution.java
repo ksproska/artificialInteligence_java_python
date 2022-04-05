@@ -127,49 +127,49 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
 
     @Override
     public Integer getNextVariableIndex(FutoshikiHeuristicEnum chosenHeuristic, Integer variableIndex) {
-        if(chosenHeuristic == FutoshikiHeuristicEnum.FH_IN_ORDER) {
-            if(cspVariables.size() <= variableIndex) return null;
-            return variableIndex + 1;
-        }
-        else if (chosenHeuristic == FutoshikiHeuristicEnum.FH_MOST_CONSTRAINTS) {
-            CSP_Variable<Integer> chosen = null;
-            Integer chosenCounter = null;
-            for (var cspVariable : cspVariables) {
+        switch (chosenHeuristic) {
+            case FH_IN_ORDER -> {
+                if(cspVariables.size() <= variableIndex) return null;
+                return variableIndex + 1;
+            }
+            case FH_MOST_CONSTRAINTS -> {
+                CSP_Variable<Integer> chosen = null;
+                Integer chosenCounter = null;
+                for (var cspVariable : cspVariables) {
 //                System.out.println(chosen);
-                if (!cspVariable.wasVariableUsed) {
-                    if (chosen == null) {
-                        chosen = cspVariable;
-                        chosenCounter = countConstraints(chosen.variableIndex);
+                    if (!cspVariable.wasVariableUsed) {
+                        if (chosen == null) {
+                            chosen = cspVariable;
+                            chosenCounter = countConstraints(chosen.variableIndex);
 //                        System.out.println(chosenCounter);
-                    } else {
-                        var nextCount = countConstraints(cspVariable.variableIndex);
-                        if (nextCount > chosenCounter) {
-                            chosen = cspVariable;
-                            chosenCounter = nextCount;
+                        } else {
+                            var nextCount = countConstraints(cspVariable.variableIndex);
+                            if (nextCount > chosenCounter) {
+                                chosen = cspVariable;
+                                chosenCounter = nextCount;
+                            }
                         }
                     }
                 }
+                if (chosen == null) return null;
+                return cspVariables.indexOf(chosen);
             }
-            if (chosen == null) return null;
-            return cspVariables.indexOf(chosen);
-        }
-        else if(chosenHeuristic == FutoshikiHeuristicEnum.FH_SMALLEST_DOMAIN) {
-            CSP_Variable<Integer> chosen = null;
-            for (var cspVariable : cspVariables) {
-                if (!cspVariable.wasVariableUsed) {
-                    if (!cspVariable.getVariableDomain().isEmpty()) {
-                        if (chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
-                            chosen = cspVariable;
+            case FH_SMALLEST_DOMAIN -> {
+                CSP_Variable<Integer> chosen = null;
+                for (var cspVariable : cspVariables) {
+                    if (!cspVariable.wasVariableUsed) {
+                        if (!cspVariable.getVariableDomain().isEmpty()) {
+                            if (chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
+                                chosen = cspVariable;
+                            }
                         }
                     }
                 }
+                if (chosen == null) return null;
+                return cspVariables.indexOf(chosen);
             }
-            if (chosen == null) return null;
-            return cspVariables.indexOf(chosen);
         }
-        else {
-            throw new IllegalStateException("Wrong enum: " + chosenHeuristic);
-        }
+        throw new IllegalStateException("Wrong enum: " + chosenHeuristic);
     }
 
     @Override
