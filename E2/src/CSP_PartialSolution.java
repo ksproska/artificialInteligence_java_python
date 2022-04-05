@@ -18,6 +18,8 @@ interface CSP_PartialSolution<P, D extends P, H extends HeuristicEnum> {
 
     ArrayList<CSP_Variable<D>> getCspVariables();
 
+    CSP_Variable<D> getSmallestDomainVariable();
+
     void updateAllVariables();
 
     boolean updateVariables(Integer variableItem);

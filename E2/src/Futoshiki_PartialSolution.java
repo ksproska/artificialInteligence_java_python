@@ -139,6 +139,37 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
         return new int[]{countLessConstraints, countMoreConstraints};
     }
 
+    private void changeDomainOrder(CSP_Variable<Integer> chosen) {
+        if(chosen.getVariableDomain().size() > 1) {
+            var chosenCounter = countConstraints(chosen.variableIndex);
+            if(chosenCounter[0] < chosenCounter[1]) {
+                Collections.reverse(chosen.getVariableDomain());
+            }
+        }
+    }
+
+    private CSP_Variable<Integer> getMostConstraintsVariable() {
+        CSP_Variable<Integer> chosen = null;
+        Integer chosenCounter = null;
+        for (var cspVariable : cspVariables) {
+//                System.out.println(chosen);
+            if (!cspVariable.wasVariableUsed) {
+                if (chosen == null) {
+                    chosen = cspVariable;
+                    chosenCounter = Arrays.stream(countConstraints(chosen.variableIndex)).sum();
+//                        System.out.println(chosenCounter);
+                } else {
+                    var nextCount = Arrays.stream(countConstraints(cspVariable.variableIndex)).sum();
+                    if (nextCount > chosenCounter) {
+                        chosen = cspVariable;
+                        chosenCounter = nextCount;
+                    }
+                }
+            }
+        }
+        return chosen;
+    }
+
     @Override
     public Integer getNextVariableIndex(FutoshikiHeuristicEnum chosenHeuristic, Integer variableIndex) {
 //        System.out.println(chosenHeuristic);
@@ -148,89 +179,25 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
                 return variableIndex + 1;
             }
             case FH_MOST_CONSTRAINTS -> {
-                CSP_Variable<Integer> chosen = null;
-                Integer chosenCounter = null;
-                for (var cspVariable : cspVariables) {
-//                System.out.println(chosen);
-                    if (!cspVariable.wasVariableUsed) {
-                        if (chosen == null) {
-                            chosen = cspVariable;
-                            chosenCounter = Arrays.stream(countConstraints(chosen.variableIndex)).sum();
-//                        System.out.println(chosenCounter);
-                        } else {
-                            var nextCount = Arrays.stream(countConstraints(cspVariable.variableIndex)).sum();
-                            if (nextCount > chosenCounter) {
-                                chosen = cspVariable;
-                                chosenCounter = nextCount;
-                            }
-                        }
-                    }
-                }
+                CSP_Variable<Integer> chosen = getMostConstraintsVariable();
                 if (chosen == null) return null;
                 return cspVariables.indexOf(chosen);
             }
             case FH_MOST_CONSTRAINTS_AND_CHANGE_DOMAIN_ORDER -> {
-                CSP_Variable<Integer> chosen = null;
-                int[] chosenCounter = null;
-                for (var cspVariable : cspVariables) {
-//                System.out.println(chosen);
-                    if (!cspVariable.wasVariableUsed) {
-                        if (chosen == null) {
-                            chosen = cspVariable;
-                            chosenCounter = countConstraints(chosen.variableIndex);
-//                        System.out.println(chosenCounter);
-                        } else {
-                            var nextCount = countConstraints(cspVariable.variableIndex);
-                            if (Arrays.stream(nextCount).sum() > Arrays.stream(chosenCounter).sum()) {
-                                chosen = cspVariable;
-                                chosenCounter = nextCount;
-                            }
-                        }
-                    }
-                }
+                CSP_Variable<Integer> chosen = getMostConstraintsVariable();
                 if (chosen == null) return null;
-//                System.out.println(Arrays.toString(chosenCounter));
-                if(chosenCounter[0] < chosenCounter[1]) {
-                    Collections.reverse(chosen.getVariableDomain());
-//                    System.out.println(chosen.getVariableDomain());
-                }
+                changeDomainOrder(chosen);
                 return cspVariables.indexOf(chosen);
             }
             case FH_SMALLEST_DOMAIN -> {
-                CSP_Variable<Integer> chosen = null;
-//                System.out.println(cspVariables);
-                for (var cspVariable : cspVariables) {
-                    if (!cspVariable.wasVariableUsed) {
-                        if (!cspVariable.getVariableDomain().isEmpty()) {
-                            if (chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
-                                chosen = cspVariable;
-                            }
-                        }
-                    }
-                }
+                CSP_Variable<Integer> chosen = getSmallestDomainVariable();
                 if (chosen == null) return null;
-//                System.out.println("next: " + chosen);
                 return cspVariables.indexOf(chosen);
             }
             case FH_SMALLEST_DOMAIN_AND_CHANGE_DOMAIN_ORDER -> {
-                CSP_Variable<Integer> chosen = null;
-                for (var cspVariable : cspVariables) {
-                    if (!cspVariable.wasVariableUsed) {
-                        if (!cspVariable.getVariableDomain().isEmpty()) {
-                            if (chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
-                                chosen = cspVariable;
-                            }
-                        }
-                    }
-                }
+                CSP_Variable<Integer> chosen = getSmallestDomainVariable();
                 if (chosen == null) return null;
-                if(chosen.getVariableDomain().size() > 1) {
-                    var chosenCounter = countConstraints(chosen.variableIndex);
-                    if(chosenCounter[0] < chosenCounter[1]) {
-                        Collections.reverse(chosen.getVariableDomain());
-//                    System.out.println(chosen.getVariableDomain());
-                    }
-                }
+                changeDomainOrder(chosen);
                 return cspVariables.indexOf(chosen);
             }
         }

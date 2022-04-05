@@ -89,14 +89,29 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
         return colEmpty + rowEmpty;
     }
 
+    private void changeDomainOrder(CSP_Variable<Integer> chosen, Integer variableIndex) {
+        if(chosen.getVariableDomain().size() > 1) {
+            if(variableIndex % 2 == 0) {
+                Collections.reverse(chosen.getVariableDomain());
+//                System.out.println(chosen.getVariableDomain());
+            }
+        }
+    }
+
     @Override
     public Integer getNextVariableIndex(BinaryHeuristicEnum chosenHeuristic, Integer variableIndex) {
         switch (chosenHeuristic) {
             case BH_IN_ORDER -> {
-                if(cspVariables.size() <= variableIndex) return null;
+                if(cspVariables.size() <= variableIndex + 1) return null;
                 return variableIndex + 1;
             }
-            case BH_MOST_AROUND -> {
+            case BH_IN_ORDER_AND_DOMAIN_ORDER -> {
+                if(cspVariables.size() <= variableIndex + 1) return null;
+                CSP_Variable<Integer> chosen = cspVariables.get(variableIndex + 1);
+                changeDomainOrder(chosen, variableIndex);
+                return variableIndex + 1;
+            }
+            case BH_MOST_IN_ROWS_COLS -> {
                 CSP_Variable<Integer> chosen = null;
                 Integer chosenCounter = null;
                 for (var cspVariable : cspVariables) {
@@ -116,20 +131,37 @@ public class Binary_PartialSolution extends Grid_PartialSolution<Integer, Binary
                 if (chosen == null) return null;
                 return cspVariables.indexOf(chosen);
             }
-            case BH_SMALLEST_DOMAIN -> {
+            case BH_MOST_IN_ROWS_COLS_AND_DOMAIN_ORDER -> {
                 CSP_Variable<Integer> chosen = null;
+                Integer chosenCounter = null;
                 for (var cspVariable : cspVariables) {
-                    if (!cspVariable.getVariableDomain().isEmpty()) {
-                        if(chosen == null || cspVariable.getVariableDomain().size() < chosen.getVariableDomain().size()) {
+                    if (!cspVariable.wasVariableUsed) {
+                        if (chosen == null) {
                             chosen = cspVariable;
+                            chosenCounter = countFilledRowsAndCols(chosen.variableIndex);
+                        } else {
+                            var nextCount = countFilledRowsAndCols(cspVariable.variableIndex);
+                            if (nextCount < chosenCounter) {
+                                chosen = cspVariable;
+                                chosenCounter = nextCount;
+                            }
                         }
                     }
                 }
                 if (chosen == null) return null;
+                changeDomainOrder(chosen, variableIndex);
                 return cspVariables.indexOf(chosen);
             }
-            case BH_LEAST_BALANCED -> {
-                //todo
+            case BH_SMALLEST_DOMAIN -> {
+                CSP_Variable<Integer> chosen = getSmallestDomainVariable();
+                if (chosen == null) return null;
+                return cspVariables.indexOf(chosen);
+            }
+            case BH_SMALLEST_DOMAIN_AND_DOMAIN_ORDER -> {
+                CSP_Variable<Integer> chosen = getSmallestDomainVariable();
+                if (chosen == null) return null;
+                changeDomainOrder(chosen, variableIndex);
+                return cspVariables.indexOf(chosen);
             }
         }
         throw new IllegalStateException("Wrong enum: " + chosenHeuristic);

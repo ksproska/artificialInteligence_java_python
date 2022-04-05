@@ -37,8 +37,7 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
             return;
         }
         var currentVariable = cspPartialSolution.getCspVariables().get(currentVariableInx);
-//        System.out.println(currentVariable.variableIndex);
-        for (var domainItem : cspProblem.getDomain()) {
+        for (var domainItem : currentVariable.getVariableDomain()) {
             visitedNodesCounter++;
             if(accumulator.isEmpty()) { tillFirstVisitedNodesCounter++; }
             var changedVariableInx = currentVariable.variableIndex;

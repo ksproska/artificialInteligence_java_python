@@ -43,6 +43,7 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
         var searchedDomain = new ArrayList<>(nextVariable.getVariableDomain());
 //        System.out.println(cspPartialSolution.getCspVariables());
 //        System.out.println(nextVariable);
+//        System.out.println(searchedDomain);
         for (int i = 0; i < searchedDomain.size(); i++) {
             visitedNodesCounter += 1;
             if(accumulator.isEmpty()) { tillFirstVisitedNodesCounter++; }
@@ -56,7 +57,7 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
 //            System.out.println(solutionCopy);
 //            System.out.println("ALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter);
 //            System.out.println("TILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter);
-
+//
 //            try {
 //                TimeUnit.SECONDS.sleep(5);
 //            } catch (InterruptedException e) {
