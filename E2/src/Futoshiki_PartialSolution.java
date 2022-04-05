@@ -208,6 +208,23 @@ public class Futoshiki_PartialSolution extends Grid_PartialSolution<Object, Futo
                 changeDomainOrder(chosen);
                 return cspVariables.indexOf(chosen);
             }
+            case FH_MOST_CONSTRAINTS_BUT_DOMAIN_1_IF_EXISTS -> {
+                CSP_Variable<Integer> chosen = getSmallestDomainVariable();
+                if(chosen == null || chosen.getVariableDomain().size() > 1) {
+                    chosen = getMostConstraintsVariable();
+                }
+                if (chosen == null) return null;
+                return cspVariables.indexOf(chosen);
+            }
+            case FH_MOST_CONSTRAINTS_BUT_DOMAIN_1_IF_EXISTS_AND_CHANGE_DOMAIN_ORDER -> {
+                CSP_Variable<Integer> chosen = getSmallestDomainVariable();
+                if(chosen == null || chosen.getVariableDomain().size() > 1) {
+                    chosen = getMostConstraintsVariable();
+                }
+                if (chosen == null) return null;
+                changeDomainOrder(chosen);
+                return cspVariables.indexOf(chosen);
+            }
         }
         throw new IllegalStateException("Wrong enum: " + chosenHeuristic);
     }

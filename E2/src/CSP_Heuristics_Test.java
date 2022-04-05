@@ -36,11 +36,12 @@ public class CSP_Heuristics_Test {
             Assertions.assertIterableEquals(resultsInOrder.get(0).partialSolution, resultsBiggestDomainAndDomainOrder.get(0).partialSolution);
             Assertions.assertIterableEquals(resultsInOrder.get(0).partialSolution, resultsMostAround.get(0).partialSolution);
             Assertions.assertIterableEquals(resultsInOrder.get(0).partialSolution, resultsMostAroundAndDomain.get(0).partialSolution);
-            Assertions.assertEquals(resultsInOrder.size(), resultsInOrderAndDomain.size());
-            Assertions.assertEquals(resultsInOrder.size(), resultsBiggestDomain.size());
-            Assertions.assertEquals(resultsInOrder.size(), resultsBiggestDomainAndDomainOrder.size());
-            Assertions.assertEquals(resultsInOrder.size(), resultsMostAround.size());
-            Assertions.assertEquals(resultsInOrder.size(), resultsMostAroundAndDomain.size());
+            Assertions.assertEquals(1, resultsInOrder.size());
+            Assertions.assertEquals(1, resultsInOrderAndDomain.size());
+            Assertions.assertEquals(1, resultsBiggestDomain.size());
+            Assertions.assertEquals(1, resultsBiggestDomainAndDomainOrder.size());
+            Assertions.assertEquals(1, resultsMostAround.size());
+            Assertions.assertEquals(1, resultsMostAroundAndDomain.size());
 //
             System.out.println("--------------------------------");
 
@@ -57,15 +58,16 @@ public class CSP_Heuristics_Test {
             Assertions.assertIterableEquals(resultsInOrder.get(0).partialSolution, resultsInOrderAndDomain.get(0).partialSolution);
             Assertions.assertIterableEquals(resultsInOrder.get(0).partialSolution, resultsMostAround.get(0).partialSolution);
             Assertions.assertIterableEquals(resultsInOrder.get(0).partialSolution, resultsMostAroundAndDomain.get(0).partialSolution);
-            Assertions.assertEquals(resultsInOrder.size(), resultsInOrderAndDomain.size());
-            Assertions.assertEquals(resultsInOrder.size(), resultsMostAround.size());
-            Assertions.assertEquals(resultsInOrder.size(), resultsMostAroundAndDomain.size());
+            Assertions.assertEquals(1, resultsInOrder.size());
+            Assertions.assertEquals(1, resultsInOrderAndDomain.size());
+            Assertions.assertEquals(1, resultsMostAround.size());
+            Assertions.assertEquals(1, resultsMostAroundAndDomain.size());
             System.out.println("----------------------------------------------------------------");
         }
     }
 
     @Test
-    void testFutoshikiForwardChecking6x6() {
+    void testFutoshiki6x6() {
         futoshikiProblem = new Futoshiki_Problem(FutoshikiEnum.F6x6);
         System.out.println(futoshikiProblem);
         futoshikiCSPSolver = new CSP_SolverForwardChecking<>(futoshikiProblem);
@@ -81,12 +83,19 @@ public class CSP_Heuristics_Test {
         System.out.println(futoshikiCSPSolver);
         var resultsSmallestDomainAndDomain = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_SMALLEST_DOMAIN_AND_CHANGE_DOMAIN_ORDER);
         System.out.println(futoshikiCSPSolver);
+        var resultsMCB1 = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_MOST_CONSTRAINTS_BUT_DOMAIN_1_IF_EXISTS);
+        System.out.println(futoshikiCSPSolver);
+        var resultsMCB1AndDomain = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_MOST_CONSTRAINTS_BUT_DOMAIN_1_IF_EXISTS_AND_CHANGE_DOMAIN_ORDER);
+        System.out.println(futoshikiCSPSolver);
 
-        Assertions.assertEquals(resultsInOrder.size(), resultsInOrderAndDomain.size());
-        Assertions.assertEquals(resultsInOrder.size(), resultsMostAround.size());
-        Assertions.assertEquals(resultsInOrder.size(), resultsMostConstraintsAndDomain.size());
-        Assertions.assertEquals(resultsInOrder.size(), resultsSmallestDomain.size());
-        Assertions.assertEquals(resultsInOrder.size(), resultsSmallestDomainAndDomain.size());
+        Assertions.assertEquals(133, resultsInOrder.size());
+        Assertions.assertEquals(133, resultsInOrderAndDomain.size());
+        Assertions.assertEquals(133, resultsMostAround.size());
+        Assertions.assertEquals(133, resultsMostConstraintsAndDomain.size());
+        Assertions.assertEquals(133, resultsSmallestDomain.size());
+        Assertions.assertEquals(133, resultsSmallestDomainAndDomain.size());
+        Assertions.assertEquals(133, resultsMCB1.size());
+        Assertions.assertEquals(133, resultsMCB1AndDomain.size());
 
         System.out.println("--------------------------------");
 
@@ -100,8 +109,9 @@ public class CSP_Heuristics_Test {
         resultsMostConstraintsAndDomain = futoshikiCSPSolver.getResults(FutoshikiHeuristicEnum.FH_MOST_CONSTRAINTS_AND_CHANGE_DOMAIN_ORDER);
         System.out.println(futoshikiCSPSolver);
 
-        Assertions.assertEquals(resultsInOrder.size(), resultsInOrderAndDomain.size());
-        Assertions.assertEquals(resultsInOrder.size(), resultsMostAround.size());
-        Assertions.assertEquals(resultsInOrder.size(), resultsMostConstraintsAndDomain.size());
+        Assertions.assertEquals(133, resultsInOrder.size());
+        Assertions.assertEquals(133, resultsInOrderAndDomain.size());
+        Assertions.assertEquals(133, resultsMostAround.size());
+        Assertions.assertEquals(133, resultsMostConstraintsAndDomain.size());
     }
 }
