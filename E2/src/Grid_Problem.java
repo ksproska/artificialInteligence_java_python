@@ -30,7 +30,7 @@ public abstract class Grid_Problem<P, E extends Enum, D extends P, H extends Heu
     }
 
     @Override
-    public String toString() { return chosenProblem + "\n" + toDisplay(problem); }
+    public String toString() { return chosenProblem + " - (" + this.indexesToFill.size() + "\\" + this.problem.size() + ")\n" + toDisplay(problem); }
 
     @Override
     public ArrayList<D> getDomain() { return overallDomain; }

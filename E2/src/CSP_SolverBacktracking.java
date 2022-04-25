@@ -85,12 +85,12 @@ public class CSP_SolverBacktracking<P, D extends P, E extends HeuristicEnum, T e
 
     @Override
     public String toString() {
-        return "CSP_Solver: Backtracking" +
-                "\nHEURISTIC:  " + chosenHeuristic +
+        return "Backtracking\t" +
+                chosenHeuristic +
 //                "\n" + accumulator.get(0) +
 //                "\nFound:      1/" + accumulator.size() +
-                "\nALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter +
-                "\nTILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter +
-                "\nDURATION:   " + timeCounter.toMillis()*0.001 + " sec" + "\n";
+                "\t" + visitedNodesCounter + "\t" + returnsCounter +
+                "\t" + tillFirstVisitedNodesCounter + "\t" + tillFirstReturnsCounter +
+                "\t" + timeCounter.toMillis()*0.001;
     }
 }

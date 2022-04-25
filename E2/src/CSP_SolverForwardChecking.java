@@ -94,12 +94,12 @@ public class CSP_SolverForwardChecking<P, D extends P, E extends HeuristicEnum, 
 
     @Override
     public String toString() {
-        return "CSP_Solver: Forward checking" +
-                "\nHEURISTIC:  " + chosenHeuristic +
+        return "Forward checking\t" +
+                chosenHeuristic +
 //                "\n" + accumulator.get(0) +
 //                "\nFound:      1/" + accumulator.size() +
-                "\nALL  Nodes: " + visitedNodesCounter + "\tReturns: " + returnsCounter +
-                "\nTILL Nodes: " + tillFirstVisitedNodesCounter + "\tReturns: " + tillFirstReturnsCounter +
-                "\nDURATION:   " + timeCounter.toMillis()*0.001 + " sec" + "\n";
+                "\t" + visitedNodesCounter + "\t" + returnsCounter +
+                "\t" + tillFirstVisitedNodesCounter + "\t" + tillFirstReturnsCounter +
+                "\t" + timeCounter.toMillis()*0.001;
     }
 }
