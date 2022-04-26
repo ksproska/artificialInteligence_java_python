@@ -23,6 +23,12 @@ class GridItem {
     final int rowId, columnId;
     Figure figure;
 
+    public GridItem copy() {
+        var copied = new GridItem(gridItemColor, letter, number, rowId, columnId);
+        copied.setFigure(figure);
+        return copied;
+    }
+
     GridItem(GridItemColor color, GridItemLetter letter, int number, int rowId, int columnId) {
         this.gridItemColor = color;
         this.letter = letter;
@@ -39,13 +45,16 @@ class GridItem {
         return figure.playerColor;
     }
 
-    public String getItem() {
+    public String getItem(boolean colored) {
         var gridItemElemToDisplay = "   ";
         if (figure != null) {
             gridItemElemToDisplay = " " + figure.getFigureDisplayChar() + " ";
         }
 
-        if(gridItemColor == GridItemColor.WHITE) {
+        if (colored) {
+            gridItemElemToDisplay = "\u001B[44;30m" + gridItemElemToDisplay + "\u001B[0m";
+        }
+        else if(gridItemColor == GridItemColor.WHITE) {
             gridItemElemToDisplay = "\u001B[47;30m" + gridItemElemToDisplay + "\u001B[0m";
         }
         else if(figure != null && figure.playerColor == PlayerColor.BLACK) {
