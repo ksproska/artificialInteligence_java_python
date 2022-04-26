@@ -218,7 +218,7 @@ public class GameGrid {
 
         @Override
         public String toString() {
-            return "Jump{" + startingPoint +
+            return "Jump (" + size() + ") {" + startingPoint +
                     "-> " + toJumpItems.stream().map(Object::toString).collect(Collectors.joining("-> ")) +
                     " over: " + jumpOverItems +
                     '}';
@@ -237,21 +237,19 @@ public class GameGrid {
 //        currentPath.add(item);
         var allDirectionsToCheck = new ArrayList<GridItem[]>();
         var d1 = checkJumpInDirection(jumpingPlayer, item, 1, 1);
-        if (d1 != null) { allDirectionsToCheck.add(d1); }
+        if (d1 != null && !currentPath.contains(d1[1])) { allDirectionsToCheck.add(d1); }
         d1 = checkJumpInDirection(jumpingPlayer, item, 1, -1);
-        if (d1 != null) { allDirectionsToCheck.add(d1); }
+        if (d1 != null && !currentPath.contains(d1[1])) { allDirectionsToCheck.add(d1); }
         d1 = checkJumpInDirection(jumpingPlayer, item, -1, 1);
-        if (d1 != null) { allDirectionsToCheck.add(d1); }
+        if (d1 != null && !currentPath.contains(d1[1])) { allDirectionsToCheck.add(d1); }
         d1 = checkJumpInDirection(jumpingPlayer, item, -1, -1);
-        if (d1 != null) { allDirectionsToCheck.add(d1); }
+        if (d1 != null && !currentPath.contains(d1[1])) { allDirectionsToCheck.add(d1); }
         for (var direction : allDirectionsToCheck) {
-            if (!currentPath.contains(direction[1])) {
-                currentPath.add(direction[0], direction[1]);
-                getNormalJump(jumpingPlayer, direction[1], currentPath.copy(), allPaths);
-            }
-            else if (!allPaths.contains(currentPath) && currentPath.size() > 1) {
-                allPaths.add(currentPath);
-            }
+            currentPath.add(direction[0], direction[1]);
+            getNormalJump(jumpingPlayer, direction[1], currentPath.copy(), allPaths);
+        }
+        if (currentPath.size() > 1) {
+            allPaths.add(currentPath);
         }
     }
 
@@ -271,8 +269,13 @@ public class GameGrid {
             allJumps.add(new Jump(item));
             getNormalJump(item.figure.playerColor, item, allJumps.get(0), allJumps);
             var maxLen = allJumps.stream().max(Comparator.comparingInt(Jump::size)).get().size();
-//            System.out.println(maxLen);
-            return getArrayListFromStream(allJumps.stream().dropWhile(list -> list.size() != maxLen));
+            var ofMaxLength = new ArrayList<Jump>();
+            for (var jump: allJumps) {
+                if (jump.size() == maxLen) {
+                    ofMaxLength.add(jump);
+                }
+            }
+            return ofMaxLength;
         }
         else {
 
