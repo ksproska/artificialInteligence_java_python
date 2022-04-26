@@ -1,8 +1,7 @@
 import org.junit.jupiter.api.Test;
-
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 public class GameGrid {
     ArrayList<ArrayList<GridItem>> fullGrid;
@@ -284,33 +283,31 @@ public class GameGrid {
             }
         };
         var allMoves = new ArrayList<Move>();
-//        var item = fullGrid.get(getRow(gridItemId)).get(getColumn(gridItemId));
-        if (item.figure == null) {
-            return allMoves;
-        }
-        if(item.figure.getFigureType() == FigureType.NORMAL) {
-            var voluntaryMoves = new ArrayList<GridItem>();
-            if (item.figure.playerColor == PlayerColor.WHITE) {
-                voluntaryMoves.add(getGridItem(item.rowId - 1, item.columnId - 1));
-                voluntaryMoves.add(getGridItem(item.rowId - 1, item.columnId + 1));
-            }
-            else {
-                voluntaryMoves.add(getGridItem(item.rowId + 1, item.columnId - 1));
-                voluntaryMoves.add(getGridItem(item.rowId + 1, item.columnId + 1));
-            }
-            for (var move : voluntaryMoves) {
-                if(move != null && move.isEmpty()) {
-                    allMoves.add(new Move(item, move));
+        if (item.figure == null) { return allMoves; }
+
+        switch (item.figure.getFigureType()) {
+            case NORMAL -> {
+                var voluntaryMoves = new ArrayList<GridItem>();
+                if (item.figure.playerColor == PlayerColor.WHITE) {
+                    voluntaryMoves.add(getGridItem(item.rowId - 1, item.columnId - 1));
+                    voluntaryMoves.add(getGridItem(item.rowId - 1, item.columnId + 1));
+                }
+                else {
+                    voluntaryMoves.add(getGridItem(item.rowId + 1, item.columnId - 1));
+                    voluntaryMoves.add(getGridItem(item.rowId + 1, item.columnId + 1));
+                }
+                for (var move : voluntaryMoves) {
+                    if(move != null && move.isEmpty()) { allMoves.add(new Move(item, move)); }
                 }
             }
-        }
-        else {
-            var allNext = new ArrayList<GridItem>();
-            for (var dimension : directions) {
-                collectGridItems(item, dimension[0], dimension[1], allNext);
-            }
-            for (var gridItem : allNext) {
-                allMoves.add(new Move(item, gridItem));
+            case CROWNED -> {
+                var allNext = new ArrayList<GridItem>();
+                for (var dimension : directions) {
+                    collectGridItems(item, dimension[0], dimension[1], allNext);
+                }
+                for (var gridItem : allNext) {
+                    allMoves.add(new Move(item, gridItem));
+                }
             }
         }
         return allMoves;
@@ -392,9 +389,7 @@ public class GameGrid {
         var countPossibleDirections = 0;
         for (var direction : directions) {
             var gridItems = checkJumpInDirection(jumpingPlayer, item, direction[0], direction[1]);
-            if (gridItems != null && !jump.contains(gridItems[1])
-//            !jump.contains(direction[1]) && jump.getStartingPoint() != direction[1]
-            ) {
+            if (gridItems != null && !jump.contains(gridItems[1])) {
                 countPossibleDirections += 1;
                 jump.add(gridItems[0], gridItems[1]);
                 getNormalJump(jumpingPlayer, gridItems[1], jump.shallowCopy(), allPaths);
@@ -405,18 +400,9 @@ public class GameGrid {
         }
     }
 
-    public static <T> ArrayList<T> getArrayListFromStream(Stream<T> stream)
-    {
-        List<T> list = stream.toList();
-        return new ArrayList<T>(list);
-    }
-
     public GridItem getNextToJumpOver(PlayerColor jumpingPlayer, GridItem item, int rowDir, int columnDir) {
         var nextItem = getGridItem(item.rowId + rowDir, item.columnId + columnDir);
-//        System.out.println(nextItem);
-        if (nextItem == null) {
-            return null;
-        }
+        if (nextItem == null) { return null; }
         if (!nextItem.isEmpty()) {
             if (nextItem.figure.playerColor == jumpingPlayer) return null;
             return nextItem;
@@ -426,9 +412,7 @@ public class GameGrid {
 
     public ArrayList<GridItem> getPlacesToLand(GridItem prev, int rowDir, int columnDir, ArrayList<GridItem> acc) {
         var nextItem = getGridItem(prev.rowId + rowDir, prev.columnId + columnDir);
-        if (nextItem == null) {
-            return acc;
-        }
+        if (nextItem == null) { return acc; }
         if (nextItem.isEmpty()) {
             acc.add(nextItem);
             getPlacesToLand(nextItem, rowDir, columnDir, acc);
@@ -448,9 +432,7 @@ public class GameGrid {
         for (var direction : directions) {
             var nextToJumpOver = getNextToJumpOver(jumpingPlayer, item, direction[0], direction[1]);
             if (nextToJumpOver != null && !jump.wasAlreadyJumpedOver(nextToJumpOver)) {
-//                System.out.println(nextToJumpOver);
                 var potentialToLand = getPlacesToLand(nextToJumpOver, direction[0], direction[1], new ArrayList<>());
-//                System.out.println(potentialToLand);
                 for (var potentialPlaceToLand : potentialToLand) {
                     if(!jump.contains(potentialPlaceToLand)) {
                         var copied = jump.shallowCopy();
@@ -466,28 +448,13 @@ public class GameGrid {
 
     public ArrayList<Jump> getObligatoryJumps(GridItem item) {
         var allJumps = new ArrayList<Jump>();
-        if (item.figure == null) {
-            return allJumps;
-        }
-//        allJumps.add(new Jump(item));
-        if(item.figure.getFigureType() == FigureType.NORMAL) {
-//            allJumps = new ArrayList<>();
-            getNormalJump(item.figure.playerColor, item, new Jump(item), allJumps);
+        if (item.figure == null) { return allJumps; }
 
+        switch (item.figure.getFigureType()) {
+            case NORMAL -> getNormalJump(item.figure.playerColor, item, new Jump(item), allJumps);
+            case CROWNED -> getCrownedJumps(item.figure.playerColor, item, new Jump(item), allJumps);
         }
-        else {
-            getCrownedJumps(item.figure.playerColor, item, new Jump(item), allJumps);
-        }
-        var ofMaxLength = new ArrayList<Jump>();
-        if (allJumps.isEmpty()) return ofMaxLength;
-        var maxLen = allJumps.stream().max(Comparator.comparingInt(Jump::size)).get().size();
-//        System.out.println(maxLen);
-        for (var jump: allJumps) {
-            if (jump.size() == maxLen && maxLen != 1) {
-                ofMaxLength.add(jump);
-            }
-        }
-        return ofMaxLength;
+        return allJumps;
     }
 
     public static void main(String[] args) {
