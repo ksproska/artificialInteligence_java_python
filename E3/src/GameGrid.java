@@ -207,10 +207,22 @@ public class GameGrid {
     public ArrayList<Move> getAllMoves() {
         var allPlayerFigures = allPlayerFigures();
         var allMoves = new ArrayList<Move>();
+        var allJumps = new ArrayList<Jump>();
         for (var item : allPlayerFigures) {
             var obligatory = getObligatoryJumps(item);
-            allMoves.addAll(obligatory);
+            allJumps.addAll(obligatory);
         }
+
+        if (!allJumps.isEmpty()) {
+            var maxLen = allJumps.stream().max(Comparator.comparingInt(Jump::size)).get().size();
+            for (var jump: allJumps) {
+                if (jump.size() == maxLen && maxLen != 1) {
+                    allMoves.add(jump);
+                }
+            }
+        }
+
+
         if (allMoves.isEmpty()) {
             for (var item : allPlayerFigures) {
                 var voluntaryMovements = getVoluntaryMovements(item);
@@ -369,30 +381,26 @@ public class GameGrid {
     }
 
     public void getNormalJump(PlayerColor jumpingPlayer, GridItem item, Jump jump, ArrayList<Jump> allPaths) {
-//        jump.add(item);
-//        System.out.println(jump);
-        var allDirectionsToCheck = new ArrayList<GridItem[]>();
-        var d1 = checkJumpInDirection(jumpingPlayer, item, 1, 1);
-        if (d1 != null) { allDirectionsToCheck.add(d1); }
-        d1 = checkJumpInDirection(jumpingPlayer, item, 1, -1);
-        if (d1 != null) { allDirectionsToCheck.add(d1); }
-        d1 = checkJumpInDirection(jumpingPlayer, item, -1, 1);
-        if (d1 != null) { allDirectionsToCheck.add(d1); }
-        d1 = checkJumpInDirection(jumpingPlayer, item, -1, -1);
-        if (d1 != null) { allDirectionsToCheck.add(d1); }
-//        System.out.println(jump.size());
-//        for (var elem : allDirectionsToCheck) {
-//            System.out.println(Arrays.toString(elem));
-//        }
-        for (var direction : allDirectionsToCheck) {
-            if (direction != null && !jump.contains(direction[1])
+        var directions = new ArrayList<int[]>(){
+            {
+                add(new int[]{1, 1});
+                add(new int[]{1, -1});
+                add(new int[]{-1, 1});
+                add(new int[]{-1, -1});
+            }
+        };
+        var countPossibleDirections = 0;
+        for (var direction : directions) {
+            var gridItems = checkJumpInDirection(jumpingPlayer, item, direction[0], direction[1]);
+            if (gridItems != null && !jump.contains(gridItems[1])
 //            !jump.contains(direction[1]) && jump.getStartingPoint() != direction[1]
             ) {
-                jump.add(direction[0], direction[1]);
-                getNormalJump(jumpingPlayer, direction[1], jump.shallowCopy(), allPaths);
+                countPossibleDirections += 1;
+                jump.add(gridItems[0], gridItems[1]);
+                getNormalJump(jumpingPlayer, gridItems[1], jump.shallowCopy(), allPaths);
             }
         }
-        if (jump.size() > 1) {
+        if (countPossibleDirections == 0 && jump.size() > 1 && !allPaths.contains(jump)) {
             allPaths.add(jump);
         }
     }
@@ -461,16 +469,18 @@ public class GameGrid {
         if (item.figure == null) {
             return allJumps;
         }
-        allJumps.add(new Jump(item));
+//        allJumps.add(new Jump(item));
         if(item.figure.getFigureType() == FigureType.NORMAL) {
-            getNormalJump(item.figure.playerColor, item, allJumps.get(0), allJumps);
+//            allJumps = new ArrayList<>();
+            getNormalJump(item.figure.playerColor, item, new Jump(item), allJumps);
 
         }
         else {
-            getCrownedJumps(item.figure.playerColor, item, allJumps.get(0), allJumps);
+            getCrownedJumps(item.figure.playerColor, item, new Jump(item), allJumps);
         }
-        var maxLen = allJumps.stream().max(Comparator.comparingInt(Jump::size)).get().size();
         var ofMaxLength = new ArrayList<Jump>();
+        if (allJumps.isEmpty()) return ofMaxLength;
+        var maxLen = allJumps.stream().max(Comparator.comparingInt(Jump::size)).get().size();
 //        System.out.println(maxLen);
         for (var jump: allJumps) {
             if (jump.size() == maxLen && maxLen != 1) {
@@ -487,24 +497,25 @@ public class GameGrid {
 
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
-        while (true) {
+        ArrayList<Move> allMoves = grid.getAllMoves();
+        while (!allMoves.isEmpty()) {
             try {
-                ArrayList<Move> allMoves = grid.getAllMoves();
                 for (int i = 0; i < allMoves.size(); i++) {
                     System.out.println(i + ": " + allMoves.get(i));
                 }
                 System.out.print("\n=> ");
                 String nextMove = scanner.nextLine();
-                if (nextMove.equals("r")) {
+                if (nextMove.equals("")) {
                     Move selected = allMoves.get(random.nextInt(allMoves.size()));
                     System.out.println(selected);
                     grid.executeMove(selected);
                     System.out.println(grid);
                 }
-                else {
+                    else {
                     grid.executeMove(allMoves.get(Integer.parseInt(nextMove)));
                     System.out.println(grid);
                 }
+                allMoves = grid.getAllMoves();
             }
             catch (Exception ignore) {}
         }
