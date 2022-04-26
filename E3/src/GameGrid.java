@@ -182,13 +182,13 @@ public class GameGrid {
         return allMoves;
     }
 
-    public GridItem checkJumpInDirection(PlayerColor jumpingPlayer, GridItem sourceItem, int rowDir, int columnDir) {
+    public GridItem[] checkJumpInDirection(PlayerColor jumpingPlayer, GridItem sourceItem, int rowDir, int columnDir) {
         var multiplier = 2;
         var jumpOver = getGridItem(sourceItem.rowId + rowDir, sourceItem.columnId + columnDir);
         if (jumpOver == null || jumpOver.isEmpty() || jumpOver.figure.playerColor == jumpingPlayer) return null;
         var toJump = getGridItem(sourceItem.rowId + rowDir * multiplier, sourceItem.columnId + columnDir * multiplier);
         if (toJump != null && toJump.isEmpty()) {
-            return toJump;
+            return new GridItem[]{jumpOver, toJump};
         }
         return null;
     }
@@ -235,7 +235,7 @@ public class GameGrid {
 
     public void getNormalJump(PlayerColor jumpingPlayer, GridItem item, Jump currentPath, ArrayList<Jump> allPaths) {
 //        currentPath.add(item);
-        var allDirectionsToCheck = new ArrayList<GridItem>();
+        var allDirectionsToCheck = new ArrayList<GridItem[]>();
         var d1 = checkJumpInDirection(jumpingPlayer, item, 1, 1);
         if (d1 != null) { allDirectionsToCheck.add(d1); }
         d1 = checkJumpInDirection(jumpingPlayer, item, 1, -1);
@@ -245,9 +245,9 @@ public class GameGrid {
         d1 = checkJumpInDirection(jumpingPlayer, item, -1, -1);
         if (d1 != null) { allDirectionsToCheck.add(d1); }
         for (var direction : allDirectionsToCheck) {
-            if (!currentPath.contains(direction)) {
-                currentPath.add(null, direction);
-                getNormalJump(jumpingPlayer, direction, currentPath.copy(), allPaths);
+            if (!currentPath.contains(direction[1])) {
+                currentPath.add(direction[0], direction[1]);
+                getNormalJump(jumpingPlayer, direction[1], currentPath.copy(), allPaths);
             }
             else if (!allPaths.contains(currentPath) && currentPath.size() > 1) {
                 allPaths.add(currentPath);
