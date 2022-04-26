@@ -83,6 +83,18 @@ public class GameGrid {
         getGridItem("d4").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
         move("c1", "d2");
     }
+    public void exampleSetup3() {
+        getGridItem("b4").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
+        getGridItem("b6").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
+        getGridItem("e5").setFigure(new Figure(PlayerColor.WHITE, FigureType.CROWNED));
+        getGridItem("d2").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
+        getGridItem("g3").setFigure(new Figure(PlayerColor.WHITE, FigureType.CROWNED));
+
+        getGridItem("d8").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("g7").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("h2").setFigure(new Figure(PlayerColor.BLACK, FigureType.CROWNED));
+        getGridItem("h8").setFigure(new Figure(PlayerColor.BLACK, FigureType.CROWNED));
+    }
 
     public PlayerColor getNextPlayer() {
         if (history.size() % 2 == 1) return PlayerColor.BLACK;
@@ -353,8 +365,20 @@ class GameGridTest {
         System.out.println(grid);
 
         System.out.println(grid.getVoluntaryMovements("f6"));
-        for (var elem :
-                grid.getObligatoryJumps("f6")) {
+        for (var elem : grid.getObligatoryJumps("f6")) {
+            System.out.println(elem);
+        }
+    }
+
+    @Test
+    void displayTest2() {
+        var grid = new GameGrid();
+//        grid.basicSetup();
+        grid.exampleSetup3();
+        System.out.println(grid);
+
+        System.out.println(grid.getVoluntaryMovements("h2"));
+        for (var elem : grid.getObligatoryJumps("h2")) {
             System.out.println(elem);
         }
     }
