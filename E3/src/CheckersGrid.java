@@ -1,9 +1,8 @@
 import org.junit.jupiter.api.Test;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
-public class GameGrid {
+public class CheckersGrid {
     ArrayList<ArrayList<GridItem>> fullGrid;
     ArrayList<Move> history;
 
@@ -16,7 +15,7 @@ public class GameGrid {
         }
     };
 
-    public GameGrid() {
+    public CheckersGrid() {
         history = new ArrayList<>();
         fullGrid = new ArrayList<>();
         var nextColor = GridItemColor.WHITE;
@@ -351,7 +350,7 @@ public class GameGrid {
     }
 
     public static void main(String[] args) {
-        var grid = new GameGrid();
+        var grid = new CheckersGrid();
         grid.basicSetup();
         System.out.println(grid);
 
@@ -382,10 +381,10 @@ public class GameGrid {
     }
 }
 
-class GameGridTest {
+class CheckersGridTest {
     @Test
     void displayTest() {
-        var grid = new GameGrid();
+        var grid = new CheckersGrid();
 //        grid.basicSetup();
         grid.exampleSetup2();
         System.out.println(grid);
@@ -397,7 +396,7 @@ class GameGridTest {
 
     @Test
     void displayTest2() {
-        var grid = new GameGrid();
+        var grid = new CheckersGrid();
 //        grid.basicSetup();
         grid.exampleSetup3();
         System.out.println(grid);

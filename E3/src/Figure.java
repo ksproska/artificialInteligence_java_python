@@ -1,3 +1,6 @@
+enum FigureType { CROWNED, NORMAL }
+enum PlayerColor { BLACK, WHITE }
+
 public class Figure {
     public final PlayerColor playerColor;
     private FigureType figureType;
@@ -7,23 +10,15 @@ public class Figure {
         this.figureType = figureType;
     }
 
-    public FigureType getFigureType() {
-        return figureType;
-    }
-
-    public void setFigureType(FigureType figureType) {
-        this.figureType = figureType;
-    }
-
     public char getFigureDisplayChar() {
-        if (figureType == FigureType.NORMAL) {
-            return '●';
-        }
-        return 'ᛗ';
+        return switch (figureType) {
+            case CROWNED ->'ᛗ';
+            case NORMAL -> '●';
+        };
     }
 
     @Override
-    public String toString() {
-        return playerColor + " - " + getFigureDisplayChar();
-    }
+    public String toString() { return playerColor + " - " + getFigureDisplayChar(); }
+    public FigureType getFigureType() { return figureType; }
+    public void setFigureType(FigureType figureType) { this.figureType = figureType; }
 }
