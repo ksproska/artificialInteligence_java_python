@@ -7,52 +7,14 @@ public class GameGrid {
     ArrayList<ArrayList<GridItem>> fullGrid;
     ArrayList<Move> history;
 
-    static class Move {
-        final PlayerColor playerColor;
-        final protected GridItem startingPoint;
-        protected ArrayList<GridItem> toJumpItems;
-
-        public Move(GridItem startingPoint) {
-            this.startingPoint = startingPoint;
-            this.playerColor = startingPoint.getPlayerColor();
-            toJumpItems = new ArrayList<>();
+    private static ArrayList<int[]> allPossibleDirections = new ArrayList<int[]>(){
+        {
+            add(new int[]{1, 1});
+            add(new int[]{1, -1});
+            add(new int[]{-1, 1});
+            add(new int[]{-1, -1});
         }
-
-        public GridItem getStartingPoint() {
-            return startingPoint;
-        }
-
-        public Move(GridItem startingPoint, GridItem next) {
-            this.startingPoint = startingPoint;
-            this.playerColor = startingPoint.getPlayerColor();
-            toJumpItems = new ArrayList<>();
-            toJumpItems.add(next);
-        }
-
-        public ArrayList<GridItem> getAllJumpedTo() {
-            return new ArrayList<GridItem>(){{
-                add(startingPoint);
-                addAll(toJumpItems);
-            }};
-        }
-
-        public void add(GridItem toJump) {
-            toJumpItems.add(toJump);
-        }
-
-        @Override
-        public String toString() {
-            return "Move{ " + startingPoint + " -> " + toJumpItems + " }";
-        }
-
-        public Move copy() {
-            var copied = new Move(startingPoint.copy());
-            for (var toJump : toJumpItems) {
-                copied.add(toJump.copy());
-            }
-            return copied;
-        }
-    }
+    };
 
     public GameGrid() {
         history = new ArrayList<>();
@@ -128,6 +90,7 @@ public class GameGrid {
 //        move("h4", "g3");
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     public PlayerColor getNextPlayer() {
         if (history.size() % 2 == 1) return PlayerColor.BLACK;
         return PlayerColor.WHITE;
@@ -169,10 +132,10 @@ public class GameGrid {
         return fullStr;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     public int getRow(String shortcut) {
         return GridItemLetter.values().length - Integer.parseInt(shortcut.split("")[1]);
     }
-
     public int getColumn(String shortcut) {
         var letter = shortcut.split("")[0];
         var chosenLetter = GridItemLetter.valueOf(letter.toUpperCase(Locale.ROOT));
@@ -191,6 +154,7 @@ public class GameGrid {
         return fullGrid.get(rowId).get(columnId);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     public ArrayList<GridItem> allPlayerFigures() {
         var allFigures = new ArrayList<GridItem>();
         for (var row : fullGrid) {
@@ -231,19 +195,6 @@ public class GameGrid {
         return allMoves;
     }
 
-    public ArrayList<Move> getAllMoves(String shortcut) {
-        var item = getGridItem(shortcut);
-        var allMoves = new ArrayList<Move>();
-        var obligatory = getObligatoryJumps(item);
-        allMoves.addAll(obligatory);
-
-        if (allMoves.isEmpty()) {
-            var voluntaryMovements = getVoluntaryMovements(item);
-            allMoves.addAll(voluntaryMovements);
-        }
-        return allMoves;
-    }
-
     public void executeMove(Move move) {
         history.add(move.copy());
 
@@ -265,6 +216,7 @@ public class GameGrid {
         }
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
     public void collectGridItems(GridItem gridItem, int rowOffset, int columnOffset, ArrayList<GridItem> acc) {
         var nextItem = getGridItem(gridItem.rowId + rowOffset, gridItem.columnId + columnOffset);
         if (nextItem != null && nextItem.isEmpty()) {
@@ -274,27 +226,21 @@ public class GameGrid {
     }
 
     public ArrayList<Move> getVoluntaryMovements(GridItem item) {
-        var directions = new ArrayList<int[]>(){
-            {
-                add(new int[]{1, 1});
-                add(new int[]{1, -1});
-                add(new int[]{-1, 1});
-                add(new int[]{-1, -1});
-            }
-        };
         var allMoves = new ArrayList<Move>();
         if (item.figure == null) { return allMoves; }
 
         switch (item.figure.getFigureType()) {
             case NORMAL -> {
                 var voluntaryMoves = new ArrayList<GridItem>();
-                if (item.figure.playerColor == PlayerColor.WHITE) {
-                    voluntaryMoves.add(getGridItem(item.rowId - 1, item.columnId - 1));
-                    voluntaryMoves.add(getGridItem(item.rowId - 1, item.columnId + 1));
-                }
-                else {
-                    voluntaryMoves.add(getGridItem(item.rowId + 1, item.columnId - 1));
-                    voluntaryMoves.add(getGridItem(item.rowId + 1, item.columnId + 1));
+                switch (item.figure.playerColor) {
+                    case WHITE -> {
+                        voluntaryMoves.add(getGridItem(item.rowId - 1, item.columnId - 1));
+                        voluntaryMoves.add(getGridItem(item.rowId - 1, item.columnId + 1));
+                    }
+                    case BLACK -> {
+                        voluntaryMoves.add(getGridItem(item.rowId + 1, item.columnId - 1));
+                        voluntaryMoves.add(getGridItem(item.rowId + 1, item.columnId + 1));
+                    }
                 }
                 for (var move : voluntaryMoves) {
                     if(move != null && move.isEmpty()) { allMoves.add(new Move(item, move)); }
@@ -302,7 +248,7 @@ public class GameGrid {
             }
             case CROWNED -> {
                 var allNext = new ArrayList<GridItem>();
-                for (var dimension : directions) {
+                for (var dimension : allPossibleDirections) {
                     collectGridItems(item, dimension[0], dimension[1], allNext);
                 }
                 for (var gridItem : allNext) {
@@ -322,59 +268,6 @@ public class GameGrid {
             return new GridItem[]{jumpOver, toJump};
         }
         return null;
-    }
-
-    public class Jump extends Move {
-        protected ArrayList<GridItem> jumpOverItems;
-
-        public Jump(GridItem startingPoint) {
-            super(startingPoint);
-            jumpOverItems = new ArrayList<>();
-        }
-
-        public void add(GridItem jumpOver, GridItem toJump) {
-            jumpOverItems.add(jumpOver);
-            toJumpItems.add(toJump);
-        }
-
-        public Jump shallowCopy() {
-            var copied = new Jump(startingPoint);
-            copied.jumpOverItems = new ArrayList<>(jumpOverItems);
-            copied.toJumpItems = new ArrayList<>(toJumpItems);
-            return copied;
-        }
-
-        @Override
-        public Jump copy() {
-            var copied = new Jump(startingPoint.copy());
-            for (var item : toJumpItems) {
-                copied.add(item.copy());
-            }
-            for (var item : jumpOverItems) {
-                copied.jumpOverItems.add(item.copy());
-            }
-            return copied;
-        }
-
-        @Override
-        public String toString() {
-            return "Jump (" + size() + ") {" + startingPoint +
-                    "-> " + toJumpItems.stream().map(Object::toString).collect(Collectors.joining("-> ")) +
-                    " over: " + jumpOverItems +
-                    '}';
-        }
-
-        public boolean contains(GridItem toJump) {
-            return toJumpItems.contains(toJump);
-        }
-
-        public int size() {
-            return toJumpItems.size() + 1;
-        }
-
-        public boolean wasAlreadyJumpedOver(GridItem jumpedOver) {
-            return jumpOverItems.contains(jumpedOver);
-        }
     }
 
     public void getNormalJump(PlayerColor jumpingPlayer, GridItem item, Jump jump, ArrayList<Jump> allPaths) {
@@ -509,13 +402,13 @@ class GameGridTest {
         grid.exampleSetup3();
         System.out.println(grid);
 
-        var nextMove = grid.getAllMoves("d2").get(1);
-        grid.executeMove(nextMove);
-        System.out.println(grid);
-
-        nextMove = grid.getAllMoves("h2").get(0);
-        grid.executeMove(nextMove);
-        System.out.println(grid);
+//        var nextMove = grid.getAllMoves("d2").get(1);
+//        grid.executeMove(nextMove);
+//        System.out.println(grid);
+//
+//        nextMove = grid.getAllMoves("h2").get(0);
+//        grid.executeMove(nextMove);
+//        System.out.println(grid);
     }
 
     @Test
