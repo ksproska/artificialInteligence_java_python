@@ -52,7 +52,12 @@ class GridItem {
         }
 
         if (colored) {
-            gridItemElemToDisplay = "\u001B[44;30m" + gridItemElemToDisplay + "\u001B[0m";
+            if (figure != null  && figure.playerColor == PlayerColor.WHITE) {
+                gridItemElemToDisplay = "\u001B[44m" + gridItemElemToDisplay + "\u001B[0m";
+            }
+            else {
+                gridItemElemToDisplay = "\u001B[44;30m" + gridItemElemToDisplay + "\u001B[0m";
+            }
         }
         else if(gridItemColor == GridItemColor.WHITE) {
             gridItemElemToDisplay = "\u001B[47;30m" + gridItemElemToDisplay + "\u001B[0m";

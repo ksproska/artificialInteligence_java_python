@@ -19,6 +19,10 @@ public class GameGrid {
             toJumpItems = new ArrayList<>();
         }
 
+        public GridItem getStartingPoint() {
+            return startingPoint;
+        }
+
         public Move(GridItem startingPoint, GridItem next) {
             this.startingPoint = startingPoint;
             this.playerColor = startingPoint.getPlayerColor();
@@ -105,7 +109,7 @@ public class GameGrid {
 
         getGridItem("a3").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
         getGridItem("h6").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
-        getGridItem("f6").setFigure(new Figure(PlayerColor.BLACK, FigureType.CROWNED));
+//        getGridItem("f6").setFigure(new Figure(PlayerColor.BLACK, FigureType.CROWNED));
 
         getGridItem("d4").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
 //        move("c1", "d2");
@@ -142,7 +146,7 @@ public class GameGrid {
 
         var allJumpedTo = new ArrayList<GridItem>();
         if (getLastMove() != null) {
-            System.out.println(getLastMove().getAllJumpedTo());
+//            System.out.println(getLastMove().getAllJumpedTo());
             allJumpedTo = getLastMove().getAllJumpedTo();
         }
         for (var row : fullGrid) {
@@ -200,7 +204,7 @@ public class GameGrid {
         return allFigures;
     }
 
-    public void getAllMoves() {
+    public ArrayList<Move> getAllMoves() {
         var allPlayerFigures = allPlayerFigures();
         var allMoves = new ArrayList<Move>();
         for (var item : allPlayerFigures) {
@@ -213,9 +217,7 @@ public class GameGrid {
                 allMoves.addAll(voluntaryMovements);
             }
         }
-        for (var move : allMoves) {
-            System.out.println(move);
-        }
+        return allMoves;
     }
 
     public ArrayList<Move> getAllMoves(String shortcut) {
@@ -228,9 +230,6 @@ public class GameGrid {
             var voluntaryMovements = getVoluntaryMovements(item);
             allMoves.addAll(voluntaryMovements);
         }
-//        for (var move : allMoves) {
-//            System.out.println(move);
-//        }
         return allMoves;
     }
 
@@ -241,6 +240,12 @@ public class GameGrid {
         var to = move.toJumpItems.get(move.toJumpItems.size() - 1);
 
         to.setFigure(from.getFigure());
+        if (to.number == 8 && from.getPlayerColor() == PlayerColor.WHITE) {
+            to.getFigure().setFigureType(FigureType.CROWNED);
+        }
+        if (to.number == 1 && from.getPlayerColor() == PlayerColor.BLACK) {
+            to.getFigure().setFigureType(FigureType.CROWNED);
+        }
         from.setFigure(null);
         if (move.getClass() == Jump.class) {
             for (var toRemoveItems : ((Jump) move).jumpOverItems) {
@@ -248,20 +253,6 @@ public class GameGrid {
             }
         }
     }
-
-//    public void move(String from, String to) {
-//        var item1 = fullGrid.get(getRow(from)).get(getColumn(from));
-//        var item2 = fullGrid.get(getRow(to)).get(getColumn(to));
-//
-//        System.out.println(item1);
-//        System.out.println(item2);
-//
-//        if(item2.getFigure() == null && item1.getFigure() != null) {
-//            item2.setFigure(item1.getFigure());
-//            item1.setFigure(null);
-//            history.add(new Move(from, to, item2.getPlayerColor()));
-//        }
-//    }
 
     public void collectGridItems(GridItem gridItem, int rowOffset, int columnOffset, ArrayList<GridItem> acc) {
         var nextItem = getGridItem(gridItem.rowId + rowOffset, gridItem.columnId + columnOffset);
@@ -272,6 +263,14 @@ public class GameGrid {
     }
 
     public ArrayList<Move> getVoluntaryMovements(GridItem item) {
+        var directions = new ArrayList<int[]>(){
+            {
+                add(new int[]{1, 1});
+                add(new int[]{1, -1});
+                add(new int[]{-1, 1});
+                add(new int[]{-1, -1});
+            }
+        };
         var allMoves = new ArrayList<Move>();
 //        var item = fullGrid.get(getRow(gridItemId)).get(getColumn(gridItemId));
         if (item.figure == null) {
@@ -295,10 +294,9 @@ public class GameGrid {
         }
         else {
             var allNext = new ArrayList<GridItem>();
-            collectGridItems(item, 1, 1, allNext);
-            collectGridItems(item, 1, -1, allNext);
-            collectGridItems(item, -1, 1, allNext);
-            collectGridItems(item, -1, -1, allNext);
+            for (var dimension : directions) {
+                collectGridItems(item, dimension[0], dimension[1], allNext);
+            }
             for (var gridItem : allNext) {
                 allMoves.add(new Move(item, gridItem));
             }
@@ -370,23 +368,32 @@ public class GameGrid {
         }
     }
 
-    public void getNormalJump(PlayerColor jumpingPlayer, GridItem item, Jump currentPath, ArrayList<Jump> allPaths) {
-//        currentPath.add(item);
+    public void getNormalJump(PlayerColor jumpingPlayer, GridItem item, Jump jump, ArrayList<Jump> allPaths) {
+//        jump.add(item);
+//        System.out.println(jump);
         var allDirectionsToCheck = new ArrayList<GridItem[]>();
         var d1 = checkJumpInDirection(jumpingPlayer, item, 1, 1);
-        if (d1 != null && !currentPath.contains(d1[1])) { allDirectionsToCheck.add(d1); }
+        if (d1 != null) { allDirectionsToCheck.add(d1); }
         d1 = checkJumpInDirection(jumpingPlayer, item, 1, -1);
-        if (d1 != null && !currentPath.contains(d1[1])) { allDirectionsToCheck.add(d1); }
+        if (d1 != null) { allDirectionsToCheck.add(d1); }
         d1 = checkJumpInDirection(jumpingPlayer, item, -1, 1);
-        if (d1 != null && !currentPath.contains(d1[1])) { allDirectionsToCheck.add(d1); }
+        if (d1 != null) { allDirectionsToCheck.add(d1); }
         d1 = checkJumpInDirection(jumpingPlayer, item, -1, -1);
-        if (d1 != null && !currentPath.contains(d1[1])) { allDirectionsToCheck.add(d1); }
+        if (d1 != null) { allDirectionsToCheck.add(d1); }
+//        System.out.println(jump.size());
+//        for (var elem : allDirectionsToCheck) {
+//            System.out.println(Arrays.toString(elem));
+//        }
         for (var direction : allDirectionsToCheck) {
-            currentPath.add(direction[0], direction[1]);
-            getNormalJump(jumpingPlayer, direction[1], currentPath.copy(), allPaths);
+            if (direction != null && !jump.contains(direction[1])
+//            !jump.contains(direction[1]) && jump.getStartingPoint() != direction[1]
+            ) {
+                jump.add(direction[0], direction[1]);
+                getNormalJump(jumpingPlayer, direction[1], jump.shallowCopy(), allPaths);
+            }
         }
-        if (currentPath.size() > 1) {
-            allPaths.add(currentPath);
+        if (jump.size() > 1) {
+            allPaths.add(jump);
         }
     }
 
@@ -422,8 +429,6 @@ public class GameGrid {
     }
 
     public ArrayList<Jump> getCrownedJumps(PlayerColor jumpingPlayer, GridItem item, Jump jump, ArrayList<Jump> allPaths) {
-//        System.out.println("all: " + allPaths);
-//        System.out.println("cur: " + jump);
         var directions = new ArrayList<int[]>(){
             {
                 add(new int[]{1, 1});
@@ -453,7 +458,6 @@ public class GameGrid {
 
     public ArrayList<Jump> getObligatoryJumps(GridItem item) {
         var allJumps = new ArrayList<Jump>();
-//        var item = fullGrid.get(getRow(gridItemId)).get(getColumn(gridItemId));
         if (item.figure == null) {
             return allJumps;
         }
@@ -467,12 +471,43 @@ public class GameGrid {
         }
         var maxLen = allJumps.stream().max(Comparator.comparingInt(Jump::size)).get().size();
         var ofMaxLength = new ArrayList<Jump>();
+//        System.out.println(maxLen);
         for (var jump: allJumps) {
             if (jump.size() == maxLen && maxLen != 1) {
                 ofMaxLength.add(jump);
             }
         }
         return ofMaxLength;
+    }
+
+    public static void main(String[] args) {
+        var grid = new GameGrid();
+        grid.basicSetup();
+        System.out.println(grid);
+
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+        while (true) {
+            try {
+                ArrayList<Move> allMoves = grid.getAllMoves();
+                for (int i = 0; i < allMoves.size(); i++) {
+                    System.out.println(i + ": " + allMoves.get(i));
+                }
+                System.out.print("\n=> ");
+                String nextMove = scanner.nextLine();
+                if (nextMove.equals("r")) {
+                    Move selected = allMoves.get(random.nextInt(allMoves.size()));
+                    System.out.println(selected);
+                    grid.executeMove(selected);
+                    System.out.println(grid);
+                }
+                else {
+                    grid.executeMove(allMoves.get(Integer.parseInt(nextMove)));
+                    System.out.println(grid);
+                }
+            }
+            catch (Exception ignore) {}
+        }
     }
 }
 
@@ -484,7 +519,9 @@ class GameGridTest {
         grid.exampleSetup2();
         System.out.println(grid);
 
-        grid.getAllMoves();
+        grid.executeMove(grid.getAllMoves().get(12));
+        System.out.println(grid);
+        System.out.println(grid.getAllMoves());
     }
 
     @Test
@@ -505,9 +542,7 @@ class GameGridTest {
 
     @Test
     void displayTest3() {
-        var grid = new GameGrid();
-        grid.basicSetup();
-        System.out.println(grid);
+
 
 //        var nextMove = grid.getAllMoves("d2").get(1);
 //        grid.executeMove(nextMove);
