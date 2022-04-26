@@ -193,8 +193,48 @@ public class GameGrid {
         return null;
     }
 
-    public void getNormalJump(PlayerColor jumpingPlayer, GridItem item, ArrayList<GridItem> currentPath, ArrayList<ArrayList<GridItem>> allPaths) {
-        currentPath.add(item);
+    public class Jump {
+        final private GridItem startingPoint;
+        private ArrayList<GridItem> toJumpItems;
+        private ArrayList<GridItem> jumpOverItems;
+
+        public Jump(GridItem startingPoint) {
+            this.startingPoint = startingPoint;
+            toJumpItems = new ArrayList<>();
+            jumpOverItems = new ArrayList<>();
+        }
+
+        public void add(GridItem jumpOver, GridItem toJump) {
+            jumpOverItems.add(jumpOver);
+            toJumpItems.add(toJump);
+        }
+
+        public Jump copy() {
+            var copied = new Jump(startingPoint);
+            copied.jumpOverItems = new ArrayList<>(jumpOverItems);
+            copied.toJumpItems = new ArrayList<>(toJumpItems);
+            return copied;
+        }
+
+        @Override
+        public String toString() {
+            return "Jump{" + startingPoint +
+                    "-> " + toJumpItems.stream().map(Object::toString).collect(Collectors.joining("-> ")) +
+                    " over: " + jumpOverItems +
+                    '}';
+        }
+
+        public boolean contains(GridItem toJump) {
+            return toJumpItems.contains(toJump);
+        }
+
+        public int size() {
+            return toJumpItems.size() + 1;
+        }
+    }
+
+    public void getNormalJump(PlayerColor jumpingPlayer, GridItem item, Jump currentPath, ArrayList<Jump> allPaths) {
+//        currentPath.add(item);
         var allDirectionsToCheck = new ArrayList<GridItem>();
         var d1 = checkJumpInDirection(jumpingPlayer, item, 1, 1);
         if (d1 != null) { allDirectionsToCheck.add(d1); }
@@ -206,7 +246,8 @@ public class GameGrid {
         if (d1 != null) { allDirectionsToCheck.add(d1); }
         for (var direction : allDirectionsToCheck) {
             if (!currentPath.contains(direction)) {
-                getNormalJump(jumpingPlayer, direction, new ArrayList<>(currentPath), allPaths);
+                currentPath.add(null, direction);
+                getNormalJump(jumpingPlayer, direction, currentPath.copy(), allPaths);
             }
             else if (!allPaths.contains(currentPath) && currentPath.size() > 1) {
                 allPaths.add(currentPath);
@@ -220,15 +261,16 @@ public class GameGrid {
         return new ArrayList<T>(list);
     }
 
-    public ArrayList<ArrayList<GridItem>> getObligatoryJumps(String gridItemId) {
-        var allJumps = new ArrayList<ArrayList<GridItem>>();
+    public ArrayList<Jump> getObligatoryJumps(String gridItemId) {
+        var allJumps = new ArrayList<Jump>();
         var item = fullGrid.get(getRow(gridItemId)).get(getColumn(gridItemId));
         if (item.figure == null) {
             return allJumps;
         }
         if(item.figure.getFigureType() == FigureType.NORMAL) {
-            getNormalJump(item.figure.playerColor, item, new ArrayList<GridItem>(), allJumps);
-            var maxLen = allJumps.stream().max(Comparator.comparingInt(ArrayList::size)).get().size();
+            allJumps.add(new Jump(item));
+            getNormalJump(item.figure.playerColor, item, allJumps.get(0), allJumps);
+            var maxLen = allJumps.stream().max(Comparator.comparingInt(Jump::size)).get().size();
 //            System.out.println(maxLen);
             return getArrayListFromStream(allJumps.stream().dropWhile(list -> list.size() != maxLen));
         }
