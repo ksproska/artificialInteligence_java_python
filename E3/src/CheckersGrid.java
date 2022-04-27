@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import java.util.*;
 
@@ -88,6 +89,28 @@ public class CheckersGrid {
 
 //        move("h4", "g3");
     }
+    public void exampleSetup4() {
+        getGridItem("b8").setFigure(new Figure(PlayerColor.WHITE, FigureType.CROWNED));
+        getGridItem("f4").setFigure(new Figure(PlayerColor.WHITE, FigureType.CROWNED));
+
+        getGridItem("b6").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("c3").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("d6").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("e3").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("g3").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("g5").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("g7").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+    }
+
+    public void exampleSetup5() {
+        getGridItem("e5").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
+
+        getGridItem("b6").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("d6").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("d2").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("d4").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("f4").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+    }
 
     // -----------------------------------------------------------------------------------------------------------------
     public PlayerColor getNextPlayer() {
@@ -159,6 +182,18 @@ public class CheckersGrid {
         for (var row : fullGrid) {
             for (var item : row) {
                 if (!item.isEmpty() && item.figure.playerColor == getNextPlayer()) {
+                    allFigures.add(item);
+                }
+            }
+        }
+        return allFigures;
+    }
+
+    public ArrayList<GridItem> allFigures() {
+        var allFigures = new ArrayList<GridItem>();
+        for (var row : fullGrid) {
+            for (var item : row) {
+                if (!item.isEmpty()) {
                     allFigures.add(item);
                 }
             }
@@ -281,10 +316,11 @@ public class CheckersGrid {
         var countPossibleDirections = 0;
         for (var direction : directions) {
             var gridItems = checkJumpInDirection(jumpingPlayer, item, direction[0], direction[1]);
-            if (gridItems != null && !jump.contains(gridItems[1])) {
+            if (gridItems != null && !jump.wasAlreadyJumpedOver(gridItems[0])) {
                 countPossibleDirections += 1;
-                jump.add(gridItems[0], gridItems[1]);
-                getNormalJump(jumpingPlayer, gridItems[1], jump.shallowCopy(), allPaths);
+                var copied = jump.shallowCopy();
+                copied.add(gridItems[0], gridItems[1]);
+                getNormalJump(jumpingPlayer, gridItems[1], copied, allPaths);
             }
         }
         if (countPossibleDirections == 0 && jump.size() > 1 && !allPaths.contains(jump)) {
@@ -379,19 +415,46 @@ public class CheckersGrid {
             catch (Exception ignore) {}
         }
     }
+
+    public String currentState() {
+        var state = "NEXT: " + getNextPlayer() + "\n";
+        for (var element : allFigures()) {
+            state += "" + element.letter + element.number + " " + element.figure.playerColor.name().split("")[0] + " " + element.figure.getFigureType().name().split("")[0] + "\n";
+        }
+        return state;
+    }
 }
 
 class CheckersGridTest {
     @Test
-    void displayTest() {
+    void multipleCrownedJumps() {
         var grid = new CheckersGrid();
-//        grid.basicSetup();
-        grid.exampleSetup2();
+        grid.exampleSetup4();
         System.out.println(grid);
 
-        grid.executeMove(grid.getAllMoves().get(12));
+        grid.executeMove(grid.getAllMoves().get(0));
+        System.out.println(grid);
+        Assert.assertEquals("""
+                NEXT: BLACK
+                B8 W C
+                H8 W C
+                E3 B N
+                """, grid.currentState());
+    }
+    @Test
+    void multipleNormalJumps() {
+        var grid = new CheckersGrid();
+        grid.exampleSetup5();
         System.out.println(grid);
         System.out.println(grid.getAllMoves());
+        grid.executeMove(grid.getAllMoves().get(0));
+        System.out.println(grid);
+//        Assert.assertEquals("""
+//                NEXT: BLACK
+//                B8 W C
+//                H8 W C
+//                E3 B N
+//                """, grid.currentState());
     }
 
     @Test
@@ -400,26 +463,7 @@ class CheckersGridTest {
 //        grid.basicSetup();
         grid.exampleSetup3();
         System.out.println(grid);
-
-//        var nextMove = grid.getAllMoves("d2").get(1);
-//        grid.executeMove(nextMove);
-//        System.out.println(grid);
-//
-//        nextMove = grid.getAllMoves("h2").get(0);
-//        grid.executeMove(nextMove);
-//        System.out.println(grid);
+//        System.out.println(grid.executeMove(grid.getAllMoves().get()));
     }
 
-    @Test
-    void displayTest3() {
-
-
-//        var nextMove = grid.getAllMoves("d2").get(1);
-//        grid.executeMove(nextMove);
-//        System.out.println(grid);
-//
-//        nextMove = grid.getAllMoves("h2").get(0);
-//        grid.executeMove(nextMove);
-//        System.out.println(grid);
-    }
 }
