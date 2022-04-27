@@ -112,6 +112,34 @@ public class CheckersGrid {
         getGridItem("f4").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
     }
 
+    public void exampleSetup6() {
+        getGridItem("h8").setFigure(new Figure(PlayerColor.WHITE, FigureType.CROWNED));
+
+        getGridItem("c3").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("c5").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("c7").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("e3").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("e5").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("e7").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("g3").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("g5").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("g7").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+    }
+
+    public void exampleSetup7() {
+        getGridItem("h8").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
+
+        getGridItem("c3").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("c5").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("c7").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("e3").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("e5").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("e7").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("g3").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("g5").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+        getGridItem("g7").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     public PlayerColor getNextPlayer() {
         if (history.size() % 2 == 1) return PlayerColor.BLACK;
@@ -305,16 +333,8 @@ public class CheckersGrid {
     }
 
     public void getNormalJump(PlayerColor jumpingPlayer, GridItem item, Jump jump, ArrayList<Jump> allPaths) {
-        var directions = new ArrayList<int[]>(){
-            {
-                add(new int[]{1, 1});
-                add(new int[]{1, -1});
-                add(new int[]{-1, 1});
-                add(new int[]{-1, -1});
-            }
-        };
         var countPossibleDirections = 0;
-        for (var direction : directions) {
+        for (var direction : allPossibleDirections) {
             var gridItems = checkJumpInDirection(jumpingPlayer, item, direction[0], direction[1]);
             if (gridItems != null && !jump.wasAlreadyJumpedOver(gridItems[0])) {
                 countPossibleDirections += 1;
@@ -349,25 +369,21 @@ public class CheckersGrid {
     }
 
     public ArrayList<Jump> getCrownedJumps(PlayerColor jumpingPlayer, GridItem item, Jump jump, ArrayList<Jump> allPaths) {
-        var directions = new ArrayList<int[]>(){
-            {
-                add(new int[]{1, 1});
-                add(new int[]{1, -1});
-                add(new int[]{-1, 1});
-                add(new int[]{-1, -1});
-            }
-        };
-        for (var direction : directions) {
+        for (var direction : allPossibleDirections) {
             var nextToJumpOver = getNextToJumpOver(jumpingPlayer, item, direction[0], direction[1]);
+//            System.out.println(jump);
+//            while (nextToJumpOver != null && jump.wasAlreadyJumpedOver(nextToJumpOver)) {
+//                nextToJumpOver = getNextToJumpOver(jumpingPlayer, nextToJumpOver, direction[0], direction[1]);
+//            }
             if (nextToJumpOver != null && !jump.wasAlreadyJumpedOver(nextToJumpOver)) {
                 var potentialToLand = getPlacesToLand(nextToJumpOver, direction[0], direction[1], new ArrayList<>());
                 for (var potentialPlaceToLand : potentialToLand) {
-                    if(!jump.contains(potentialPlaceToLand)) {
+//                    if(!jump.contains(potentialPlaceToLand)) {
                         var copied = jump.shallowCopy();
                         copied.add(nextToJumpOver, potentialPlaceToLand);
                         allPaths.add(copied);
                         getCrownedJumps(jumpingPlayer, potentialPlaceToLand, copied, allPaths);
-                    }
+//                    }
                 }
             }
         }
@@ -431,7 +447,7 @@ class CheckersGridTest {
         var grid = new CheckersGrid();
         grid.exampleSetup4();
         System.out.println(grid);
-
+        Assert.assertEquals(1, grid.getAllMoves().size());
         grid.executeMove(grid.getAllMoves().get(0));
         System.out.println(grid);
         Assert.assertEquals("""
@@ -446,24 +462,46 @@ class CheckersGridTest {
         var grid = new CheckersGrid();
         grid.exampleSetup5();
         System.out.println(grid);
+        Assert.assertEquals(2, grid.getAllMoves().size());
+        grid.executeMove(grid.getAllMoves().get(0));
+        System.out.println(grid);
+        Assert.assertEquals("""
+                NEXT: BLACK
+                B6 B N
+                D6 B N
+                F4 B N
+                E1 W N
+                """, grid.currentState());
+    }
+
+    @Test
+    void maxPossibleJump() {
+        var grid = new CheckersGrid();
+        grid.exampleSetup6();
+        System.out.println(grid);
         System.out.println(grid.getAllMoves());
+        Assert.assertEquals(12, grid.getAllMoves().size());
+        grid.executeMove(grid.getAllMoves().get(0));
+        System.out.println(grid);
+        Assert.assertEquals("""
+                NEXT: BLACK
+                B2 W C
+                """, grid.currentState());
+    }
+
+    @Test
+    void maxNormalPossibleJump() {
+        var grid = new CheckersGrid();
+        grid.exampleSetup7();
+        System.out.println(grid);
+        System.out.println(grid.getAllMoves());
+//        Assert.assertEquals(4, grid.getAllMoves().size());
         grid.executeMove(grid.getAllMoves().get(0));
         System.out.println(grid);
 //        Assert.assertEquals("""
 //                NEXT: BLACK
-//                B8 W C
-//                H8 W C
-//                E3 B N
+//                B4 W C
 //                """, grid.currentState());
-    }
-
-    @Test
-    void displayTest2() {
-        var grid = new CheckersGrid();
-//        grid.basicSetup();
-        grid.exampleSetup3();
-        System.out.println(grid);
-//        System.out.println(grid.executeMove(grid.getAllMoves().get()));
     }
 
 }
