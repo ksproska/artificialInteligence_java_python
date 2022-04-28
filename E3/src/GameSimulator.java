@@ -11,15 +11,15 @@ public class GameSimulator {
 
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
-        ArrayList<Move> allMoves = grid.getAllMoves();
-        while (!allMoves.isEmpty()) {
+        ArrayList<Move> allMoves = grid.getAllCurrentPossibleMoves();
+        while (!grid.isGameFinished()) {
             try {
                 for (int i = 0; i < allMoves.size(); i++) {
                     System.out.println(i + ": " + allMoves.get(i));
                 }
                 System.out.print("\n=> ");
                 String nextMove = "";
-                if (!playWithBot || PlayerColor.WHITE == grid.getNextPlayer()) {
+                if (!playWithBot || PlayerColor.WHITE == grid.getCurrentPlayer()) {
                     nextMove = scanner.nextLine();
                 }
                 if (nextMove.equals("")) {
@@ -32,9 +32,10 @@ public class GameSimulator {
                     grid.executeMove(allMoves.get(Integer.parseInt(nextMove)));
                     System.out.println(grid);
                 }
-                allMoves = grid.getAllMoves();
+                allMoves = grid.getAllCurrentPossibleMoves();
             }
             catch (Exception ignore) {}
         }
+        System.out.println("WINNER: " + grid.getWinner());
     }
 }

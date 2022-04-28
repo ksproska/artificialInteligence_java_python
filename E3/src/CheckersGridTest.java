@@ -7,8 +7,8 @@ class CheckersGridTest {
         var grid = new CheckersGrid();
         grid.exampleSetup4();
         System.out.println(grid);
-        Assert.assertEquals(1, grid.getAllMoves().size());
-        grid.executeMove(grid.getAllMoves().get(0));
+        Assert.assertEquals(1, grid.getAllCurrentPossibleMoves().size());
+        grid.executeMove(grid.getAllCurrentPossibleMoves().get(0));
         System.out.println(grid);
         Assert.assertEquals("""
                 NEXT: BLACK
@@ -23,8 +23,8 @@ class CheckersGridTest {
         var grid = new CheckersGrid();
         grid.exampleSetup5();
         System.out.println(grid);
-        Assert.assertEquals(2, grid.getAllMoves().size());
-        grid.executeMove(grid.getAllMoves().get(0));
+        Assert.assertEquals(2, grid.getAllCurrentPossibleMoves().size());
+        grid.executeMove(grid.getAllCurrentPossibleMoves().get(0));
         System.out.println(grid);
         Assert.assertEquals("""
                 NEXT: BLACK
@@ -40,9 +40,9 @@ class CheckersGridTest {
         var grid = new CheckersGrid();
         grid.exampleSetup6();
         System.out.println(grid);
-        System.out.println(grid.getAllMoves());
-        Assert.assertEquals(12, grid.getAllMoves().size());
-        grid.executeMove(grid.getAllMoves().get(0));
+        System.out.println(grid.getAllCurrentPossibleMoves());
+        Assert.assertEquals(12, grid.getAllCurrentPossibleMoves().size());
+        grid.executeMove(grid.getAllCurrentPossibleMoves().get(0));
         System.out.println(grid);
         Assert.assertEquals("""
                 NEXT: BLACK
@@ -55,9 +55,9 @@ class CheckersGridTest {
         var grid = new CheckersGrid();
         grid.exampleSetup7();
         System.out.println(grid);
-        System.out.println(grid.getAllMoves());
+        System.out.println(grid.getAllCurrentPossibleMoves());
 //        Assert.assertEquals(4, grid.getAllMoves().size());
-        grid.executeMove(grid.getAllMoves().get(0));
+        grid.executeMove(grid.getAllCurrentPossibleMoves().get(0));
         System.out.println(grid);
 //        Assert.assertEquals("""
 //                NEXT: BLACK
