@@ -401,37 +401,6 @@ public class CheckersGrid {
         return allJumps;
     }
 
-    public static void main(String[] args) {
-        var grid = new CheckersGrid();
-        grid.basicSetup();
-        System.out.println(grid);
-
-        Scanner scanner = new Scanner(System.in);
-        Random random = new Random();
-        ArrayList<Move> allMoves = grid.getAllMoves();
-        while (!allMoves.isEmpty()) {
-            try {
-                for (int i = 0; i < allMoves.size(); i++) {
-                    System.out.println(i + ": " + allMoves.get(i));
-                }
-                System.out.print("\n=> ");
-                String nextMove = scanner.nextLine();
-                if (nextMove.equals("")) {
-                    Move selected = allMoves.get(random.nextInt(allMoves.size()));
-                    System.out.println(selected);
-                    grid.executeMove(selected);
-                    System.out.println(grid);
-                }
-                    else {
-                    grid.executeMove(allMoves.get(Integer.parseInt(nextMove)));
-                    System.out.println(grid);
-                }
-                allMoves = grid.getAllMoves();
-            }
-            catch (Exception ignore) {}
-        }
-    }
-
     public String currentState() {
         var state = "NEXT: " + getNextPlayer() + "\n";
         for (var element : allFigures()) {
@@ -441,67 +410,3 @@ public class CheckersGrid {
     }
 }
 
-class CheckersGridTest {
-    @Test
-    void multipleCrownedJumps() {
-        var grid = new CheckersGrid();
-        grid.exampleSetup4();
-        System.out.println(grid);
-        Assert.assertEquals(1, grid.getAllMoves().size());
-        grid.executeMove(grid.getAllMoves().get(0));
-        System.out.println(grid);
-        Assert.assertEquals("""
-                NEXT: BLACK
-                B8 W C
-                H8 W C
-                E3 B N
-                """, grid.currentState());
-    }
-    @Test
-    void multipleNormalJumps() {
-        var grid = new CheckersGrid();
-        grid.exampleSetup5();
-        System.out.println(grid);
-        Assert.assertEquals(2, grid.getAllMoves().size());
-        grid.executeMove(grid.getAllMoves().get(0));
-        System.out.println(grid);
-        Assert.assertEquals("""
-                NEXT: BLACK
-                B6 B N
-                D6 B N
-                F4 B N
-                E1 W N
-                """, grid.currentState());
-    }
-
-    @Test
-    void maxPossibleJump() {
-        var grid = new CheckersGrid();
-        grid.exampleSetup6();
-        System.out.println(grid);
-        System.out.println(grid.getAllMoves());
-        Assert.assertEquals(12, grid.getAllMoves().size());
-        grid.executeMove(grid.getAllMoves().get(0));
-        System.out.println(grid);
-        Assert.assertEquals("""
-                NEXT: BLACK
-                B2 W C
-                """, grid.currentState());
-    }
-
-    @Test
-    void maxNormalPossibleJump() {
-        var grid = new CheckersGrid();
-        grid.exampleSetup7();
-        System.out.println(grid);
-        System.out.println(grid.getAllMoves());
-//        Assert.assertEquals(4, grid.getAllMoves().size());
-        grid.executeMove(grid.getAllMoves().get(0));
-        System.out.println(grid);
-//        Assert.assertEquals("""
-//                NEXT: BLACK
-//                B4 W C
-//                """, grid.currentState());
-    }
-
-}
