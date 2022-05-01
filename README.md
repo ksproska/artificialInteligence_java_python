@@ -4,7 +4,7 @@ Genetic algorithm - Facility Layout Optimization
 ![image](https://user-images.githubusercontent.com/61067969/166144399-a3c3b088-5d77-4708-be16-4461b9816118.png)
 
 # E2
-## vCSP - Binary
+## CSP - Binary
 
 ### Problem:
 ![image](https://user-images.githubusercontent.com/61067969/166144568-c14062ca-f384-4ba3-bdf1-bda149fd2225.png)
