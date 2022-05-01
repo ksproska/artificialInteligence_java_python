@@ -3,24 +3,24 @@ import java.util.ArrayList;
 
 class Move {
     final PlayerColor playerColor;
-    final protected GridItem startingPoint;
-    protected ArrayList<GridItem> toJumpItems;
+    final protected GridItemSnapshot startingPoint;
+    protected ArrayList<GridItemSnapshot> toJumpItems;
 
-    public Move(GridItem startingPoint) {
+    public Move(GridItemSnapshot startingPoint) {
         this.startingPoint = startingPoint;
         this.playerColor = startingPoint.getPlayerColor();
         toJumpItems = new ArrayList<>();
     }
 
-    public Move(GridItem startingPoint, GridItem next) {
+    public Move(GridItemSnapshot startingPoint, GridItemSnapshot next) {
         this.startingPoint = startingPoint;
         this.playerColor = startingPoint.getPlayerColor();
         toJumpItems = new ArrayList<>();
         toJumpItems.add(next);
     }
 
-    public ArrayList<GridItem> getAllJumpedTo() {
-        return new ArrayList<GridItem>() {{
+    public ArrayList<GridItemSnapshot> getAllJumpedTo() {
+        return new ArrayList<GridItemSnapshot>() {{
             add(startingPoint);
             addAll(toJumpItems);
         }};
@@ -28,8 +28,8 @@ class Move {
 
     @Override
     public String toString() { return "Move{ " + startingPoint + " -> " + toJumpItems + " }"; }
-    public GridItem getStartingPoint() { return startingPoint; }
-    public void add(GridItem toJump) { toJumpItems.add(toJump); }
+    public GridItemSnapshot getStartingPoint() { return startingPoint; }
+    public void add(GridItemSnapshot toJump) { toJumpItems.add(toJump); }
 
     public Move copy() {
         var copied = new Move(startingPoint.copy());

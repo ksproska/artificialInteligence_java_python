@@ -1,10 +1,10 @@
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-class CheckersGridTest {
+class CheckersGridHandlerTest {
     @Test
     void multipleCrownedJumps() {
-        var grid = new CheckersGrid();
+        var grid = new CheckersGridHandler();
         grid.exampleSetup4();
         System.out.println(grid);
         Assert.assertEquals(1, grid.getAllCurrentPossibleMoves().size());
@@ -20,7 +20,7 @@ class CheckersGridTest {
 
     @Test
     void multipleNormalJumps() {
-        var grid = new CheckersGrid();
+        var grid = new CheckersGridHandler();
         grid.exampleSetup5();
         System.out.println(grid);
         Assert.assertEquals(2, grid.getAllCurrentPossibleMoves().size());
@@ -37,7 +37,7 @@ class CheckersGridTest {
 
     @Test
     void maxPossibleJump() {
-        var grid = new CheckersGrid();
+        var grid = new CheckersGridHandler();
         grid.exampleSetup6();
         System.out.println(grid);
         System.out.println(grid.getAllCurrentPossibleMoves());
@@ -52,7 +52,7 @@ class CheckersGridTest {
 
     @Test
     void maxNormalPossibleJump() {
-        var grid = new CheckersGrid();
+        var grid = new CheckersGridHandler();
         grid.exampleSetup7();
         System.out.println(grid);
         System.out.println(grid.getAllCurrentPossibleMoves());

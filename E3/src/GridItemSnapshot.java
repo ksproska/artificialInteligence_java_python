@@ -4,7 +4,6 @@ import java.util.HashMap;
 enum GridItemColor { WHITE, BLACK }
 enum GridItemLetter { A, B, C, D, E, F, G, H }
 
-
 class GridItem {
     public static HashMap<GridItemLetter, Integer> lettersIndexes = new HashMap<>(){
         {
@@ -15,27 +14,34 @@ class GridItem {
             }
         }
     };
-
     final GridItemColor gridItemColor;
     final GridItemLetter letter;
     final int number;
     final int rowId, columnId;
-    Figure figure;
 
-    public GridItem copy() {
-        var copied = new GridItem(gridItemColor, letter, number, rowId, columnId);
+    GridItem(GridItemColor gridItemColor, GridItemLetter letter, int number, int rowId, int columnId) {
+        this.gridItemColor = gridItemColor;
+        this.letter = letter;
+        this.number = number;
+        this.rowId = rowId;
+        this.columnId = columnId;
+    }
+}
+
+class GridItemSnapshot {
+    private Figure figure;
+    final private GridItem gridItem;
+
+    public GridItemSnapshot copy() {
+        var copied = new GridItemSnapshot(gridItem);
         if (figure != null) {
             copied.setFigure(figure.copy());
         }
         return copied;
     }
 
-    GridItem(GridItemColor color, GridItemLetter letter, int number, int rowId, int columnId) {
-        this.gridItemColor = color;
-        this.letter = letter;
-        this.number = number;
-        this.rowId = rowId;
-        this.columnId = columnId;
+    GridItemSnapshot(GridItem gridItem) {
+        this.gridItem = gridItem;
     }
 
     public String getItem(boolean colored, boolean colored2) {
@@ -60,7 +66,7 @@ class GridItem {
                 gridItemElemToDisplay = "\u001B[44;30m" + gridItemElemToDisplay + "\u001B[0m";
             }
         }
-        else if(gridItemColor == GridItemColor.WHITE) {
+        else if(gridItem.gridItemColor == GridItemColor.WHITE) {
             gridItemElemToDisplay = "\u001B[47;30m" + gridItemElemToDisplay + "\u001B[0m";
         }
         else if(figure != null && figure.playerColor == PlayerColor.BLACK) {
@@ -71,10 +77,16 @@ class GridItem {
     }
 
     @Override
-    public String toString() { return "" + letter + number; }
+    public String toString() { return "" + gridItem.letter + gridItem.columnId; }
 
     public Figure getFigure() { return figure; }
     public PlayerColor getPlayerColor() { return figure.playerColor; }
     public void setFigure(Figure figure) { this.figure = figure; }
     public boolean isEmpty() { return figure == null; }
+    public GridItemColor getGridItemColor() { return gridItem.gridItemColor; }
+    public int getNumber() { return gridItem.number; }
+    public GridItemLetter getLetter() { return gridItem.letter; }
+    public int getRowId() { return gridItem.rowId; }
+    public int getColumnId() { return gridItem.columnId; }
+    public HashMap<GridItemLetter, Integer> getLettersIndexes() { return GridItem.lettersIndexes; }
 }

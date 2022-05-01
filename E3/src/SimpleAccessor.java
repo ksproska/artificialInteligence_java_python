@@ -1,15 +1,15 @@
 public class SimpleAccessor implements CheckersGridAccessor {
     private static int normalWeight = 1, crownedWeight = 5;
     @Override
-    public int accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor) {
-        if (checkersGrid.isGameFinished()) {
-            if (checkersGrid.wasDrawn()) return 0;
-            if (checkersGrid.getWinner() == playerColor) return Integer.MAX_VALUE;
+    public int accessCheckersGrid(CheckersGridHandler checkersGridHandler, PlayerColor playerColor) {
+        if (checkersGridHandler.isGameFinished()) {
+            if (checkersGridHandler.wasDrawn()) return 0;
+            if (checkersGridHandler.getWinner() == playerColor) return Integer.MAX_VALUE;
             return Integer.MIN_VALUE;
         }
         int countCurrent = 0;
 
-        for (var item : checkersGrid.getAllFilledItems()) {
+        for (var item : checkersGridHandler.getAllFilledItems()) {
             var multiplier = 1;
             if (item.getPlayerColor() != playerColor) {
                 multiplier = -1;

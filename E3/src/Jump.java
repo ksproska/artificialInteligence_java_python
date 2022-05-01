@@ -2,14 +2,14 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 class Jump extends Move {
-    protected ArrayList<GridItem> jumpOverItems;
+    protected ArrayList<GridItemSnapshot> jumpOverItems;
 
-    public Jump(GridItem startingPoint) {
+    public Jump(GridItemSnapshot startingPoint) {
         super(startingPoint);
         jumpOverItems = new ArrayList<>();
     }
 
-    public void add(GridItem jumpOver, GridItem toJump) {
+    public void add(GridItemSnapshot jumpOver, GridItemSnapshot toJump) {
         jumpOverItems.add(jumpOver);
         toJumpItems.add(toJump);
     }
@@ -41,11 +41,11 @@ class Jump extends Move {
                 '}';
     }
 
-    public boolean contains(GridItem toJump) { return toJumpItems.contains(toJump); }
+    public boolean contains(GridItemSnapshot toJump) { return toJumpItems.contains(toJump); }
     public int size() { return toJumpItems.size() + 1; }
-    public boolean wasAlreadyJumpedOver(GridItem jumpedOver) { return jumpOverItems.contains(jumpedOver); }
+    public boolean wasAlreadyJumpedOver(GridItemSnapshot jumpedOver) { return jumpOverItems.contains(jumpedOver); }
 
-    public ArrayList<GridItem> getJumpOverItems() {
+    public ArrayList<GridItemSnapshot> getJumpOverItems() {
         return jumpOverItems;
     }
 }

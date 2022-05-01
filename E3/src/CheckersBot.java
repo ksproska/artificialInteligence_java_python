@@ -19,18 +19,18 @@ public class CheckersBot {
         }
     }
 
-    public Move getBestMove(CheckersGrid checkersGrid) {
-        if (checkersGrid.getCurrentPlayer() != playerColor) {
+    public Move getBestMove(CheckersGridHandler checkersGridHandler) {
+        if (checkersGridHandler.getCurrentPlayer() != playerColor) {
             return null;
         }
-        var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
+        var allPossibleMoves = checkersGridHandler.getAllCurrentPossibleMoves();
         if (allPossibleMoves.isEmpty()) return null;
         if (allPossibleMoves.size() == 1) return allPossibleMoves.get(0);
         int bestResult = 0;
         ArrayList<Integer> bestMoves = new ArrayList<>();
         for (int i = 0; i < allPossibleMoves.size(); i++) {
 //            System.out.println(checkersGrid);
-            var copied = checkersGrid.copy();
+            var copied = checkersGridHandler.copy();
             copied.executeMove(i);
             var estimation = min(copied, maxDepth);
             System.out.println(allPossibleMoves.get(i) + ": " + estimation);
@@ -48,14 +48,14 @@ public class CheckersBot {
         return allPossibleMoves.get(bestMoves.get(random.nextInt(bestMoves.size())));
     }
 
-    public int max(CheckersGrid checkersGrid , int depth) {
-        var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
+    public int max(CheckersGridHandler checkersGridHandler, int depth) {
+        var allPossibleMoves = checkersGridHandler.getAllCurrentPossibleMoves();
         if (allPossibleMoves.isEmpty()) {
             if (depth > 0) return Integer.MIN_VALUE + depth;
             return Integer.MIN_VALUE;
         }
         if (depth == 0) {
-            var currentGridEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor);
+            var currentGridEstimation = accessor.accessCheckersGrid(checkersGridHandler, playerColor);
             Integer bestMoveEstimation = null;
             for (var move : allPossibleMoves) {
                 var moveEstimation = accessor.accessMove(move, playerColor);
@@ -68,7 +68,7 @@ public class CheckersBot {
 
         Integer bestEstimation = null;
         for (int i = 0; i < allPossibleMoves.size(); i++) {
-            var copied = checkersGrid.copy();
+            var copied = checkersGridHandler.copy();
             copied.executeMove(i);
             var estimation = min(copied, depth - 1);
             if (bestEstimation == null || bestEstimation < estimation) {
@@ -79,14 +79,14 @@ public class CheckersBot {
         return bestEstimation;
     }
 
-    public int min(CheckersGrid checkersGrid , int depth) {
-        var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
+    public int min(CheckersGridHandler checkersGridHandler, int depth) {
+        var allPossibleMoves = checkersGridHandler.getAllCurrentPossibleMoves();
         if (allPossibleMoves.isEmpty()) {
             if (depth > 0) return Integer.MAX_VALUE - depth;
             return Integer.MAX_VALUE;
         }
         if (depth == 0) {
-            var currentGridEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor);
+            var currentGridEstimation = accessor.accessCheckersGrid(checkersGridHandler, playerColor);
             Integer worstMoveEstimation = null;
             for (var move : allPossibleMoves) {
                 var moveEstimation = accessor.accessMove(move, playerColor);
@@ -98,7 +98,7 @@ public class CheckersBot {
         }
         Integer worstEstimation = null;
         for (int i = 0; i < allPossibleMoves.size(); i++) {
-            var copied = checkersGrid.copy();
+            var copied = checkersGridHandler.copy();
             copied.executeMove(i);
             var estimation = max(copied, depth - 1);
             if (worstEstimation == null || worstEstimation > estimation) {

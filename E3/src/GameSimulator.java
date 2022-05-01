@@ -7,7 +7,7 @@ public class GameSimulator {
         var playWithBot = true;
         var botBlack = new CheckersBot(new SimpleAccessor(), PlayerColor.BLACK, 6);
         var botWhite = new CheckersBot(new SimpleAccessor(), PlayerColor.WHITE, 6);
-        var grid = new CheckersGrid();
+        var grid = new CheckersGridHandler();
         grid.basicSetup();
         System.out.println(grid);
 

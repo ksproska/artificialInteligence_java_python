@@ -18,8 +18,7 @@ public class Figure {
     }
 
     public Figure copy() {
-        var copied = new Figure(playerColor, figureType);
-        return copied;
+        return new Figure(playerColor, figureType);
     }
 
     @Override
