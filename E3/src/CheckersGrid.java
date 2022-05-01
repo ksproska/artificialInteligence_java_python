@@ -164,27 +164,47 @@ public class CheckersGrid {
         return history.get(history.size() - 1);
     }
 
+    public Move getLastLastMove() {
+        if (history.size() <= 1) return null;
+        return history.get(history.size() - 2);
+    }
+
     @Override
     public String toString() {
         var fullStr = "";
         fullStr += "\nNEXT PLAYER: " + getCurrentPlayer() + "\n";
 
-        var allJumpedTo = new ArrayList<GridItem>();
+        var allLastJumpedTo = new ArrayList<GridItem>();
+        var allLastLastJumpedTo = new ArrayList<GridItem>();
         if (getLastMove() != null) {
 //            System.out.println(getLastMove().getAllJumpedTo());
-            allJumpedTo = getLastMove().getAllJumpedTo();
+            allLastJumpedTo = getLastMove().getAllJumpedTo();
+        }
+        if (getLastLastMove() != null) {
+//            System.out.println(getLastMove().getAllJumpedTo());
+            allLastLastJumpedTo = getLastLastMove().getAllJumpedTo();
         }
         for (var row : fullGrid) {
             fullStr += row.get(0).number + " ";
             for (var item : row) {
-                boolean specialFlat = false;
-                for (var special :
-                        allJumpedTo) {
+                boolean lastFlag = false;
+                for (var special : allLastJumpedTo) {
                     if (special.columnId == item.columnId && special.rowId == item.rowId) {
-                        specialFlat = true;
+                        lastFlag = true;
                     }
                 }
-                fullStr += item.getItem(specialFlat);
+                boolean lastLastFlag = false;
+                for (var special : allLastLastJumpedTo) {
+                    if (special.columnId == item.columnId && special.rowId == item.rowId) {
+                        lastLastFlag = true;
+                    }
+                }
+//                if (getCurrentPlayer() == PlayerColor.WHITE) {
+//                    var temp = allLastJumpedTo;
+//                    allLastJumpedTo = allLastLastJumpedTo;
+//                    allLastLastJumpedTo = temp;
+//                }
+                fullStr += item.getItem(lastFlag, lastLastFlag);
             }
             fullStr += '\n';
         }

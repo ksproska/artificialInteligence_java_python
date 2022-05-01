@@ -36,13 +36,21 @@ class GridItem {
         this.columnId = columnId;
     }
 
-    public String getItem(boolean colored) {
+    public String getItem(boolean colored, boolean colored2) {
         var gridItemElemToDisplay = "   ";
         if (figure != null) {
             gridItemElemToDisplay = " " + figure.getFigureDisplayChar() + " ";
         }
 
         if (colored) {
+            if (figure != null  && figure.playerColor == PlayerColor.WHITE) {
+                gridItemElemToDisplay = "\u001B[41m" + gridItemElemToDisplay + "\u001B[0m";
+            }
+            else {
+                gridItemElemToDisplay = "\u001B[41;30m" + gridItemElemToDisplay + "\u001B[0m";
+            }
+        }
+        if (colored2) {
             if (figure != null  && figure.playerColor == PlayerColor.WHITE) {
                 gridItemElemToDisplay = "\u001B[44m" + gridItemElemToDisplay + "\u001B[0m";
             }
