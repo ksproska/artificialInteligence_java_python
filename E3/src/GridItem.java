@@ -24,7 +24,9 @@ class GridItem {
 
     public GridItem copy() {
         var copied = new GridItem(gridItemColor, letter, number, rowId, columnId);
-        copied.setFigure(figure);
+        if (figure != null) {
+            copied.setFigure(figure.copy());
+        }
         return copied;
     }
 

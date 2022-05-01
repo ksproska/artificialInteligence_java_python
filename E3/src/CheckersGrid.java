@@ -15,6 +15,10 @@ public class CheckersGrid {
         }
     };
 
+    public CheckersGrid copy() {
+        return new CheckersGrid(fullGrid, history);
+    }
+
     public CheckersGrid() {
         history = new ArrayList<>();
         fullGrid = new ArrayList<>();
@@ -42,6 +46,32 @@ public class CheckersGrid {
                 nextColor = GridItemColor.BLACK;
             }
         }
+    }
+
+    public CheckersGrid(ArrayList<ArrayList<GridItem>> fullGrid, ArrayList<Move> history) {
+        this.history = new ArrayList<>(history);
+        this.fullGrid = new ArrayList<>();
+        for (var row : fullGrid) {
+            var tempArray = new ArrayList<GridItem>();
+            for (var item : row) {
+                tempArray.add(item.copy());
+            }
+            this.fullGrid.add(tempArray);
+        }
+        setAllCurrentPossibleMoves();
+    }
+
+    public ArrayList<GridItem> getAllFilledItems() {
+        var all = new ArrayList<GridItem>();
+        for (var row :
+                fullGrid) {
+            for (var item : row) {
+                if (!item.isEmpty()) {
+                    all.add(item);
+                }
+            }
+        }
+        return all;
     }
 
     private void setAllCurrentPossibleMoves() {
@@ -295,6 +325,11 @@ public class CheckersGrid {
             }
         }
         return allMoves;
+    }
+
+    public void executeMove(int moveInx) {
+        var move = allCurrentPossibleMoves.get(moveInx);
+        executeMove(move);
     }
 
     public void executeMove(Move move) {

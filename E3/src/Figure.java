@@ -17,6 +17,11 @@ public class Figure {
         };
     }
 
+    public Figure copy() {
+        var copied = new Figure(playerColor, figureType);
+        return copied;
+    }
+
     @Override
     public String toString() { return playerColor + " - " + getFigureDisplayChar(); }
     public FigureType getFigureType() { return figureType; }

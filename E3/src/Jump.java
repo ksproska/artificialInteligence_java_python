@@ -44,4 +44,8 @@ class Jump extends Move {
     public boolean contains(GridItem toJump) { return toJumpItems.contains(toJump); }
     public int size() { return toJumpItems.size() + 1; }
     public boolean wasAlreadyJumpedOver(GridItem jumpedOver) { return jumpOverItems.contains(jumpedOver); }
+
+    public ArrayList<GridItem> getJumpOverItems() {
+        return jumpOverItems;
+    }
 }
