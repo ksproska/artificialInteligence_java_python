@@ -1,10 +1,6 @@
 import java.util.*;
 
-public class CheckersGridHandler {
-    ArrayList<ArrayList<GridItemSnapshot>> fullGrid;
-    ArrayList<Move> history;
-    ArrayList<Move> allCurrentPossibleMoves;
-
+class CheckersGrid {
     private static final ArrayList<int[]> allPossibleDirections = new ArrayList<int[]>(){
         {
             add(new int[]{1, 1});
@@ -13,13 +9,11 @@ public class CheckersGridHandler {
             add(new int[]{-1, -1});
         }
     };
+    private ArrayList<ArrayList<GridItemSnapshot>> fullGrid;
+    private ArrayList<Move> allCurrentPossibleMoves;
+    private PlayerColor playerColor;
 
-    public CheckersGridHandler copy() {
-        return new CheckersGridHandler(fullGrid, history);
-    }
-
-    public CheckersGridHandler() {
-        history = new ArrayList<>();
+    public CheckersGrid() {
         fullGrid = new ArrayList<>();
         allCurrentPossibleMoves = new ArrayList<>();
         var nextColor = GridItemColor.WHITE;
@@ -45,10 +39,20 @@ public class CheckersGridHandler {
                 nextColor = GridItemColor.BLACK;
             }
         }
+//        System.out.println(fullGrid);
+        playerColor = PlayerColor.WHITE;
     }
 
-    public CheckersGridHandler(ArrayList<ArrayList<GridItemSnapshot>> fullGrid, ArrayList<Move> history) {
-        this.history = new ArrayList<>(history);
+    @Override
+    public String toString() {
+        return "CheckersGrid{" +
+                "fullGrid=" + fullGrid +
+                ", \n\sallCurrentPossibleMoves=" + allCurrentPossibleMoves +
+                ", \n\splayerColor=" + playerColor +
+                '}';
+    }
+
+    public CheckersGrid(ArrayList<ArrayList<GridItemSnapshot>> fullGrid, ArrayList<Move> allCurrentPossibleMoves, PlayerColor playerColor) {
         this.fullGrid = new ArrayList<>();
         for (var row : fullGrid) {
             var tempArray = new ArrayList<GridItemSnapshot>();
@@ -57,13 +61,33 @@ public class CheckersGridHandler {
             }
             this.fullGrid.add(tempArray);
         }
+        this.allCurrentPossibleMoves = new ArrayList<>();
+//        for (var move : allCurrentPossibleMoves) {
+//            this.allCurrentPossibleMoves.add(move.copy());
+//        }
+        this.playerColor = playerColor;
         setAllCurrentPossibleMoves();
+    }
+
+    public void executeMove(int moveInx) {
+        var move = getAllCurrentPossibleMoves().get(moveInx);
+        executeMove(move);
+    }
+
+    public PlayerColor getOppositePlayer(PlayerColor color) {
+        return switch (color) {
+            case WHITE -> PlayerColor.BLACK;
+            case BLACK -> PlayerColor.WHITE;
+        };
+    }
+
+    public CheckersGrid copy() {
+        return new CheckersGrid(fullGrid, allCurrentPossibleMoves, playerColor);
     }
 
     public ArrayList<GridItemSnapshot> getAllFilledItems() {
         var all = new ArrayList<GridItemSnapshot>();
-        for (var row :
-                fullGrid) {
+        for (var row : fullGrid) {
             for (var item : row) {
                 if (!item.isEmpty()) {
                     all.add(item);
@@ -73,6 +97,28 @@ public class CheckersGridHandler {
         return all;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    public int getRow(String shortcut) {
+        return GridItemLetter.values().length - Integer.parseInt(shortcut.split("")[1]);
+    }
+    public int getColumn(String shortcut) {
+        var letter = shortcut.split("")[0];
+        var chosenLetter = GridItemLetter.valueOf(letter.toUpperCase(Locale.ROOT));
+        return GridItem.lettersIndexes.get(chosenLetter);
+    }
+
+    public GridItemSnapshot getGridItem(int rowId, int columnId) {
+        if (rowId < 0 || columnId < 0 || rowId >= fullGrid.size() || columnId >= GridItem.lettersIndexes.size()) {
+            return null;
+        }
+        return fullGrid.get(rowId).get(columnId);
+    }
+    public GridItemSnapshot getGridItem(String shortcut) {
+        var rowId = getRow(shortcut);
+        var columnId = getColumn(shortcut);
+        return fullGrid.get(rowId).get(columnId);
+    }
+
     private void setAllCurrentPossibleMoves() {
         allCurrentPossibleMoves = getAllMoves();
     }
@@ -80,6 +126,7 @@ public class CheckersGridHandler {
     public ArrayList<Move> getAllCurrentPossibleMoves() { return allCurrentPossibleMoves; }
 
     public void basicSetup() {
+        playerColor = PlayerColor.WHITE;
         for (var row : new int[]{1, 2}) {
             for (var item : fullGrid.get(row - 1)) {
                 if(item.getGridItemColor() == GridItemColor.BLACK) {
@@ -94,6 +141,7 @@ public class CheckersGridHandler {
                 }
             }
         }
+//        System.out.println(fullGrid);
         setAllCurrentPossibleMoves();
     }
 
@@ -179,106 +227,11 @@ public class CheckersGridHandler {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    public PlayerColor getCurrentPlayer() {
-        if (history.size() % 2 == 1) return PlayerColor.BLACK;
-        return PlayerColor.WHITE;
-    }
-    public PlayerColor getPrevPlayer() {
-        if (history.size() % 2 == 0) return PlayerColor.BLACK;
-        return PlayerColor.WHITE;
-    }
-
-    public Move getLastMove() {
-        if (history.isEmpty()) return null;
-        return history.get(history.size() - 1);
-    }
-
-    public Move getLastLastMove() {
-        if (history.size() <= 1) return null;
-        return history.get(history.size() - 2);
-    }
-
-    @Override
-    public String toString() {
-        var fullStr = "";
-        fullStr += "\nNEXT PLAYER: " + getCurrentPlayer() + "\n";
-
-        var allLastJumpedTo = new ArrayList<GridItemSnapshot>();
-        var allLastLastJumpedTo = new ArrayList<GridItemSnapshot>();
-        if (getLastMove() != null) {
-//            System.out.println(getLastMove().getAllJumpedTo());
-            allLastJumpedTo = getLastMove().getAllJumpedTo();
-        }
-        if (getLastLastMove() != null) {
-//            System.out.println(getLastMove().getAllJumpedTo());
-            allLastLastJumpedTo = getLastLastMove().getAllJumpedTo();
-        }
-        for (var row : fullGrid) {
-            fullStr += row.get(0).getNumber() + " ";
-            for (var item : row) {
-                boolean lastFlag = false;
-                for (var special : allLastJumpedTo) {
-                    if (special.getColumnId() == item.getColumnId() && special.getRowId() == item.getRowId()) {
-                        lastFlag = true;
-                    }
-                }
-                boolean lastLastFlag = false;
-                for (var special : allLastLastJumpedTo) {
-                    if (special.getColumnId() == item.getColumnId() && special.getRowId() == item.getRowId()) {
-                        lastLastFlag = true;
-                    }
-                }
-//                if (getCurrentPlayer() == PlayerColor.WHITE) {
-//                    var temp = allLastJumpedTo;
-//                    allLastJumpedTo = allLastLastJumpedTo;
-//                    allLastLastJumpedTo = temp;
-//                }
-                fullStr += item.getItem(lastFlag, lastLastFlag);
-            }
-            fullStr += '\n';
-        }
-        fullStr += "  ";
-        for (var item : fullGrid.get(0)) {
-            fullStr += " " + item.getLetter() + " ";
-        }
-        return fullStr;
-    }
-
-    public String currentState() {
-        var state = "NEXT: " + getCurrentPlayer() + "\n";
-        for (var element : getAllFigures()) {
-            state += "" + element.getLetter() + element.getNumber() + " " + element.getFigure().playerColor.name().split("")[0] + " " + element.getFigure().getFigureType().name().split("")[0] + "\n";
-        }
-        return state;
-    }
-    // -----------------------------------------------------------------------------------------------------------------
-    public int getRow(String shortcut) {
-        return GridItemLetter.values().length - Integer.parseInt(shortcut.split("")[1]);
-    }
-    public int getColumn(String shortcut) {
-        var letter = shortcut.split("")[0];
-        var chosenLetter = GridItemLetter.valueOf(letter.toUpperCase(Locale.ROOT));
-        return GridItem.lettersIndexes.get(chosenLetter);
-    }
-
-    public GridItemSnapshot getGridItem(int rowId, int columnId) {
-        if (rowId < 0 || columnId < 0 || rowId >= fullGrid.size() || columnId >= GridItem.lettersIndexes.size()) {
-            return null;
-        }
-        return fullGrid.get(rowId).get(columnId);
-    }
-    public GridItemSnapshot getGridItem(String shortcut) {
-        var rowId = getRow(shortcut);
-        var columnId = getColumn(shortcut);
-        return fullGrid.get(rowId).get(columnId);
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
     public ArrayList<GridItemSnapshot> getAllPlayerFigures() {
         var allFigures = new ArrayList<GridItemSnapshot>();
         for (var row : fullGrid) {
             for (var item : row) {
-                if (!item.isEmpty() && item.getFigure().playerColor == getCurrentPlayer()) {
+                if (!item.isEmpty() && item.getFigure().playerColor == playerColor) {
                     allFigures.add(item);
                 }
             }
@@ -300,6 +253,7 @@ public class CheckersGridHandler {
 
     private ArrayList<Move> getAllMoves() {
         var allPlayerFigures = getAllPlayerFigures();
+//        System.out.println(allPlayerFigures);
         var allMoves = new ArrayList<Move>();
         var allJumps = new ArrayList<Jump>();
         for (var item : allPlayerFigures) {
@@ -326,14 +280,7 @@ public class CheckersGridHandler {
         return allMoves;
     }
 
-    public void executeMove(int moveInx) {
-        var move = allCurrentPossibleMoves.get(moveInx);
-        executeMove(move);
-    }
-
     public void executeMove(Move move) {
-        history.add(move.copy());
-
         var from = move.startingPoint;
         var to = move.toJumpItems.get(move.toJumpItems.size() - 1);
 
@@ -350,6 +297,7 @@ public class CheckersGridHandler {
                 toRemoveItems.setFigure(null);
             }
         }
+        this.playerColor = getOppositePlayer(this.playerColor);
         setAllCurrentPossibleMoves();
     }
 
@@ -415,10 +363,10 @@ public class CheckersGridHandler {
             if (nextToJumpOver != null && !jump.wasAlreadyJumpedOver(nextToJumpOver)) {
                 var potentialToLand = getPlacesToCrownedLand(nextToJumpOver, direction[0], direction[1], new ArrayList<>());
                 for (var potentialPlaceToLand : potentialToLand) {
-                        var copied = jump.shallowCopy();
-                        copied.add(nextToJumpOver, potentialPlaceToLand);
-                        allPaths.add(copied);
-                        getAllCrownedJumps(jumpingPlayer, potentialPlaceToLand, copied, allPaths);
+                    var copied = jump.shallowCopy();
+                    copied.add(nextToJumpOver, potentialPlaceToLand);
+                    allPaths.add(copied);
+                    getAllCrownedJumps(jumpingPlayer, potentialPlaceToLand, copied, allPaths);
 //                    }
                 }
             }
@@ -470,6 +418,132 @@ public class CheckersGridHandler {
         return allMoves;
     }
 
+    public ArrayList<ArrayList<GridItemSnapshot>> getFullGrid() { return fullGrid; }
+}
+
+public class CheckersGridHandler {
+    CheckersGrid checkersGrid;
+    ArrayList<Move> history;
+
+    public void basicSetup() {
+        checkersGrid.basicSetup();
+    }
+
+    public ArrayList<GridItemSnapshot> getAllPlayerFigures() { return checkersGrid.getAllPlayerFigures(); }
+
+    public CheckersGrid getCheckersGrid() {
+        return checkersGrid;
+    }
+
+    public void executeMove(Move move) {
+        history.add(move.copy());
+        checkersGrid.executeMove(move);
+    }
+
+    public ArrayList<Move> getAllCurrentPossibleMoves() { return checkersGrid.getAllCurrentPossibleMoves(); }
+
+//    public CheckersGridHandler copy() {
+//        return new CheckersGridHandler(checkersGrid.getFullGrid(), history);
+//    }
+
+    public CheckersGridHandler() {
+        checkersGrid = new CheckersGrid();
+        history = new ArrayList<>();
+    }
+
+    public ArrayList<GridItemSnapshot> getAllFilledItems() {
+        return checkersGrid.getAllFilledItems();
+    }
+
+//    public CheckersGridHandler(ArrayList<ArrayList<GridItemSnapshot>> fullGrid, ArrayList<Move> history) {
+//        this.history = new ArrayList<>(history);
+//        this.fullGrid = new ArrayList<>();
+//        for (var row : fullGrid) {
+//            var tempArray = new ArrayList<GridItemSnapshot>();
+//            for (var item : row) {
+//                tempArray.add(item.copy());
+//            }
+//            this.fullGrid.add(tempArray);
+//        }
+//        setAllCurrentPossibleMoves();
+//    }
+
+    public ArrayList<GridItemSnapshot> getAllFigures() { return checkersGrid.getAllFigures(); }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public PlayerColor getCurrentPlayer() {
+        if (history.size() % 2 == 1) return PlayerColor.BLACK;
+        return PlayerColor.WHITE;
+    }
+    public PlayerColor getPrevPlayer() {
+        if (history.size() % 2 == 0) return PlayerColor.BLACK;
+        return PlayerColor.WHITE;
+    }
+
+    public Move getLastMove() {
+        if (history.isEmpty()) return null;
+        return history.get(history.size() - 1);
+    }
+
+    public Move getLastLastMove() {
+        if (history.size() <= 1) return null;
+        return history.get(history.size() - 2);
+    }
+
+    @Override
+    public String toString() {
+        var fullStr = "";
+        fullStr += "\nNEXT PLAYER: " + getCurrentPlayer() + "\n";
+
+        var allLastJumpedTo = new ArrayList<GridItemSnapshot>();
+        var allLastLastJumpedTo = new ArrayList<GridItemSnapshot>();
+        if (getLastMove() != null) {
+//            System.out.println(getLastMove().getAllJumpedTo());
+            allLastJumpedTo = getLastMove().getAllJumpedTo();
+        }
+        if (getLastLastMove() != null) {
+//            System.out.println(getLastMove().getAllJumpedTo());
+            allLastLastJumpedTo = getLastLastMove().getAllJumpedTo();
+        }
+        for (var row : checkersGrid.getFullGrid()) {
+            fullStr += row.get(0).getNumber() + " ";
+            for (var item : row) {
+                boolean lastFlag = false;
+                for (var special : allLastJumpedTo) {
+                    if (special.getColumnId() == item.getColumnId() && special.getRowId() == item.getRowId()) {
+                        lastFlag = true;
+                    }
+                }
+                boolean lastLastFlag = false;
+                for (var special : allLastLastJumpedTo) {
+                    if (special.getColumnId() == item.getColumnId() && special.getRowId() == item.getRowId()) {
+                        lastLastFlag = true;
+                    }
+                }
+//                if (getCurrentPlayer() == PlayerColor.WHITE) {
+//                    var temp = allLastJumpedTo;
+//                    allLastJumpedTo = allLastLastJumpedTo;
+//                    allLastLastJumpedTo = temp;
+//                }
+                fullStr += item.getItem(lastFlag, lastLastFlag);
+            }
+            fullStr += '\n';
+        }
+        fullStr += "  ";
+        for (var item : checkersGrid.getFullGrid().get(0)) {
+            fullStr += " " + item.getLetter() + " ";
+        }
+        return fullStr;
+    }
+
+    public String currentState() {
+        var state = "NEXT: " + getCurrentPlayer() + "\n";
+        for (var element : checkersGrid.getAllFigures()) {
+            state += "" + element.getLetter() + element.getNumber() + " " + element.getFigure().playerColor.name().split("")[0] + " " + element.getFigure().getFigureType().name().split("")[0] + "\n";
+        }
+        return state;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     public boolean wasDrawn() {
         var lastXMovesWereCrowns = 15;
@@ -483,7 +557,7 @@ public class CheckersGridHandler {
     }
 
     public boolean isGameFinished() {
-        if (allCurrentPossibleMoves.isEmpty()) return true;
+        if (checkersGrid.getAllCurrentPossibleMoves().isEmpty()) return true;
         return wasDrawn();
     }
 

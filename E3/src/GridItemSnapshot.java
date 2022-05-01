@@ -77,7 +77,7 @@ class GridItemSnapshot {
     }
 
     @Override
-    public String toString() { return "" + gridItem.letter + gridItem.columnId; }
+    public String toString() { return "" + gridItem.letter + gridItem.number /* + " - " + figure*/; }
 
     public Figure getFigure() { return figure; }
     public PlayerColor getPlayerColor() { return figure.playerColor; }

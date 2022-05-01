@@ -3,7 +3,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class GameSimulator {
-    public static void main(String[] args) {
+    public static void bot() {
         var playWithBot = true;
         var botBlack = new CheckersBot(new SimpleAccessor(), PlayerColor.BLACK, 6);
         var botWhite = new CheckersBot(new SimpleAccessor(), PlayerColor.WHITE, 6);
@@ -12,41 +12,53 @@ public class GameSimulator {
         System.out.println(grid);
 
         Scanner scanner = new Scanner(System.in);
-        Random random = new Random();
-        ArrayList<Move> allMoves = grid.getAllCurrentPossibleMoves();
+        ArrayList<Move> allMoves;
         while (!grid.isGameFinished()) {
-//            try {
-
-                scanner.nextLine();
-                System.out.println("Counting...");
+            System.out.println("Press ENTER: ");
+            scanner.nextLine();
+            System.out.println("Counting...");
             if (PlayerColor.WHITE == grid.getCurrentPlayer()) {
-//                    System.out.println("test");
-                    var selectedMove = botWhite.getBestMove(grid);
-                    System.out.println("BOT white: " + selectedMove);
-                    grid.executeMove(selectedMove);
-//                    System.out.print("\n=> ");
-//                    String nextMove = scanner.nextLine();
-//                    if (nextMove.equals("")) {
-//                        Move selected = allMoves.get(random.nextInt(allMoves.size()));
-//                        System.out.println(selected);
-//                        grid.executeMove(selected);
-//                        System.out.println(grid);
-//                    }
-                }
-                else {
-                    var selectedMove = botBlack.getBestMove(grid);
-                    System.out.println("BOT black: " + selectedMove);
-                    grid.executeMove(selectedMove);
-                }
-                System.out.println("-------------------------------------------");
+                var selectedMove = botWhite.getBestMove(grid);
+                System.out.println("BOT white: " + selectedMove);
+                grid.executeMove(selectedMove);
+            }
+            else {
+                var selectedMove = botBlack.getBestMove(grid);
+                System.out.println("BOT black: " + selectedMove);
+                grid.executeMove(selectedMove);
+            }
+            System.out.println("-------------------------------------------");
             allMoves = grid.getAllCurrentPossibleMoves();
             for (int i = 0; i < allMoves.size(); i++) {
                 System.out.println(i + ": " + allMoves.get(i));
             }
             System.out.println(grid);
-//            }
-//            catch (Exception ignore) {}
         }
         System.out.println("WINNER: " + grid.getWinner());
+    }
+
+    public static void randoms() {
+        var grid = new CheckersGridHandler();
+        grid.basicSetup();
+        Random random = new Random();
+
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Move> allMoves = grid.getAllCurrentPossibleMoves();
+        while (!grid.isGameFinished()) {
+            System.out.println(grid);
+            for (int i = 0; i < allMoves.size(); i++) {
+                System.out.println(i + ": " + allMoves.get(i));
+            }
+            scanner.nextLine();
+            Move selected = allMoves.get(random.nextInt(allMoves.size()));
+            System.out.println(selected);
+            grid.executeMove(selected);
+            allMoves = grid.getAllCurrentPossibleMoves();
+        }
+        System.out.println("WINNER: " + grid.getWinner());
+    }
+
+    public static void main(String[] args) {
+        bot();
     }
 }
