@@ -1,0 +1,1 @@
+# sztuczna_inteligencja
