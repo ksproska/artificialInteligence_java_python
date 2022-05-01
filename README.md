@@ -6,18 +6,18 @@ Genetic algorithm - Facility Layout Optimization
 # E2
 ## vCSP - Binary
 
-Problem:
+### Problem:
 ![image](https://user-images.githubusercontent.com/61067969/166144568-c14062ca-f384-4ba3-bdf1-bda149fd2225.png)
 
-Example solution:
+### Example solution:
 ![image](https://user-images.githubusercontent.com/61067969/166144580-b1c12903-078c-4d6b-99d2-58c9a98f06ed.png)
 
 ## CSP - Futoshiki
 
-Problem:
+### Problem:
 ![image](https://user-images.githubusercontent.com/61067969/166144515-57727c76-966a-41a1-a406-4f900bffc528.png)
 
-Example solution:
+### Example solution:
 ![image](https://user-images.githubusercontent.com/61067969/166144537-0fea7585-b7d7-44f6-b981-2ede5034bdc5.png)
 
 # E3
