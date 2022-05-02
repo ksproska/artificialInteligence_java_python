@@ -2,25 +2,25 @@ import java.util.ArrayList;
 
 
 class Move {
-    final PlayerColor playerColor;
-    final protected GridItemSnapshot startingPoint;
-    protected ArrayList<GridItemSnapshot> toJumpItems;
+    final FigureType figureType;
+    final protected GridItem startingPoint;
+    protected ArrayList<GridItem> toJumpItems;
 
-    public Move(GridItemSnapshot startingPoint) {
+    public Move(FigureType figureType, GridItem startingPoint) {
+        this.figureType = figureType;
         this.startingPoint = startingPoint;
-        this.playerColor = startingPoint.getPlayerColor();
         toJumpItems = new ArrayList<>();
     }
 
-    public Move(GridItemSnapshot startingPoint, GridItemSnapshot next) {
+    public Move(GridItem startingPoint, GridItem next, FigureType figureType) {
         this.startingPoint = startingPoint;
-        this.playerColor = startingPoint.getPlayerColor();
+        this.figureType = figureType;
         toJumpItems = new ArrayList<>();
         toJumpItems.add(next);
     }
 
-    public ArrayList<GridItemSnapshot> getAllJumpedTo() {
-        return new ArrayList<GridItemSnapshot>() {{
+    public ArrayList<GridItem> getAllJumpedTo() {
+        return new ArrayList<GridItem>() {{
             add(startingPoint);
             addAll(toJumpItems);
         }};
@@ -28,14 +28,6 @@ class Move {
 
     @Override
     public String toString() { return "Move{ " + startingPoint + " -> " + toJumpItems + " }"; }
-    public GridItemSnapshot getStartingPoint() { return startingPoint; }
-    public void add(GridItemSnapshot toJump) { toJumpItems.add(toJump); }
-
-    public Move copy() {
-        var copied = new Move(startingPoint.copy());
-        for (var toJump : toJumpItems) {
-            copied.add(toJump.copy());
-        }
-        return copied;
-    }
+    public GridItem getStartingPoint() { return startingPoint; }
+    public void add(GridItem toJump) { toJumpItems.add(toJump); }
 }

@@ -60,5 +60,6 @@ public class GameSimulator {
 
     public static void main(String[] args) {
         bot();
+//        randoms();
     }
 }
