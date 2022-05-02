@@ -1,5 +1,10 @@
 public class SimpleAccessor extends CheckersGridAccessor {
     private static int normalWeight = 1, crownedWeight = 5;
+
+    public SimpleAccessor(int maxOffset) {
+        super(maxOffset);
+    }
+
     @Override
     public int accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor) {
         int countCurrent = 0;

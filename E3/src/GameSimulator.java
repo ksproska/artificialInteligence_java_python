@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class GameSimulator {
     public static void bot() {
-        var botBlack = new CheckersBot(new SimpleAccessor(), PlayerColor.BLACK, 6);
-        var botWhite = new CheckersBot(new SimpleAccessor(), PlayerColor.WHITE, 6);
+        var botBlack = new CheckersBot(new SimpleAccessor(3), PlayerColor.BLACK, 7);
+        var botWhite = new CheckersBot(new SimpleAccessor(3), PlayerColor.WHITE, 7);
         var grid = new CheckersGridHandler();
         grid.basicSetup();
 

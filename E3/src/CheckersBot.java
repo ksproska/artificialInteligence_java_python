@@ -9,7 +9,7 @@ public class CheckersBot {
     final Integer maxDepth;
     private int lastMoveCount, lastMoveTime;
     private int totalMoveCount, totalMoveTime, counter;
-    private Integer overallWorstScenario;
+    private Integer startEstimation;
 
     public CheckersBot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
         totalMoveCount = 0;
@@ -29,7 +29,7 @@ public class CheckersBot {
     public Move getBestMove(CheckersGridHandler checkersGridHandler) {
         lastMoveTime = 0;
         lastMoveCount = 0;
-        overallWorstScenario = null;
+        startEstimation = accessor.accessCheckersGrid(checkersGridHandler.checkersGrid, playerColor);
         long start = System.currentTimeMillis();
         if (checkersGridHandler.getCurrentPlayer() != playerColor) {
             return null;
@@ -43,6 +43,7 @@ public class CheckersBot {
             var copied = checkersGridHandler.getCheckersGrid().copy();
             copied.executeMove(move);
             var estimation = min(copied, maxDepth);
+            System.out.println(move + ": " + estimation);
             if (bestMoves.isEmpty() || bestResult == estimation) {
                 bestMoves.add(move);
                 bestResult = estimation;
@@ -63,9 +64,18 @@ public class CheckersBot {
     }
 
     public int max(CheckersGrid checkersGrid, int depth) {
+        var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor);
         if (depth == 0) {
-            var estimation = accessor.accessCheckersGrid(checkersGrid, playerColor);
-            return estimation;
+            return currentEstimation;
+        }
+//        if (startEstimation > currentEstimation) {
+//            System.out.println(currentEstimation);
+//        }
+        if (startEstimation - accessor.maxOffset > currentEstimation) {
+//            System.out.println(startEstimation);
+//            System.out.println(currentEstimation);
+//            System.out.println(accessor.maxOffset);
+            return currentEstimation;
         }
         var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
         if (allPossibleMoves.isEmpty()) {
@@ -86,9 +96,18 @@ public class CheckersBot {
     }
 
     public int min(CheckersGrid checkersGrid, int depth) {
+        var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor);
         if (depth == 0) {
-            var estimation = accessor.accessCheckersGrid(checkersGrid, playerColor);
-            return estimation;
+            return currentEstimation;
+        }
+//        if (startEstimation > currentEstimation) {
+//            System.out.println(currentEstimation);
+//        }
+        if (startEstimation - accessor.maxOffset > currentEstimation) {
+//            System.out.println(startEstimation);
+//            System.out.println(accessor.maxOffset);
+//            System.out.println(currentEstimation);
+            return currentEstimation;
         }
         var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
         if (allPossibleMoves.isEmpty()) {
