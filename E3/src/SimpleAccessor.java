@@ -17,7 +17,7 @@ public class SimpleAccessor implements CheckersGridAccessor {
                 if (figure.playerColor != playerColor) {
                     multiplier = -1;
                 }
-                if (figure.getFigureType() == FigureType.NORMAL) {
+                if (figure.figureType == FigureType.NORMAL) {
                     countCurrent += normalWeight * multiplier;
                 }
                 else {

@@ -52,15 +52,7 @@ class CheckersGrid {
     public CheckersGrid(ArrayList<ArrayList<Figure>> figures, ArrayList<Move> allCurrentPossibleMoves, PlayerColor playerColor) {
         this.figures = new ArrayList<>();
         for (var row : figures) {
-            var tempArray = new ArrayList<Figure>();
-            for (var item : row) {
-                if (item != null) {
-                    tempArray.add(item.copy());
-                }
-                else {
-                    tempArray.add(null);
-                }
-            }
+            var tempArray = new ArrayList<Figure>(row);
             this.figures.add(tempArray);
         }
         this.allCurrentPossibleMoves = new ArrayList<>(allCurrentPossibleMoves);
@@ -267,17 +259,23 @@ class CheckersGrid {
         return allMoves;
     }
 
+    public void setFigure(GridItem item, Figure figure) {
+        figures.get(item.rowId).set(item.columnId, figure);
+    }
+    public void setFigure(GridItem item, FigureType figureType, PlayerColor playerColor) {
+        figures.get(item.rowId).set(item.columnId, new Figure(playerColor, figureType));
+    }
+
     public void executeMove(Move move) {
         var from = move.startingPoint;
         var to = move.toJumpItems.get(move.toJumpItems.size() - 1);
         var figureFrom = getFigure(from);
         figures.get(to.rowId).set(to.columnId, figureFrom);
-        var figureTo = getFigure(to);
         if (to.number == 8 && figureFrom.playerColor == PlayerColor.WHITE) {
-            figureTo.setFigureType(FigureType.CROWNED);
+            setFigure(to, FigureType.CROWNED, PlayerColor.WHITE);
         }
         if (to.number == 1 && figureFrom.playerColor == PlayerColor.BLACK) {
-            figureTo.setFigureType(FigureType.CROWNED);
+            setFigure(to, FigureType.CROWNED, PlayerColor.BLACK);
         }
         figures.get(from.rowId).set(from.columnId, null);
         if (move.getClass() == Jump.class) {
@@ -372,7 +370,7 @@ class CheckersGrid {
         var allJumps = new ArrayList<Jump>();
         if (getFigure(item) == null) { return allJumps; }
 
-        switch (getFigure(item).getFigureType()) {
+        switch (getFigure(item).figureType) {
             case NORMAL -> getAllNormalJumps(getFigure(item).playerColor, item, new Jump(FigureType.NORMAL, item), allJumps);
             case CROWNED -> getAllCrownedJumps(getFigure(item).playerColor, item, new Jump(FigureType.CROWNED, item), allJumps);
         }
@@ -383,7 +381,7 @@ class CheckersGrid {
         var allMoves = new ArrayList<Move>();
         if (getFigure(item) == null) { return allMoves; }
 
-        switch (getFigure(item).getFigureType()) {
+        switch (getFigure(item).figureType) {
             case NORMAL -> {
                 var voluntaryMoves = new ArrayList<GridItem>();
                 switch (getFigure(item).playerColor) {
@@ -412,6 +410,7 @@ class CheckersGrid {
         }
         return allMoves;
     }
+    // -----------------------------------------------------------------------------------------------------------------
 
     public ArrayList<ArrayList<GridItem>> getFullGrid() { return board; }
 }

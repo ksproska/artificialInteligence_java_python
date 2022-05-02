@@ -14,11 +14,14 @@ class Jump extends Move {
         toJumpItems.add(toJump);
     }
 
+    public Jump(FigureType figureType, GridItem startingPoint, ArrayList<GridItem> jumpOverItems, ArrayList<GridItem> toJumpItems) {
+        super(figureType, startingPoint);
+        this.jumpOverItems = new ArrayList<>(jumpOverItems);
+        this.toJumpItems = new ArrayList<>(toJumpItems);
+    }
+
     public Jump shallowCopy() {
-        var copied = new Jump(figureType, startingPoint);
-        copied.jumpOverItems = new ArrayList<>(jumpOverItems);
-        copied.toJumpItems = new ArrayList<>(toJumpItems);
-        return copied;
+        return new Jump(figureType, startingPoint, jumpOverItems, toJumpItems);
     }
 
     @Override
@@ -29,11 +32,6 @@ class Jump extends Move {
                 '}';
     }
 
-    public boolean contains(GridItem toJump) { return toJumpItems.contains(toJump); }
     public int size() { return toJumpItems.size() + 1; }
     public boolean wasAlreadyJumpedOver(GridItem jumpedOver) { return jumpOverItems.contains(jumpedOver); }
-
-    public ArrayList<GridItem> getJumpOverItems() {
-        return jumpOverItems;
-    }
 }

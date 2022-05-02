@@ -28,6 +28,5 @@ class Move {
 
     @Override
     public String toString() { return "Move{ " + startingPoint + " -> " + toJumpItems + " }"; }
-    public GridItem getStartingPoint() { return startingPoint; }
     public void add(GridItem toJump) { toJumpItems.add(toJump); }
 }

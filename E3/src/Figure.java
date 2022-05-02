@@ -3,7 +3,7 @@ enum PlayerColor { BLACK, WHITE }
 
 public class Figure {
     public final PlayerColor playerColor;
-    private FigureType figureType;
+    public final FigureType figureType;
 
     public Figure(PlayerColor playerColor, FigureType figureType) {
         this.playerColor = playerColor;
@@ -17,12 +17,6 @@ public class Figure {
         };
     }
 
-    public Figure copy() {
-        return new Figure(playerColor, figureType);
-    }
-
     @Override
     public String toString() { return playerColor + " - " + getFigureDisplayChar(); }
-    public FigureType getFigureType() { return figureType; }
-    public void setFigureType(FigureType figureType) { this.figureType = figureType; }
 }
