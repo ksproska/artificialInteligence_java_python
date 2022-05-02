@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -6,8 +7,13 @@ public class CheckersBot {
     final private CheckersGridAccessor accessor;
     final private PlayerColor playerColor;
     final Integer maxDepth;
+    private int lastMoveCount, lastMoveTime;
+    private int totalMoveCount, totalMoveTime, counter;
 
     public CheckersBot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
+        totalMoveCount = 0;
+        totalMoveTime = 0;
+        counter = 0;
         this.accessor = accessor;
         this.playerColor = playerColor;
         if (maxDepth == null) {
@@ -20,6 +26,9 @@ public class CheckersBot {
     }
 
     public Move getBestMove(CheckersGridHandler checkersGridHandler) {
+        lastMoveTime = 0;
+        lastMoveCount = 0;
+        long start = System.currentTimeMillis();
         if (checkersGridHandler.getCurrentPlayer() != playerColor) {
             return null;
         }
@@ -30,12 +39,8 @@ public class CheckersBot {
         ArrayList<Integer> bestMoves = new ArrayList<>();
         for (int i = 0; i < allPossibleMoves.size(); i++) {
             var copied = checkersGridHandler.getCheckersGrid().copy();
-//            System.out.println(copied);
             copied.executeMove(i);
-//            System.out.println(copied);
-//            System.out.println(accessor.accessCheckersGrid(copied, playerColor));
             var estimation = min(copied, maxDepth);
-            System.out.println(allPossibleMoves.get(i) + ": " + estimation);
             if (bestMoves.isEmpty() || bestResult == estimation) {
                 bestMoves.add(i);
                 bestResult = estimation;
@@ -46,7 +51,12 @@ public class CheckersBot {
                 bestResult = estimation;
             }
         }
-        System.out.println("Best estimated result: " + bestResult);
+        long end = System.currentTimeMillis();
+        lastMoveTime = (int) (end - start);
+        printStats();
+        totalMoveTime += lastMoveTime;
+        totalMoveCount += lastMoveCount;
+        counter += 1;
         return allPossibleMoves.get(bestMoves.get(random.nextInt(bestMoves.size())));
     }
 
@@ -69,6 +79,7 @@ public class CheckersBot {
                 bestEstimation = estimation;
             }
         }
+        lastMoveCount += 1;
         return bestEstimation;
     }
 
@@ -91,6 +102,18 @@ public class CheckersBot {
                 worstEstimation = estimation;
             }
         }
+        lastMoveCount += 1;
         return worstEstimation;
+    }
+
+    public void printStats() {
+        System.out.println("Last:");
+        System.out.println("Nodes: " + lastMoveCount);
+        System.out.println("Time:  " + ((double) lastMoveTime / 1000) + " sec");
+        if (counter > 0) {
+            System.out.println("Average:");
+            System.out.println("Nodes: " + (double) totalMoveCount / counter);
+            System.out.println("Time:  " + (double) totalMoveTime / (1000 * counter) + " sec");
+        }
     }
 }
