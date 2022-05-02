@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class GameSimulator {
     public static void bot() {
-        var playWithBot = true;
         var botBlack = new CheckersBot(new SimpleAccessor(), PlayerColor.BLACK, 6);
         var botWhite = new CheckersBot(new SimpleAccessor(), PlayerColor.WHITE, 6);
         var grid = new CheckersGridHandler();
@@ -13,11 +12,8 @@ public class GameSimulator {
         Scanner scanner = new Scanner(System.in);
         ArrayList<Move> allMoves;
         while (!grid.isGameFinished()) {
-            System.out.println("-------------------------------------------\nAvailable moves:");
             allMoves = grid.getAllCurrentPossibleMoves();
-            for (int i = 0; i < allMoves.size(); i++) {
-                System.out.println(i + ": " + allMoves.get(i));
-            }
+            System.out.println("-------------------------------\nAvailable moves count: " + allMoves.size());
             System.out.println(grid);
 
 //            System.out.print("Press ENTER to continue...");
@@ -36,7 +32,9 @@ public class GameSimulator {
         }
         System.out.println(grid);
         System.out.println("WINNER: " + grid.getWinner());
-        botWhite.printStats();
+        System.out.println("White bot:");
+        botWhite.printAverages();
+        System.out.println("Black bot:");
         botBlack.printStats();
     }
 

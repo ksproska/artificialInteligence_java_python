@@ -1,14 +1,7 @@
-import java.util.ArrayList;
-
-public class SimpleAccessor implements CheckersGridAccessor {
+public class SimpleAccessor extends CheckersGridAccessor {
     private static int normalWeight = 1, crownedWeight = 5;
     @Override
     public int accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor) {
-//        if (checkersGrid.isGameFinished()) {
-//            if (checkersGrid.wasDrawn()) return 0;
-//            if (checkersGrid.getWinner() == playerColor) return Integer.MAX_VALUE;
-//            return Integer.MIN_VALUE;
-//        }
         int countCurrent = 0;
 
         for (var figure : checkersGrid.getAllFilledItems()) {

@@ -1,3 +1,3 @@
-public interface CheckersGridAccessor {
-    int accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor);
+abstract class CheckersGridAccessor {
+    int accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor) { throw new IllegalStateException("Method not implemented"); }
 }

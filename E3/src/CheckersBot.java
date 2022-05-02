@@ -9,6 +9,7 @@ public class CheckersBot {
     final Integer maxDepth;
     private int lastMoveCount, lastMoveTime;
     private int totalMoveCount, totalMoveTime, counter;
+    private Integer overallWorstScenario;
 
     public CheckersBot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
         totalMoveCount = 0;
@@ -28,6 +29,7 @@ public class CheckersBot {
     public Move getBestMove(CheckersGridHandler checkersGridHandler) {
         lastMoveTime = 0;
         lastMoveCount = 0;
+        overallWorstScenario = null;
         long start = System.currentTimeMillis();
         if (checkersGridHandler.getCurrentPlayer() != playerColor) {
             return null;
@@ -36,18 +38,18 @@ public class CheckersBot {
         if (allPossibleMoves.isEmpty()) return null;
         if (allPossibleMoves.size() == 1) return allPossibleMoves.get(0);
         int bestResult = 0;
-        ArrayList<Integer> bestMoves = new ArrayList<>();
-        for (int i = 0; i < allPossibleMoves.size(); i++) {
+        ArrayList<Move> bestMoves = new ArrayList<>();
+        for (var move : allPossibleMoves) {
             var copied = checkersGridHandler.getCheckersGrid().copy();
-            copied.executeMove(i);
+            copied.executeMove(move);
             var estimation = min(copied, maxDepth);
             if (bestMoves.isEmpty() || bestResult == estimation) {
-                bestMoves.add(i);
+                bestMoves.add(move);
                 bestResult = estimation;
             }
             else if (bestResult < estimation) {
                 bestMoves.clear();
-                bestMoves.add(i);
+                bestMoves.add(move);
                 bestResult = estimation;
             }
         }
@@ -57,23 +59,23 @@ public class CheckersBot {
         totalMoveTime += lastMoveTime;
         totalMoveCount += lastMoveCount;
         counter += 1;
-        return allPossibleMoves.get(bestMoves.get(random.nextInt(bestMoves.size())));
+        return bestMoves.get(random.nextInt(bestMoves.size()));
     }
 
     public int max(CheckersGrid checkersGrid, int depth) {
+        if (depth == 0) {
+            var estimation = accessor.accessCheckersGrid(checkersGrid, playerColor);
+            return estimation;
+        }
         var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
         if (allPossibleMoves.isEmpty()) {
             if (depth > 0) return Integer.MIN_VALUE + depth;
             return Integer.MIN_VALUE;
         }
-        if (depth == 0) {
-            return accessor.accessCheckersGrid(checkersGrid, playerColor);
-        }
-
         Integer bestEstimation = null;
-        for (int i = 0; i < allPossibleMoves.size(); i++) {
+        for (var move: allPossibleMoves) {
             var copied = checkersGrid.copy();
-            copied.executeMove(i);
+            copied.executeMove(move);
             var estimation = min(copied, depth - 1);
             if (bestEstimation == null || bestEstimation < estimation) {
                 bestEstimation = estimation;
@@ -84,19 +86,19 @@ public class CheckersBot {
     }
 
     public int min(CheckersGrid checkersGrid, int depth) {
+        if (depth == 0) {
+            var estimation = accessor.accessCheckersGrid(checkersGrid, playerColor);
+            return estimation;
+        }
         var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
         if (allPossibleMoves.isEmpty()) {
             if (depth > 0) return Integer.MAX_VALUE - depth;
             return Integer.MAX_VALUE;
         }
-        if (depth == 0) {
-            return accessor.accessCheckersGrid(checkersGrid, playerColor);
-        }
-
         Integer worstEstimation = null;
-        for (int i = 0; i < allPossibleMoves.size(); i++) {
+        for (var move: allPossibleMoves) {
             var copied = checkersGrid.copy();
-            copied.executeMove(i);
+            copied.executeMove(move);
             var estimation = max(copied, depth - 1);
             if (worstEstimation == null || worstEstimation > estimation) {
                 worstEstimation = estimation;
@@ -107,13 +109,19 @@ public class CheckersBot {
     }
 
     public void printStats() {
-        System.out.println("Last:");
-        System.out.println("Nodes: " + lastMoveCount);
-        System.out.println("Time:  " + ((double) lastMoveTime / 1000) + " sec");
+        if (lastMoveCount != 0) {
+            System.out.println("Last:");
+            System.out.println("\tNodes: " + lastMoveCount);
+            System.out.println("\tTime:  " + ((double) lastMoveTime / 1000) + " sec");
+        }
+        printAverages();
+    }
+
+    public void printAverages() {
         if (counter > 0) {
             System.out.println("Average:");
-            System.out.println("Nodes: " + (double) totalMoveCount / counter);
-            System.out.println("Time:  " + (double) totalMoveTime / (1000 * counter) + " sec");
+            System.out.println("\tNodes: " + (double) totalMoveCount / counter);
+            System.out.println("\tTime:  " + (double) totalMoveTime / (1000 * counter) + " sec");
         }
     }
 }

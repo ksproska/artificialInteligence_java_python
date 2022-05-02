@@ -16,16 +16,30 @@ class CheckersGrid {
 
     public CheckersGrid() {
         figures = new ArrayList<>();
-        board = new ArrayList<>();
         allCurrentPossibleMoves = new ArrayList<>();
-        var nextColor = GridItemColor.WHITE;
-        int gridSize = 8;
-        for (int i = gridSize; i > 0; i--) {
-            var newList = new ArrayList<GridItem>();
-            int counter = 0;
-            for (var letter : GridItemLetter.values()) {
-                newList.add(new GridItem(nextColor, letter, i, gridSize - i, counter));
-                counter ++;
+        if (board == null) {
+            board = new ArrayList<>();
+            var nextColor = GridItemColor.WHITE;
+            int gridSize = 8;
+            for (int i = gridSize; i > 0; i--) {
+                var newList = new ArrayList<GridItem>();
+                int counter = 0;
+                for (var letter : GridItemLetter.values()) {
+                    newList.add(new GridItem(nextColor, letter, i, gridSize - i, counter));
+                    counter ++;
+                    if(nextColor == GridItemColor.BLACK) {
+                        nextColor = GridItemColor.WHITE;
+                    }
+                    else {
+                        nextColor = GridItemColor.BLACK;
+                    }
+                }
+                board.add(newList);
+                var emptyList = new ArrayList<Figure>();
+                for (int j = 0; j < gridSize; j++) {
+                    emptyList.add(null);
+                }
+                figures.add(emptyList);
                 if(nextColor == GridItemColor.BLACK) {
                     nextColor = GridItemColor.WHITE;
                 }
@@ -33,20 +47,8 @@ class CheckersGrid {
                     nextColor = GridItemColor.BLACK;
                 }
             }
-            board.add(newList);
-            var emptyList = new ArrayList<Figure>();
-            for (int j = 0; j < gridSize; j++) {
-                emptyList.add(null);
-            }
-            figures.add(emptyList);
-            if(nextColor == GridItemColor.BLACK) {
-                nextColor = GridItemColor.WHITE;
-            }
-            else {
-                nextColor = GridItemColor.BLACK;
-            }
+            playerColor = PlayerColor.WHITE;
         }
-        playerColor = PlayerColor.WHITE;
     }
 
     public CheckersGrid(ArrayList<ArrayList<Figure>> figures, ArrayList<Move> allCurrentPossibleMoves, PlayerColor playerColor) {
@@ -57,11 +59,6 @@ class CheckersGrid {
         }
         this.allCurrentPossibleMoves = new ArrayList<>(allCurrentPossibleMoves);
         this.playerColor = playerColor;
-    }
-
-    public void executeMove(int moveInx) {
-        var move = getAllCurrentPossibleMoves().get(moveInx);
-        executeMove(move);
     }
 
     public PlayerColor getOppositePlayer(PlayerColor color) {
@@ -110,33 +107,38 @@ class CheckersGrid {
         return board.get(rowId).get(columnId);
     }
 
-    private void setAllCurrentPossibleMoves() {
+    public void setAllCurrentPossibleMoves() {
         allCurrentPossibleMoves = getAllMoves();
     }
 
-    public ArrayList<Move> getAllCurrentPossibleMoves() { return allCurrentPossibleMoves; }
+    public ArrayList<Move> getAllCurrentPossibleMoves() {
+        if (allCurrentPossibleMoves.isEmpty()) {
+            setAllCurrentPossibleMoves();
+        }
+        return allCurrentPossibleMoves;
+    }
 
     public void basicSetup() {
         playerColor = PlayerColor.WHITE;
+        var figure = new Figure(PlayerColor.BLACK, FigureType.NORMAL);
         for (var row : new int[]{1, 2}) {
             for (int i = 0; i < figures.get(row - 1).size(); i++) {
-                var figure = figures.get(row - 1).get(i);
                 var item = board.get(row - 1).get(i);
                 if (item.gridItemColor == GridItemColor.BLACK) {
-                    figures.get(row - 1).set(i, new Figure(PlayerColor.BLACK, FigureType.NORMAL));
+                    figures.get(row - 1).set(i, figure);
                 }
             }
         }
+        figure = new Figure(PlayerColor.WHITE, FigureType.NORMAL);
         for (var row : new int[]{7, 8}) {
             for (int i = 0; i < figures.get(row - 1).size(); i++) {
-                var figure = figures.get(row - 1).get(i);
                 var item = board.get(row - 1).get(i);
                 if (item.gridItemColor == GridItemColor.BLACK) {
-                    figures.get(row - 1).set(i, new Figure(PlayerColor.WHITE, FigureType.NORMAL));
+                    figures.get(row - 1).set(i, figure);
                 }
             }
         }
-        setAllCurrentPossibleMoves();
+//        setAllCurrentPossibleMoves();
     }
 
 //    public void exampleSetup2() {
@@ -284,7 +286,8 @@ class CheckersGrid {
             }
         }
         this.playerColor = getOppositePlayer(this.playerColor);
-        setAllCurrentPossibleMoves();
+//        setAllCurrentPossibleMoves();
+        allCurrentPossibleMoves = new ArrayList<>();
     }
 
     public boolean isItemEmpty(GridItem gridItem) {
@@ -432,7 +435,9 @@ public class CheckersGridHandler {
         checkersGrid.executeMove(move);
     }
 
-    public ArrayList<Move> getAllCurrentPossibleMoves() { return checkersGrid.getAllCurrentPossibleMoves(); }
+    public ArrayList<Move> getAllCurrentPossibleMoves() {
+        return checkersGrid.getAllCurrentPossibleMoves();
+    }
 
 
     public CheckersGridHandler() {
