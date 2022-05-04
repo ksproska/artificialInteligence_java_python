@@ -16,11 +16,18 @@ class CheckersGrid {
 
     public CheckersGrid() {
         figures = new ArrayList<>();
+        int gridSize = 8;
+        for (int i = gridSize; i > 0; i--) {
+            var emptyList = new ArrayList<Figure>();
+            for (int j = 0; j < gridSize; j++) {
+                emptyList.add(null);
+            }
+            figures.add(emptyList);
+        }
         allCurrentPossibleMoves = new ArrayList<>();
         if (board == null) {
             board = new ArrayList<>();
             var nextColor = GridItemColor.WHITE;
-            int gridSize = 8;
             for (int i = gridSize; i > 0; i--) {
                 var newList = new ArrayList<GridItem>();
                 int counter = 0;
@@ -35,11 +42,6 @@ class CheckersGrid {
                     }
                 }
                 board.add(newList);
-                var emptyList = new ArrayList<Figure>();
-                for (int j = 0; j < gridSize; j++) {
-                    emptyList.add(null);
-                }
-                figures.add(emptyList);
                 if(nextColor == GridItemColor.BLACK) {
                     nextColor = GridItemColor.WHITE;
                 }
@@ -501,8 +503,14 @@ public class CheckersGridHandler {
     @Override
     public String toString() {
         var fullStr = "";
-        fullStr += "\nNEXT PLAYER: " + getCurrentPlayer() + "\n";
-
+        fullStr += "\nNEXT PLAYER: ";
+        if (getCurrentPlayer() == PlayerColor.WHITE) {
+            fullStr += "\u001B[47;30m" + getCurrentPlayer() + "\u001B[0m";
+        }
+        else {
+            fullStr += getCurrentPlayer();
+        }
+        fullStr += "\n";
         var allLastJumpedTo = new ArrayList<GridItem>();
         var allLastLastJumpedTo = new ArrayList<GridItem>();
         if (getLastMove() != null) {

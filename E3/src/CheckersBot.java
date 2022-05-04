@@ -30,6 +30,7 @@ public class CheckersBot {
         lastMoveTime = 0;
         lastMoveCount = 0;
         startEstimation = accessor.accessCheckersGrid(checkersGridHandler.checkersGrid, playerColor);
+        System.out.println("Start: " + startEstimation);
         long start = System.currentTimeMillis();
         if (checkersGridHandler.getCurrentPlayer() != playerColor) {
             return null;
@@ -44,6 +45,9 @@ public class CheckersBot {
             copied.executeMove(move);
             var estimation = min(copied, maxDepth);
             System.out.println(move + ": " + estimation);
+//            if (startEstimation - accessor.maxOffset > estimation) {
+//                throw new IllegalStateException("?");
+//            }
             if (bestMoves.isEmpty() || bestResult == estimation) {
                 bestMoves.add(move);
                 bestResult = estimation;
@@ -71,7 +75,7 @@ public class CheckersBot {
 //        if (startEstimation > currentEstimation) {
 //            System.out.println(currentEstimation);
 //        }
-        if (startEstimation - accessor.maxOffset > currentEstimation) {
+        if (startEstimation - accessor.maxOffset >= currentEstimation) {
 //            System.out.println(startEstimation);
 //            System.out.println(currentEstimation);
 //            System.out.println(accessor.maxOffset);
@@ -103,7 +107,7 @@ public class CheckersBot {
 //        if (startEstimation > currentEstimation) {
 //            System.out.println(currentEstimation);
 //        }
-        if (startEstimation - accessor.maxOffset > currentEstimation) {
+        if (startEstimation - accessor.maxOffset >= currentEstimation) {
 //            System.out.println(startEstimation);
 //            System.out.println(accessor.maxOffset);
 //            System.out.println(currentEstimation);

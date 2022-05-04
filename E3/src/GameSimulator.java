@@ -1,11 +1,12 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
 public class GameSimulator {
-    public static void bot() {
-        var botBlack = new CheckersBot(new SimpleAccessor(3), PlayerColor.BLACK, 7);
-        var botWhite = new CheckersBot(new SimpleAccessor(3), PlayerColor.WHITE, 7);
+    public static PlayerColor bot() {
+        var botWhite = new CheckersBot(new SimpleAccessor(3), PlayerColor.WHITE, 6);
+        var botBlack = new CheckersBot(new ComplexGridAccessor(20), PlayerColor.BLACK, 6);
         var grid = new CheckersGridHandler();
         grid.basicSetup();
 
@@ -36,6 +37,7 @@ public class GameSimulator {
         botWhite.printAverages();
         System.out.println("Black bot:");
         botBlack.printStats();
+        return grid.getWinner();
     }
 
     public static void randoms() {
@@ -60,7 +62,13 @@ public class GameSimulator {
     }
 
     public static void main(String[] args) {
-        bot();
+        var winnerws = new ArrayList<PlayerColor>();
+        for (int i = 0; i < 100; i++) {
+            var nextWinner = bot();
+            winnerws.add(nextWinner);
+        }
+        System.out.println(Collections.frequency(winnerws, PlayerColor.WHITE));
+        System.out.println(Collections.frequency(winnerws, PlayerColor.BLACK));
 //        randoms();
     }
 }
