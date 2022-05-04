@@ -5,22 +5,22 @@ public class ComplexGridAccessor extends CheckersGridAccessor {
         super(maxOffset);
     }
 
-    int getAreaNumber(GridItem gridItem) {
+    private double getAreaNumber(GridItem gridItem) {
         if (gridItem.letter == GridItemLetter.A || gridItem.letter == GridItemLetter.H) {
             if (gridItem.number == 1 || gridItem.number == 8) {
-                return 3;
+                return 1.3;
             }
         }
         if (gridItem.letter == GridItemLetter.B || gridItem.letter == GridItemLetter.G) {
             if (gridItem.number == 2 || gridItem.number == 7) {
-                return 2;
+                return 1.1;
             }
         }
         return 1;
     }
 
     @Override
-    public int accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor) {
+    public double accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor) {
         int countCurrent = 0;
 
         for (var row : checkersGrid.getFullGrid()) {

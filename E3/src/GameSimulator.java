@@ -5,8 +5,8 @@ import java.util.Scanner;
 
 public class GameSimulator {
     public static PlayerColor bot() {
-        var botWhite = new CheckersBot(new SimpleAccessor(3), PlayerColor.WHITE, 6);
-        var botBlack = new CheckersBot(new ComplexGridAccessor(20), PlayerColor.BLACK, 6);
+        var botWhite = new CheckersBot(new SimpleAccessor(3), PlayerColor.WHITE, 7);
+        var botBlack = new CheckersBot(new ComplexGridAccessor(20), PlayerColor.BLACK, 7);
         var grid = new CheckersGridHandler();
         grid.basicSetup();
 
@@ -18,7 +18,7 @@ public class GameSimulator {
             System.out.println(grid);
 
 //            System.out.print("Press ENTER to continue...");
-//            scanner.nextLine();
+////            scanner.nextLine();
             System.out.println("Counting...");
             if (PlayerColor.WHITE == grid.getCurrentPlayer()) {
                 var selectedMove = botWhite.getBestMove(grid);
@@ -63,7 +63,7 @@ public class GameSimulator {
 
     public static void main(String[] args) {
         var winnerws = new ArrayList<PlayerColor>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             var nextWinner = bot();
             winnerws.add(nextWinner);
             System.out.println(Collections.frequency(winnerws, PlayerColor.WHITE));

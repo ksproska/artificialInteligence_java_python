@@ -9,13 +9,13 @@ public class CheckersBot {
     final Integer maxDepth;
     private int lastMoveCount, lastMoveTime;
     private int totalMoveCount, totalMoveTime, counter;
-    private Integer startEstimation;
+    private Double startEstimation;
 
     private class MoveWithEstimation {
         public final Move move;
-        public final int estimation;
+        public final double estimation;
 
-        private MoveWithEstimation(Move move, int estimation) {
+        private MoveWithEstimation(Move move, double estimation) {
             this.move = move;
             this.estimation = estimation;
         }
@@ -48,12 +48,12 @@ public class CheckersBot {
         var allPossibleMoves = checkersGridHandler.getAllCurrentPossibleMoves();
         if (allPossibleMoves.isEmpty()) return null;
         if (allPossibleMoves.size() == 1) return allPossibleMoves.get(0);
-        int bestResult = 0;
+        double bestResult = 0;
         ArrayList<Move> bestMoves = new ArrayList<>();
         Vector<MoveWithEstimation> movesWithEstimation = new Vector<>();
         Vector<Thread> threads = new Vector<>();
         for (var move : allPossibleMoves) {
-            var nextThread = new MinThread(checkersGridHandler.getCheckersGrid(), move, maxDepth, movesWithEstimation);
+            var nextThread = new MinOrMaxThread(MinMaxEnum.MIN, checkersGridHandler.getCheckersGrid(), move, maxDepth - 1, movesWithEstimation);
             threads.add(nextThread);
             nextThread.start();
         }
@@ -77,9 +77,6 @@ public class CheckersBot {
                 bestResult = moveWithEstimation.estimation;
             }
         }
-//            if (startEstimation - accessor.maxOffset > estimation) {
-//                throw new IllegalStateException("?");
-//            }
         long end = System.currentTimeMillis();
         lastMoveTime = (int) (end - start);
         printStats();
@@ -89,23 +86,25 @@ public class CheckersBot {
         return bestMoves.get(random.nextInt(bestMoves.size()));
     }
 
-    public class MinThread extends Thread {
+    public class MinOrMaxThread extends Thread {
         CheckersGrid copied;
         Move move;
         int depth;
+        MinMaxEnum minMaxEnum;
         Vector<MoveWithEstimation> moveWithEstimations;
 
-        public MinThread(CheckersGrid checkersGrid, Move move, int depth, Vector<MoveWithEstimation> moveWithEstimations) {
+        public MinOrMaxThread(MinMaxEnum minMaxEnum, CheckersGrid checkersGrid, Move move, int depth, Vector<MoveWithEstimation> moveWithEstimations) {
             copied = checkersGrid.copy();
             this.move = move;
             this.depth = depth;
             this.moveWithEstimations = moveWithEstimations;
+            this.minMaxEnum = minMaxEnum;
         }
 
         @Override
         public void run() {
             copied.executeMove(move);
-            var estimation = minOrMax(copied, depth, MinMaxEnum.MIN);
+            var estimation = minOrMax(copied, depth, minMaxEnum);
             moveWithEstimations.add(new MoveWithEstimation(move, estimation));
             System.out.println(move + ": " + estimation);
         }
@@ -115,7 +114,7 @@ public class CheckersBot {
         MIN, MAX
     }
 
-    public int minOrMax(CheckersGrid checkersGrid, int depth, MinMaxEnum minMaxEnum) {
+    public double minOrMax(CheckersGrid checkersGrid, int depth, MinMaxEnum minMaxEnum) {
         var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor);
         if (depth == 0) {
             return currentEstimation;
@@ -124,7 +123,7 @@ public class CheckersBot {
             return currentEstimation;
         }
         var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
-        Integer chosenEstimation = null;
+        Double chosenEstimation = null;
         switch (minMaxEnum) {
             case MIN -> {
                 if (allPossibleMoves.isEmpty()) {

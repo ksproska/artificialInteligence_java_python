@@ -6,7 +6,7 @@ public class SimpleAccessor extends CheckersGridAccessor {
     }
 
     @Override
-    public int accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor) {
+    public double accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor) {
         int countCurrent = 0;
 
         for (var figure : checkersGrid.getAllFilledItems()) {
