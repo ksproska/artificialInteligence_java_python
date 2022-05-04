@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
-public class CheckersBot {
+public class MinMaxBot implements Player {
     static Random random = new Random();
     final private CheckersGridAccessor accessor;
     final private PlayerColor playerColor;
@@ -10,6 +10,11 @@ public class CheckersBot {
     private int lastMoveCount, lastMoveTime;
     private int totalMoveCount, totalMoveTime, counter;
     private Double startEstimation;
+
+    @Override
+    public Move getChosenMove(CheckersGridHandler checkersGridHandler) {
+        return getBestMove(checkersGridHandler);
+    }
 
     private class MoveWithEstimation {
         public final Move move;
@@ -21,7 +26,7 @@ public class CheckersBot {
         }
     }
 
-    public CheckersBot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
+    public MinMaxBot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
         totalMoveCount = 0;
         totalMoveTime = 0;
         counter = 0;
