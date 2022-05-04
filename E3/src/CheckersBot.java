@@ -1,6 +1,6 @@
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Vector;
 
 public class CheckersBot {
     static Random random = new Random();
@@ -10,6 +10,16 @@ public class CheckersBot {
     private int lastMoveCount, lastMoveTime;
     private int totalMoveCount, totalMoveTime, counter;
     private Integer startEstimation;
+
+    private class MoveWithEstimation {
+        public final Move move;
+        public final int estimation;
+
+        private MoveWithEstimation(Move move, int estimation) {
+            this.move = move;
+            this.estimation = estimation;
+        }
+    }
 
     public CheckersBot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
         totalMoveCount = 0;
@@ -40,24 +50,36 @@ public class CheckersBot {
         if (allPossibleMoves.size() == 1) return allPossibleMoves.get(0);
         int bestResult = 0;
         ArrayList<Move> bestMoves = new ArrayList<>();
+        Vector<MoveWithEstimation> movesWithEstimation = new Vector<>();
+        Vector<Thread> threads = new Vector<>();
         for (var move : allPossibleMoves) {
-            var copied = checkersGridHandler.getCheckersGrid().copy();
-            copied.executeMove(move);
-            var estimation = min(copied, maxDepth);
-            System.out.println(move + ": " + estimation);
+            var nextThread = new MinThread(checkersGridHandler.getCheckersGrid(), move, maxDepth, movesWithEstimation);
+            threads.add(nextThread);
+            nextThread.start();
+        }
+        for (var nextThread : threads) {
+            try { nextThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if (movesWithEstimation.size() != allPossibleMoves.size()) {
+            throw new IllegalStateException("?");
+        }
+        for (var moveWithEstimation :
+                movesWithEstimation) {
+            if (bestMoves.isEmpty() || bestResult == moveWithEstimation.estimation) {
+                bestMoves.add(moveWithEstimation.move);
+                bestResult = moveWithEstimation.estimation;
+            } else if (bestResult < moveWithEstimation.estimation) {
+                bestMoves.clear();
+                bestMoves.add(moveWithEstimation.move);
+                bestResult = moveWithEstimation.estimation;
+            }
+        }
 //            if (startEstimation - accessor.maxOffset > estimation) {
 //                throw new IllegalStateException("?");
 //            }
-            if (bestMoves.isEmpty() || bestResult == estimation) {
-                bestMoves.add(move);
-                bestResult = estimation;
-            }
-            else if (bestResult < estimation) {
-                bestMoves.clear();
-                bestMoves.add(move);
-                bestResult = estimation;
-            }
-        }
         long end = System.currentTimeMillis();
         lastMoveTime = (int) (end - start);
         printStats();
@@ -67,68 +89,74 @@ public class CheckersBot {
         return bestMoves.get(random.nextInt(bestMoves.size()));
     }
 
-    public int max(CheckersGrid checkersGrid, int depth) {
-        var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor);
-        if (depth == 0) {
-            return currentEstimation;
+    public class MinThread extends Thread {
+        CheckersGrid copied;
+        Move move;
+        int depth;
+        Vector<MoveWithEstimation> moveWithEstimations;
+
+        public MinThread(CheckersGrid checkersGrid, Move move, int depth, Vector<MoveWithEstimation> moveWithEstimations) {
+            copied = checkersGrid.copy();
+            this.move = move;
+            this.depth = depth;
+            this.moveWithEstimations = moveWithEstimations;
         }
-//        if (startEstimation > currentEstimation) {
-//            System.out.println(currentEstimation);
-//        }
-        if (startEstimation - accessor.maxOffset >= currentEstimation) {
-//            System.out.println(startEstimation);
-//            System.out.println(currentEstimation);
-//            System.out.println(accessor.maxOffset);
-            return currentEstimation;
-        }
-        var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
-        if (allPossibleMoves.isEmpty()) {
-            if (depth > 0) return Integer.MIN_VALUE + depth;
-            return Integer.MIN_VALUE;
-        }
-        Integer bestEstimation = null;
-        for (var move: allPossibleMoves) {
-            var copied = checkersGrid.copy();
+
+        @Override
+        public void run() {
             copied.executeMove(move);
-            var estimation = min(copied, depth - 1);
-            if (bestEstimation == null || bestEstimation < estimation) {
-                bestEstimation = estimation;
-            }
+            var estimation = minOrMax(copied, depth, MinMaxEnum.MIN);
+            moveWithEstimations.add(new MoveWithEstimation(move, estimation));
+            System.out.println(move + ": " + estimation);
         }
-        lastMoveCount += 1;
-        return bestEstimation;
     }
 
-    public int min(CheckersGrid checkersGrid, int depth) {
+    enum MinMaxEnum {
+        MIN, MAX
+    }
+
+    public int minOrMax(CheckersGrid checkersGrid, int depth, MinMaxEnum minMaxEnum) {
         var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor);
         if (depth == 0) {
             return currentEstimation;
         }
-//        if (startEstimation > currentEstimation) {
-//            System.out.println(currentEstimation);
-//        }
         if (startEstimation - accessor.maxOffset >= currentEstimation) {
-//            System.out.println(startEstimation);
-//            System.out.println(accessor.maxOffset);
-//            System.out.println(currentEstimation);
             return currentEstimation;
         }
         var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
-        if (allPossibleMoves.isEmpty()) {
-            if (depth > 0) return Integer.MAX_VALUE - depth;
-            return Integer.MAX_VALUE;
-        }
-        Integer worstEstimation = null;
-        for (var move: allPossibleMoves) {
-            var copied = checkersGrid.copy();
-            copied.executeMove(move);
-            var estimation = max(copied, depth - 1);
-            if (worstEstimation == null || worstEstimation > estimation) {
-                worstEstimation = estimation;
+        Integer chosenEstimation = null;
+        switch (minMaxEnum) {
+            case MIN -> {
+                if (allPossibleMoves.isEmpty()) {
+                    if (depth > 0) return Integer.MAX_VALUE - depth;
+                    return Integer.MAX_VALUE;
+                }
+                for (var move: allPossibleMoves) {
+                    var copied = checkersGrid.copy();
+                    copied.executeMove(move);
+                    var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MAX);
+                    if (chosenEstimation == null || chosenEstimation > estimation) {
+                        chosenEstimation = estimation;
+                    }
+                }
+            }
+            case MAX -> {
+                if (allPossibleMoves.isEmpty()) {
+                    if (depth > 0) return Integer.MIN_VALUE + depth;
+                    return Integer.MIN_VALUE;
+                }
+                for (var move: allPossibleMoves) {
+                    var copied = checkersGrid.copy();
+                    copied.executeMove(move);
+                    var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MIN);
+                    if (chosenEstimation == null || chosenEstimation < estimation) {
+                        chosenEstimation = estimation;
+                    }
+                }
             }
         }
         lastMoveCount += 1;
-        return worstEstimation;
+        return chosenEstimation;
     }
 
     public void printStats() {

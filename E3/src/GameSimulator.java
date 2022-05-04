@@ -66,9 +66,9 @@ public class GameSimulator {
         for (int i = 0; i < 100; i++) {
             var nextWinner = bot();
             winnerws.add(nextWinner);
+            System.out.println(Collections.frequency(winnerws, PlayerColor.WHITE));
+            System.out.println(Collections.frequency(winnerws, PlayerColor.BLACK));
         }
-        System.out.println(Collections.frequency(winnerws, PlayerColor.WHITE));
-        System.out.println(Collections.frequency(winnerws, PlayerColor.BLACK));
 //        randoms();
     }
 }
