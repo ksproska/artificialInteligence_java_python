@@ -123,7 +123,7 @@ class CheckersGrid {
     public void basicSetup() {
         playerColor = PlayerColor.WHITE;
         var figure = new Figure(PlayerColor.BLACK, FigureType.NORMAL);
-        for (var row : new int[]{1, 2}) {
+        for (var row : new int[]{1, 2, 3}) {
             for (int i = 0; i < figures.get(row - 1).size(); i++) {
                 var item = board.get(row - 1).get(i);
                 if (item.gridItemColor == GridItemColor.BLACK) {
@@ -132,7 +132,7 @@ class CheckersGrid {
             }
         }
         figure = new Figure(PlayerColor.WHITE, FigureType.NORMAL);
-        for (var row : new int[]{7, 8}) {
+        for (var row : new int[]{6, 7, 8}) {
             for (int i = 0; i < figures.get(row - 1).size(); i++) {
                 var item = board.get(row - 1).get(i);
                 if (item.gridItemColor == GridItemColor.BLACK) {
