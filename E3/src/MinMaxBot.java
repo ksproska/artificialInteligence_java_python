@@ -132,8 +132,7 @@ public class MinMaxBot implements Player {
         switch (minMaxEnum) {
             case MIN -> {
                 if (allPossibleMoves.isEmpty()) {
-                    if (depth > 0) return Double.MAX_VALUE - depth;
-                    return Double.MAX_VALUE;
+                    return Double.MAX_VALUE - maxDepth + depth;
                 }
                 for (var move: allPossibleMoves) {
                     var copied = checkersGrid.copy();
@@ -146,8 +145,7 @@ public class MinMaxBot implements Player {
             }
             case MAX -> {
                 if (allPossibleMoves.isEmpty()) {
-                    if (depth > 0) return Double.MIN_VALUE + depth;
-                    return Double.MIN_VALUE;
+                    return Double.MIN_VALUE + maxDepth - depth;
                 }
                 for (var move: allPossibleMoves) {
                     var copied = checkersGrid.copy();
