@@ -7,27 +7,29 @@ public class AlphaBetaBot extends Bot {
 
     @Override
     public ArrayList<MoveWithEstimation> getAllMovesWithEstimations(CheckersGridHandler checkersGridHandler) {
-        var alpha = -Double.MAX_VALUE;
-        var beta = Double.MAX_VALUE;
-        var chosenEstimation = -Double.MAX_VALUE;
+        var alpha = Integer.MIN_VALUE;
+        var beta = Integer.MAX_VALUE;
+        var chosenEstimation = Integer.MIN_VALUE;
         ArrayList<MoveWithEstimation> movesWithEstimation = new ArrayList<>();
         for (var move : checkersGridHandler.getAllCurrentPossibleMoves()) {
-            if (chosenEstimation <= beta) {
-                var estimation = minOrMax(checkersGridHandler.getCheckersGrid(), maxDepth - 1, MinMaxEnum.MIN, alpha, beta);
+//            if (chosenEstimation <= beta) {
+                var copied = checkersGridHandler.getCheckersGrid().copy();
+                copied.executeMove(move);
+                var estimation = minOrMax(copied, maxDepth - 1, MinMaxEnum.MIN, alpha, beta);
                 movesWithEstimation.add(new MoveWithEstimation(move, estimation));
+                System.out.println("LAST: " + move + ": " + estimation);
                 if (chosenEstimation < estimation) {
                     chosenEstimation = estimation;
                 }
                 if (alpha < estimation) { alpha = estimation; }
-            }
+//            }
         }
         return movesWithEstimation;
     }
 
-    public double minOrMax(CheckersGrid checkersGrid, int depth, MinMaxEnum minMaxEnum, double alpha, double beta) {
+    public int minOrMax(CheckersGrid checkersGrid, int depth, MinMaxEnum minMaxEnum, double alpha, double beta) {
         if (depth == 0) {
-            var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor, null);
-            return currentEstimation;
+            return accessor.accessCheckersGrid(checkersGrid, playerColor, null);
         }
         var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
         if (allPossibleMoves.isEmpty()) {
@@ -38,7 +40,7 @@ public class AlphaBetaBot extends Bot {
             };
         }
 
-        Double chosenEstimation = null;
+        Integer chosenEstimation = null;
         for (var move: allPossibleMoves) {
             var copied = checkersGrid.copy();
             copied.executeMove(move);

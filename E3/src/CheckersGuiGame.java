@@ -142,7 +142,7 @@ public class CheckersGuiGame {
     }
 
     public static void main(String[] args) {
-        var botBlack = new MinMaxBot(new SimpleAccessor(), PlayerColor.BLACK, 7);
+        var botBlack = new AlphaBetaBot(new SimpleAccessor(), PlayerColor.BLACK, 10);
         var checkersGridHandler = new CheckersGridHandler();
         checkersGridHandler.basicSetup();
 //        checkersGridHandler.exampleSetup2();
