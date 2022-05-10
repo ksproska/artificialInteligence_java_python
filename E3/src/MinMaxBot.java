@@ -1,64 +1,18 @@
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Vector;
 
-public class MinMaxBot implements Player {
-    static Random random = new Random();
-    final private CheckersGridAccessor accessor;
-    final private PlayerColor playerColor;
-    final Integer maxDepth;
-    private int lastMoveCount, lastMoveTime;
-    private int totalMoveCount, totalMoveTime, counter;
+public class MinMaxBot extends Bot {
+    protected MinMaxBot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
+        super(accessor, playerColor, maxDepth);
+    }
 
     @Override
-    public Move getChosenMove(CheckersGridHandler checkersGridHandler) {
-        return getBestMove(checkersGridHandler);
-    }
-
-    public MinMaxBot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
-        totalMoveCount = 0;
-        totalMoveTime = 0;
-        counter = 0;
-        this.accessor = accessor;
-        this.playerColor = playerColor;
-        this.maxDepth = maxDepth;
-    }
-
-    public Move getBestMove(CheckersGridHandler checkersGridHandler) {
-        lastMoveTime = 0;
-        lastMoveCount = 0;
-        long start = System.currentTimeMillis();
-        if (checkersGridHandler.getCurrentPlayer() != playerColor) {
-            return null;
-        }
-        var allPossibleMoves = checkersGridHandler.getAllCurrentPossibleMoves();
-        if (allPossibleMoves.isEmpty()) return null;
-        if (allPossibleMoves.size() == 1) return allPossibleMoves.get(0);
-        double bestResult = 0;
-        ArrayList<Move> bestMoves = new ArrayList<>();
-        Vector<MoveWithEstimation> movesWithEstimation = new Vector<>();
-        for (var move : allPossibleMoves) {
+    public ArrayList<MoveWithEstimation> getAllMovesWithEstimations(CheckersGridHandler checkersGridHandler) {
+        ArrayList<MoveWithEstimation> movesWithEstimation = new ArrayList<>();
+        for (var move : checkersGridHandler.getAllCurrentPossibleMoves()) {
             var estimation = minOrMax(checkersGridHandler.getCheckersGrid(), maxDepth - 1, MinMaxEnum.MIN);
             movesWithEstimation.add(new MoveWithEstimation(move, estimation));
         }
-        for (var moveWithEstimation :
-                movesWithEstimation) {
-            if (bestMoves.isEmpty() || bestResult == moveWithEstimation.estimation) {
-                bestMoves.add(moveWithEstimation.move);
-                bestResult = moveWithEstimation.estimation;
-            } else if (bestResult < moveWithEstimation.estimation) {
-                bestMoves.clear();
-                bestMoves.add(moveWithEstimation.move);
-                bestResult = moveWithEstimation.estimation;
-            }
-        }
-        long end = System.currentTimeMillis();
-        lastMoveTime = (int) (end - start);
-        printStats();
-        totalMoveTime += lastMoveTime;
-        totalMoveCount += lastMoveCount;
-        counter += 1;
-        return bestMoves.get(random.nextInt(bestMoves.size()));
+        return movesWithEstimation;
     }
 
     public double minOrMax(CheckersGrid checkersGrid, int depth, MinMaxEnum minMaxEnum) {
@@ -67,7 +21,6 @@ public class MinMaxBot implements Player {
             return currentEstimation;
         }
         var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
-        Double chosenEstimation = null;
         if (allPossibleMoves.isEmpty()) {
             var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor, minMaxEnum);
             return switch (minMaxEnum) {
@@ -76,42 +29,26 @@ public class MinMaxBot implements Player {
             };
         }
 
+        Double chosenEstimation = null;
         for (var move: allPossibleMoves) {
             var copied = checkersGrid.copy();
             copied.executeMove(move);
             switch (minMaxEnum) {
                 case MIN -> {
-                    var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MAX);
-                    if (chosenEstimation == null || chosenEstimation > estimation) {
-                        chosenEstimation = estimation;
+                    var currentEstimation = minOrMax(copied, depth - 1, MinMaxEnum.MAX);
+                    if (chosenEstimation == null || chosenEstimation > currentEstimation) {
+                        chosenEstimation = currentEstimation;
                     }
                 }
                 case MAX -> {
-                    var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MIN);
-                    if (chosenEstimation == null || chosenEstimation < estimation) {
-                        chosenEstimation = estimation;
+                    var currentEstimation = minOrMax(copied, depth - 1, MinMaxEnum.MIN);
+                    if (chosenEstimation == null || chosenEstimation < currentEstimation) {
+                        chosenEstimation = currentEstimation;
                     }
                 }
             }
         }
         lastMoveCount += 1;
         return chosenEstimation;
-    }
-
-    public void printStats() {
-        if (lastMoveCount != 0) {
-            System.out.println("Last:");
-            System.out.println("\tNodes: " + lastMoveCount);
-            System.out.println("\tTime:  " + ((double) lastMoveTime / 1000) + " sec");
-        }
-        printAverages();
-    }
-
-    public void printAverages() {
-        if (counter > 0) {
-            System.out.println("Average:");
-            System.out.println("\tNodes: " + (double) totalMoveCount / counter);
-            System.out.println("\tTime:  " + (double) totalMoveTime / (1000 * counter) + " sec");
-        }
     }
 }

@@ -32,21 +32,13 @@ public class GameSimulator {
         }
         System.out.println(grid);
         System.out.println("WINNER: " + grid.getWinner());
-        if (white.getClass() == MinMaxBot.class) {
+        if (white instanceof Bot) {
             System.out.println("White bot:");
-            ((MinMaxBot) white).printAverages();
+            ((Bot) white).printAverages();
         }
-        if (black.getClass() == MinMaxBot.class) {
+        if (black instanceof Bot) {
             System.out.println("Black bot:");
-            ((MinMaxBot) black).printAverages();
-        }
-        if (white.getClass() == AlphaBetaBot.class) {
-            System.out.println("White bot:");
-            ((AlphaBetaBot) white).printAverages();
-        }
-        if (black.getClass() == AlphaBetaBot.class) {
-            System.out.println("Black bot:");
-            ((AlphaBetaBot) black).printAverages();
+            ((Bot) black).printAverages();
         }
         return grid.getWinner();
     }
