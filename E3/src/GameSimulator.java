@@ -44,8 +44,8 @@ public class GameSimulator {
     }
 
     public static void main(String[] args) {
-        var botWhite = new MinMaxBot(new SimpleAccessor(3), PlayerColor.WHITE, 7);
-        var botBlack = new MinMaxBot(new ComplexGridAccessor(4), PlayerColor.BLACK, 7);
+        var botWhite = new MinMaxBot(new SimpleAccessor(), PlayerColor.WHITE, 7);
+        var botBlack = new MinMaxBot(new ComplexGridAccessor(), PlayerColor.BLACK, 7);
         var human = new Human();
 
         runGame(botWhite, botBlack);

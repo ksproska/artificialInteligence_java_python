@@ -117,32 +117,30 @@ public class MinMaxBot implements Player {
 
     public double minOrMax(CheckersGrid checkersGrid, int depth, MinMaxEnum minMaxEnum) {
         if (depth == 0) {
-            var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor);
+            var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor, minMaxEnum);
             return currentEstimation;
         }
         var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
         Double chosenEstimation = null;
-        switch (minMaxEnum) {
-            case MIN -> {
-                if (allPossibleMoves.isEmpty()) {
-                    return Double.MAX_VALUE - maxDepth + depth;
-                }
-                for (var move: allPossibleMoves) {
-                    var copied = checkersGrid.copy();
-                    copied.executeMove(move);
+        if (allPossibleMoves.isEmpty()) {
+            var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor, minMaxEnum);
+            return switch (minMaxEnum) {
+                case MIN -> currentEstimation - maxDepth + depth;
+                case MAX -> currentEstimation + maxDepth - depth;
+            };
+        }
+
+        for (var move: allPossibleMoves) {
+            var copied = checkersGrid.copy();
+            copied.executeMove(move);
+            switch (minMaxEnum) {
+                case MIN -> {
                     var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MAX);
                     if (chosenEstimation == null || chosenEstimation > estimation) {
                         chosenEstimation = estimation;
                     }
                 }
-            }
-            case MAX -> {
-                if (allPossibleMoves.isEmpty()) {
-                    return Double.MIN_VALUE + maxDepth - depth;
-                }
-                for (var move: allPossibleMoves) {
-                    var copied = checkersGrid.copy();
-                    copied.executeMove(move);
+                case MAX -> {
                     var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MIN);
                     if (chosenEstimation == null || chosenEstimation < estimation) {
                         chosenEstimation = estimation;

@@ -1,10 +1,6 @@
 public class ComplexGridAccessor extends CheckersGridAccessor {
     private static int normalWeight = 1, crownedWeight = 5;
 
-    public ComplexGridAccessor(int maxOffset) {
-        super(maxOffset);
-    }
-
     private double getAreaNumber(GridItem gridItem) {
         if (gridItem.letter == GridItemLetter.A || gridItem.letter == GridItemLetter.H) {
             if (gridItem.number == 1 || gridItem.number == 8) {
@@ -20,7 +16,14 @@ public class ComplexGridAccessor extends CheckersGridAccessor {
     }
 
     @Override
-    public double accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor) {
+    public double accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor, MinMaxBot.MinMaxEnum whoseTurn) {
+        if (checkersGrid.getAllCurrentPossibleMoves().isEmpty()) {
+            return switch (whoseTurn) {
+                case MIN -> Double.MAX_VALUE;
+                case MAX -> Double.MIN_VALUE;
+            };
+        }
+
         int countCurrent = 0;
 
         for (var row : checkersGrid.getFullGrid()) {
