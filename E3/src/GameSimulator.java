@@ -40,15 +40,24 @@ public class GameSimulator {
             System.out.println("Black bot:");
             ((MinMaxBot) black).printAverages();
         }
+        if (white.getClass() == AlphaBetaBot.class) {
+            System.out.println("White bot:");
+            ((AlphaBetaBot) white).printAverages();
+        }
+        if (black.getClass() == AlphaBetaBot.class) {
+            System.out.println("Black bot:");
+            ((AlphaBetaBot) black).printAverages();
+        }
         return grid.getWinner();
     }
 
     public static void main(String[] args) {
         var botWhite = new MinMaxBot(new SimpleAccessor(), PlayerColor.WHITE, 7);
         var botBlack = new MinMaxBot(new ComplexGridAccessor(), PlayerColor.BLACK, 7);
+        var botBlack2 = new AlphaBetaBot(new SimpleAccessor(), PlayerColor.BLACK, 7);
         var human = new Human();
 
-        runGame(botWhite, botBlack);
+        runGame(botWhite, botBlack2);
 //        runGame(botWhite, human);
     }
 }

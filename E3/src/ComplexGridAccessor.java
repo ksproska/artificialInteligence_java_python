@@ -16,7 +16,7 @@ public class ComplexGridAccessor extends CheckersGridAccessor {
     }
 
     @Override
-    public double accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor, MinMaxBot.MinMaxEnum whoseTurn) {
+    public double accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor, MinMaxEnum whoseTurn) {
         if (checkersGrid.getAllCurrentPossibleMoves().isEmpty()) {
             return switch (whoseTurn) {
                 case MIN -> Double.MAX_VALUE;

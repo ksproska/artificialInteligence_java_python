@@ -2,7 +2,7 @@ public class SimpleAccessor extends CheckersGridAccessor {
     private static int normalWeight = 1, crownedWeight = 5;
 
     @Override
-    public double accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor, MinMaxBot.MinMaxEnum whoseTurn) {
+    public double accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor, MinMaxEnum whoseTurn) {
         if (checkersGrid.getAllCurrentPossibleMoves().isEmpty()) {
             return switch (whoseTurn) {
                 case MIN -> Double.MAX_VALUE;

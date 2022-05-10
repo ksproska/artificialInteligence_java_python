@@ -1,3 +1,3 @@
 abstract class CheckersGridAccessor {
-    double accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor, MinMaxBot.MinMaxEnum whoseTurn) { throw new IllegalStateException("Method not implemented"); }
+    double accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor, MinMaxEnum whoseTurn) { throw new IllegalStateException("Method not implemented"); }
 }

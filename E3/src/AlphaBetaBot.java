@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
-public class MinMaxBot implements Player {
+public class AlphaBetaBot implements Player {
     static Random random = new Random();
     final private CheckersGridAccessor accessor;
     final private PlayerColor playerColor;
@@ -15,7 +15,7 @@ public class MinMaxBot implements Player {
         return getBestMove(checkersGridHandler);
     }
 
-    public MinMaxBot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
+    public AlphaBetaBot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
         totalMoveCount = 0;
         totalMoveTime = 0;
         counter = 0;
@@ -27,6 +27,8 @@ public class MinMaxBot implements Player {
     public Move getBestMove(CheckersGridHandler checkersGridHandler) {
         lastMoveTime = 0;
         lastMoveCount = 0;
+        var alpha = Double.MIN_VALUE;
+        var beta = Double.MAX_VALUE;
         long start = System.currentTimeMillis();
         if (checkersGridHandler.getCurrentPlayer() != playerColor) {
             return null;
@@ -37,12 +39,21 @@ public class MinMaxBot implements Player {
         double bestResult = 0;
         ArrayList<Move> bestMoves = new ArrayList<>();
         Vector<MoveWithEstimation> movesWithEstimation = new Vector<>();
+        var chosenEstimation = Double.MIN_VALUE;
         for (var move : allPossibleMoves) {
-            var estimation = minOrMax(checkersGridHandler.getCheckersGrid(), maxDepth - 1, MinMaxEnum.MIN);
-            movesWithEstimation.add(new MoveWithEstimation(move, estimation));
+            if (chosenEstimation <= beta) {
+                var estimation = minOrMax(checkersGridHandler.getCheckersGrid(), maxDepth - 1, MinMaxEnum.MIN, alpha, beta);
+                if (alpha < estimation) {
+                    alpha = estimation;
+                }
+                movesWithEstimation.add(new MoveWithEstimation(move, estimation));
+                if (chosenEstimation < estimation) {
+                    chosenEstimation = estimation;
+                }
+            }
+
         }
-        for (var moveWithEstimation :
-                movesWithEstimation) {
+        for (var moveWithEstimation : movesWithEstimation) {
             if (bestMoves.isEmpty() || bestResult == moveWithEstimation.estimation) {
                 bestMoves.add(moveWithEstimation.move);
                 bestResult = moveWithEstimation.estimation;
@@ -61,7 +72,7 @@ public class MinMaxBot implements Player {
         return bestMoves.get(random.nextInt(bestMoves.size()));
     }
 
-    public double minOrMax(CheckersGrid checkersGrid, int depth, MinMaxEnum minMaxEnum) {
+    public double minOrMax(CheckersGrid checkersGrid, int depth, MinMaxEnum minMaxEnum, double alpha, double beta) {
         if (depth == 0) {
             var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor, minMaxEnum);
             return currentEstimation;
@@ -81,15 +92,25 @@ public class MinMaxBot implements Player {
             copied.executeMove(move);
             switch (minMaxEnum) {
                 case MIN -> {
-                    var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MAX);
-                    if (chosenEstimation == null || chosenEstimation > estimation) {
-                        chosenEstimation = estimation;
+                    if (chosenEstimation == null || chosenEstimation >= alpha) {
+                        var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MAX, alpha, beta);
+                        if (beta > estimation) {
+                            beta = estimation;
+                        }
+                        if (chosenEstimation == null || chosenEstimation > estimation) {
+                            chosenEstimation = estimation;
+                        }
                     }
                 }
                 case MAX -> {
-                    var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MIN);
-                    if (chosenEstimation == null || chosenEstimation < estimation) {
-                        chosenEstimation = estimation;
+                    if (chosenEstimation == null || chosenEstimation <= beta) {
+                        var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MIN, alpha, beta);
+                        if (alpha < estimation) {
+                            alpha = estimation;
+                        }
+                        if (chosenEstimation == null || chosenEstimation < estimation) {
+                            chosenEstimation = estimation;
+                        }
                     }
                 }
             }
