@@ -2,13 +2,13 @@ public class SimpleAccessor extends CheckersGridAccessor {
     private static int normalWeight = 1, crownedWeight = 5;
 
     @Override
-    public double accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor, MinMaxEnum whoseTurn) {
-        if (checkersGrid.getAllCurrentPossibleMoves().isEmpty()) {
-            return switch (whoseTurn) {
-                case MIN -> Double.MAX_VALUE;
-                case MAX -> Double.MIN_VALUE;
-            };
-        }
+    public int accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor, MinMaxEnum whoseTurn) {
+//        if (whoseTurn != null) {
+//            return switch (whoseTurn) {
+//                case MIN -> Integer.MIN_VALUE;
+//                case MAX -> Integer.MAX_VALUE;
+//            };
+//        }
         int countCurrent = 0;
 
         for (var figure : checkersGrid.getAllFilledItems()) {

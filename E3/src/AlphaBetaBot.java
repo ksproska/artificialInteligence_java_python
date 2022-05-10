@@ -7,9 +7,9 @@ public class AlphaBetaBot extends Bot {
 
     @Override
     public ArrayList<MoveWithEstimation> getAllMovesWithEstimations(CheckersGridHandler checkersGridHandler) {
-        var alpha = Double.MIN_VALUE;
+        var alpha = -Double.MAX_VALUE;
         var beta = Double.MAX_VALUE;
-        var chosenEstimation = Double.MIN_VALUE;
+        var chosenEstimation = -Double.MAX_VALUE;
         ArrayList<MoveWithEstimation> movesWithEstimation = new ArrayList<>();
         for (var move : checkersGridHandler.getAllCurrentPossibleMoves()) {
             if (chosenEstimation <= beta) {
@@ -26,7 +26,7 @@ public class AlphaBetaBot extends Bot {
 
     public double minOrMax(CheckersGrid checkersGrid, int depth, MinMaxEnum minMaxEnum, double alpha, double beta) {
         if (depth == 0) {
-            var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor, minMaxEnum);
+            var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor, null);
             return currentEstimation;
         }
         var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();

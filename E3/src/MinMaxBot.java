@@ -8,47 +8,51 @@ public class MinMaxBot extends Bot {
     @Override
     public ArrayList<MoveWithEstimation> getAllMovesWithEstimations(CheckersGridHandler checkersGridHandler) {
         ArrayList<MoveWithEstimation> movesWithEstimation = new ArrayList<>();
-        for (var move : checkersGridHandler.getAllCurrentPossibleMoves()) {
-            var estimation = minOrMax(checkersGridHandler.getCheckersGrid(), maxDepth - 1, MinMaxEnum.MIN);
+        var possibleMoves = checkersGridHandler.getAllCurrentPossibleMoves();
+        for (var move : possibleMoves) {
+            var copied = checkersGridHandler.getCheckersGrid().copy();
+            copied.executeMove(move);
+            var estimation = minOrMax(copied, maxDepth - 1, MinMaxEnum.MIN);
             movesWithEstimation.add(new MoveWithEstimation(move, estimation));
+            System.out.println("LAST: " + move + ": " + estimation);
         }
         return movesWithEstimation;
     }
 
-    public double minOrMax(CheckersGrid checkersGrid, int depth, MinMaxEnum minMaxEnum) {
+    public int minOrMax(CheckersGrid checkersGrid, int depth, MinMaxEnum minMaxEnum) {
         if (depth == 0) {
-            var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor, minMaxEnum);
-            return currentEstimation;
+            return accessor.accessCheckersGrid(checkersGrid, playerColor, null);
         }
         var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
-        if (allPossibleMoves.isEmpty()) {
-            var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor, minMaxEnum);
-            return switch (minMaxEnum) {
-                case MIN -> currentEstimation - maxDepth + depth;
-                case MAX -> currentEstimation + maxDepth - depth;
-            };
-        }
-
-        Double chosenEstimation = null;
-        for (var move: allPossibleMoves) {
-            var copied = checkersGrid.copy();
-            copied.executeMove(move);
-            switch (minMaxEnum) {
-                case MIN -> {
-                    var currentEstimation = minOrMax(copied, depth - 1, MinMaxEnum.MAX);
-                    if (chosenEstimation == null || chosenEstimation > currentEstimation) {
-                        chosenEstimation = currentEstimation;
+        Integer chosenEstimation = null;
+        switch (minMaxEnum) {
+            case MIN -> {
+                if (allPossibleMoves.isEmpty()) {
+                    return Integer.MAX_VALUE;
+                }
+                for (var move: allPossibleMoves) {
+                    var copied = checkersGrid.copy();
+                    copied.executeMove(move);
+                    var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MAX);
+                    if (chosenEstimation == null || chosenEstimation > estimation) {
+                        chosenEstimation = estimation;
                     }
                 }
-                case MAX -> {
-                    var currentEstimation = minOrMax(copied, depth - 1, MinMaxEnum.MIN);
-                    if (chosenEstimation == null || chosenEstimation < currentEstimation) {
-                        chosenEstimation = currentEstimation;
+            }
+            case MAX -> {
+                if (allPossibleMoves.isEmpty()) {
+                    return Integer.MIN_VALUE;
+                }
+                for (var move: allPossibleMoves) {
+                    var copied = checkersGrid.copy();
+                    copied.executeMove(move);
+                    var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MIN);
+                    if (chosenEstimation == null || chosenEstimation < estimation) {
+                        chosenEstimation = estimation;
                     }
                 }
             }
         }
-        lastMoveCount += 1;
         return chosenEstimation;
     }
 }

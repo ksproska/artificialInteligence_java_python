@@ -9,10 +9,14 @@ class CheckersGrid {
             add(new int[]{-1, -1});
         }
     };
-    private static ArrayList<ArrayList<GridItem>> board;
+    public static ArrayList<ArrayList<GridItem>> board;
     private ArrayList<ArrayList<Figure>> figures;
     private ArrayList<Move> allCurrentPossibleMoves;
     private PlayerColor playerColor;
+
+    public ArrayList<ArrayList<Figure>> getFigures() {
+        return figures;
+    }
 
     public CheckersGrid() {
         figures = new ArrayList<>();
@@ -143,21 +147,16 @@ class CheckersGrid {
 //        setAllCurrentPossibleMoves();
     }
 
-//    public void exampleSetup2() {
-//        getGridItem("c1").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
-//        getGridItem("b2").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
-//        getGridItem("b6").setFigure(new Figure(PlayerColor.WHITE, FigureType.CROWNED));
-//        getGridItem("d6").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
-//        getGridItem("f8").setFigure(new Figure(PlayerColor.WHITE, FigureType.CROWNED));
-//
-//        getGridItem("a3").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
-//        getGridItem("h6").setFigure(new Figure(PlayerColor.BLACK, FigureType.NORMAL));
-////        getGridItem("f6").setFigure(new Figure(PlayerColor.BLACK, FigureType.CROWNED));
-//
-//        getGridItem("d4").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
-//        setAllCurrentPossibleMoves();
-////        move("c1", "d2");
-//    }
+    public void exampleSetup2() {
+        var figure = new Figure(PlayerColor.BLACK, FigureType.NORMAL);
+        var item = getGridItem("b6");
+        figures.get(item.rowId).set(item.columnId, figure);
+        item = getGridItem("c5");
+        figures.get(item.rowId).set(item.columnId, figure);
+        figure = new Figure(PlayerColor.WHITE, FigureType.NORMAL);
+        item = getGridItem("d2");
+        figures.get(item.rowId).set(item.columnId, figure);
+    }
 //    public void exampleSetup3() {
 //        getGridItem("b4").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
 //        getGridItem("b6").setFigure(new Figure(PlayerColor.WHITE, FigureType.NORMAL));
@@ -426,6 +425,10 @@ public class CheckersGridHandler {
 
     public void basicSetup() {
         checkersGrid.basicSetup();
+    }
+
+    public void exampleSetup2() {
+        checkersGrid.exampleSetup2();
     }
 
     public CheckersGrid getCheckersGrid() {

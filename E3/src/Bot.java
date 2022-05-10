@@ -9,6 +9,9 @@ public abstract class Bot implements Player {
     protected int lastMoveCount, lastMoveTime;
     protected int totalMoveCount, totalMoveTime, counter;
 
+    public CheckersGridAccessor getAccessor() {
+        return accessor;
+    }
 
     protected Bot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
         totalMoveCount = 0;

@@ -1,9 +1,7 @@
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 
 public class Human implements Player {
-    static Random random = new Random();
     static Scanner scanner = new Scanner(System.in);
 
     @Override
