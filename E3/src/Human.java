@@ -3,6 +3,11 @@ import java.util.Scanner;
 
 public class Human implements Player {
     static Scanner scanner = new Scanner(System.in);
+    public final PlayerColor playerColor;
+
+    public Human(PlayerColor playerColor) {
+        this.playerColor = playerColor;
+    }
 
     @Override
     public Move getChosenMove(CheckersGridHandler checkersGridHandler) {
@@ -18,5 +23,10 @@ public class Human implements Player {
             }
             catch (Exception ignore) {}
         }
+    }
+
+    @Override
+    public PlayerColor getPlayerColor() {
+        return playerColor;
     }
 }

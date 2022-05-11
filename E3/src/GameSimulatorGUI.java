@@ -1,30 +1,20 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class CheckersGuiGame {
+public class GameSimulatorGUI {
     private final ImageIcon whiteIcon, blackIcon, whiteCrownedIcon, blackCrownedIcon;
     private final CheckersGridHandler grid;
     private final ArrayList<ArrayList<JButton>> buttons;
     private GridItem fromItem, toItem;
-    private Bot black;
-
-    public GridItem getToItem() {
-        return toItem;
-    }
-
-    public GridItem getFromItem() {
-        return fromItem;
-    }
+    private final Bot black;
 
     public void resetInput() {
         fromItem = null;
         toItem = null;
     }
 
-    public CheckersGuiGame(CheckersGridHandler grid, Bot black) {
+    public GameSimulatorGUI(CheckersGridHandler grid, Bot black) {
         this.black = black;
         this.grid = grid;
         JFrame frame = new JFrame("Checkers");
@@ -61,17 +51,13 @@ public class CheckersGuiGame {
                 var button = buttons.get(i).get(j);
                 int finalI = i;
                 int finalJ = j;
-                button.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        if (fromItem == null) {
-                            fromItem = CheckersGrid.board.get(finalI).get(finalJ);
-                            button.setBackground(Color.RED);
-                        } else {
-                            toItem = CheckersGrid.board.get(finalI).get(finalJ);
-                            executeMove();
-                        }
-//                        System.out.println(fromItem);
-//                        System.out.println(toItem);
+                button.addActionListener(e -> {
+                    if (fromItem == null) {
+                        fromItem = CheckersGrid.board.get(finalI).get(finalJ);
+                        button.setBackground(Color.RED);
+                    } else {
+                        toItem = CheckersGrid.board.get(finalI).get(finalJ);
+                        executeMove();
                     }
                 });
             }
@@ -88,11 +74,14 @@ public class CheckersGuiGame {
             if (move.startingPoint == fromItem) {
                 if (move.toJumpItems.get(move.toJumpItems.size() - 1) == toItem) {
                     grid.executeMove(move);
+                    System.out.println("\n----------------------------------------");
+                    System.out.println("White: " + move);
                     System.out.println(grid);
                     resetInput();
-                    System.out.println(black.getAccessor().accessCheckersGrid(grid.getCheckersGrid(), PlayerColor.BLACK, null));
+//                    System.out.println(black.getAccessor().accessCheckersGrid(grid.getCheckersGrid(), PlayerColor.BLACK, null));
                     updateGrid();
                     var selectedMove = black.getChosenMove(grid);
+                    System.out.println("\n----------------------------------------");
                     System.out.println("Black: " + selectedMove);
                     grid.executeMove(selectedMove);
                     System.out.println(grid);
@@ -102,7 +91,7 @@ public class CheckersGuiGame {
             }
         }
         updateGrid();
-        System.out.println("INCORRECT INPUT\nPossible moves:");
+        System.out.println("\n" + "\u001B[43;30m" + "INCORRECT INPUT!" + "\u001B[0m" + "\nPossible moves:");
         for (var move : allMoves) {
             System.out.println(move);
         }
@@ -110,12 +99,19 @@ public class CheckersGuiGame {
     }
 
     public void updateGrid() {
+        var allJumpedTo = new ArrayList<GridItem>();
+        if (grid.getLastMove() != null) {
+            allJumpedTo = grid.getLastMove().getAllJumpedTo();
+        }
         for (int i = 0; i < CheckersGrid.board.size(); i++) {
             for (int j = 0; j < CheckersGrid.board.get(i).size(); j++) {
                 var gridItem = CheckersGrid.board.get(i).get(j);
                 var figure = grid.checkersGrid.getFigures().get(i).get(j);
                 var button = buttons.get(i).get(j);
-                if (gridItem.gridItemColor == GridItemColor.BLACK) {
+                if (allJumpedTo.contains(gridItem)) {
+                    button.setBackground(Color.CYAN);
+                }
+                else if (gridItem.gridItemColor == GridItemColor.BLACK) {
                     button.setBackground(Color.GRAY);
                 }
                 if (figure != null) {
@@ -142,10 +138,10 @@ public class CheckersGuiGame {
     }
 
     public static void main(String[] args) {
-        var botBlack = new AlphaBetaBot(new SimpleAccessor(), PlayerColor.BLACK, 9);
+        var botBlack = new BotAlphaBeta(new SimpleAccessor(), PlayerColor.BLACK, 9);
         var checkersGridHandler = new CheckersGridHandler();
         checkersGridHandler.basicSetup();
 //        checkersGridHandler.exampleSetup2();
-        new CheckersGuiGame(checkersGridHandler, botBlack);
+        new GameSimulatorGUI(checkersGridHandler, botBlack);
     }
 }

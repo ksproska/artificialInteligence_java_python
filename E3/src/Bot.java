@@ -13,6 +13,11 @@ public abstract class Bot implements Player {
         return accessor;
     }
 
+    @Override
+    public PlayerColor getPlayerColor() {
+        return playerColor;
+    }
+
     protected Bot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
         totalMoveCount = 0;
         totalMoveTime = 0;
@@ -29,6 +34,12 @@ public abstract class Bot implements Player {
 
     public ArrayList<MoveWithEstimation> getAllMovesWithEstimations(CheckersGridHandler checkersGridHandler) {
         throw new IllegalStateException("Method not implemented");
+    }
+
+    public void restartForNewGame() {
+        totalMoveCount = 0;
+        totalMoveTime = 0;
+        counter = 0;
     }
 
     public Move getBestMove(CheckersGridHandler checkersGridHandler) {
@@ -56,7 +67,7 @@ public abstract class Bot implements Player {
         }
         long end = System.currentTimeMillis();
         lastMoveTime = (int) (end - start);
-        printStats();
+//        printStats();
         totalMoveTime += lastMoveTime;
         totalMoveCount += lastMoveCount;
         counter += 1;
@@ -64,19 +75,15 @@ public abstract class Bot implements Player {
     }
 
     public void printStats() {
-        if (lastMoveCount != 0) {
-            System.out.println("Last:");
-            System.out.println("\tNodes: " + lastMoveCount);
-            System.out.println("\tTime:  " + ((double) lastMoveTime / 1000) + " sec");
-        }
-        printAverages();
+        System.out.printf("Nodes:      %.2f %n", (double) totalMoveCount / counter);
+        System.out.printf("Time (ses): %.3f %n", (double) totalMoveTime / (1000 * counter));
     }
 
     public void printAverages() {
         if (counter > 0) {
             System.out.println("Average:");
-            System.out.println("\tNodes: " + (double) totalMoveCount / counter);
-            System.out.println("\tTime:  " + (double) totalMoveTime / (1000 * counter) + " sec");
+            System.out.printf("\tNodes:      %.2f %n", (double) totalMoveCount / counter);
+            System.out.printf("\tTime (ses): %.3f %n", (double) totalMoveTime / (1000 * counter));
         }
     }
 }

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
-public class AlphaBetaBot extends Bot {
-    protected AlphaBetaBot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
+public class BotAlphaBeta extends Bot {
+    protected BotAlphaBeta(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
         super(accessor, playerColor, maxDepth);
     }
 
@@ -16,7 +16,7 @@ public class AlphaBetaBot extends Bot {
             copied.executeMove(move);
             var estimation = minOrMax(copied, maxDepth - 1, MinMaxEnum.MIN, alpha, beta);
             movesWithEstimation.add(new MoveWithEstimation(move, estimation));
-            System.out.println("LAST: " + move + ": " + estimation);
+//            System.out.println("LAST: " + move + ": " + estimation);
             if (chosenEstimation < estimation) {
                 chosenEstimation = estimation;
             }

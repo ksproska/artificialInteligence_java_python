@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
-public class MinMaxBot extends Bot {
-    protected MinMaxBot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
+public class BotMinMax extends Bot {
+    protected BotMinMax(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
         super(accessor, playerColor, maxDepth);
     }
 
@@ -14,7 +14,7 @@ public class MinMaxBot extends Bot {
             copied.executeMove(move);
             var estimation = minOrMax(copied, maxDepth - 1, MinMaxEnum.MIN);
             movesWithEstimation.add(new MoveWithEstimation(move, estimation));
-            System.out.println("LAST: " + move + ": " + estimation);
+//            System.out.println("LAST: " + move + ": " + estimation);
         }
         return movesWithEstimation;
     }
@@ -58,6 +58,7 @@ public class MinMaxBot extends Bot {
                 }
             }
         }
+        lastMoveCount += 1;
         return chosenEstimation;
     }
 }
