@@ -8,6 +8,7 @@ public class GameSimulatorGUI {
     private final ArrayList<ArrayList<JButton>> buttons;
     private GridItem fromItem, toItem;
     private final Bot black;
+    private final JFrame frame;
 
     public void resetInput() {
         fromItem = null;
@@ -17,7 +18,7 @@ public class GameSimulatorGUI {
     public GameSimulatorGUI(CheckersGridHandler grid, Bot black) {
         this.black = black;
         this.grid = grid;
-        JFrame frame = new JFrame("Checkers");
+        frame = new JFrame("Checkers");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400,400);
         var whiteIconTemp = new ImageIcon("F:\\sztuczna_inteligencja\\E3\\src\\images\\white.png");
@@ -80,12 +81,31 @@ public class GameSimulatorGUI {
                     resetInput();
 //                    System.out.println(black.getAccessor().accessCheckersGrid(grid.getCheckersGrid(), PlayerColor.BLACK, null));
                     updateGrid();
+                    if (grid.isGameFinished()) {
+                        System.out.println("WINNER: " + grid.getWinner());
+                        black.printStats();
+//                        for (var row : buttons) {
+//                            for (var button : row) {
+//                                button.setEnabled(false);
+//                            }
+//                        }
+                        return;
+                    }
                     var selectedMove = black.getChosenMove(grid);
                     System.out.println("\n----------------------------------------");
                     System.out.println("Black: " + selectedMove);
                     grid.executeMove(selectedMove);
                     System.out.println(grid);
                     updateGrid();
+                    if (grid.isGameFinished()) {
+                        System.out.println("WINNER: " + grid.getWinner());
+                        black.printStats();
+//                        for (var row : buttons) {
+//                            for (var button : row) {
+//                                button.setEnabled(false);
+//                            }
+//                        }
+                    }
                     return;
                 }
             }
@@ -138,7 +158,7 @@ public class GameSimulatorGUI {
     }
 
     public static void main(String[] args) {
-        var botBlack = new BotAlphaBeta(new SimpleAccessor(), PlayerColor.BLACK, 9);
+        var botBlack = new BotAlphaBeta(new SimpleAccessor(), PlayerColor.BLACK, 8);
         var checkersGridHandler = new CheckersGridHandler();
         checkersGridHandler.basicSetup();
 //        checkersGridHandler.exampleSetup2();
