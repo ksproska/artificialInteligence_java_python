@@ -12,17 +12,14 @@ public class AlphaBetaBot extends Bot {
         var chosenEstimation = Integer.MIN_VALUE;
         ArrayList<MoveWithEstimation> movesWithEstimation = new ArrayList<>();
         for (var move : checkersGridHandler.getAllCurrentPossibleMoves()) {
-//            if (chosenEstimation <= beta) {
-                var copied = checkersGridHandler.getCheckersGrid().copy();
-                copied.executeMove(move);
-                var estimation = minOrMax(copied, maxDepth - 1, MinMaxEnum.MIN, alpha, beta);
-                movesWithEstimation.add(new MoveWithEstimation(move, estimation));
-                System.out.println("LAST: " + move + ": " + estimation);
-                if (chosenEstimation < estimation) {
-                    chosenEstimation = estimation;
-                }
-                if (alpha < estimation) { alpha = estimation; }
-//            }
+            var copied = checkersGridHandler.getCheckersGrid().copy();
+            copied.executeMove(move);
+            var estimation = minOrMax(copied, maxDepth - 1, MinMaxEnum.MIN, alpha, beta);
+            movesWithEstimation.add(new MoveWithEstimation(move, estimation));
+            System.out.println("LAST: " + move + ": " + estimation);
+            if (chosenEstimation < estimation) {
+                chosenEstimation = estimation;
+            }
         }
         return movesWithEstimation;
     }
@@ -39,16 +36,20 @@ public class AlphaBetaBot extends Bot {
                 case MAX -> currentEstimation + maxDepth - depth;
             };
         }
+        int chosenEstimation = 0;
+        switch (minMaxEnum) {
+            case MIN -> chosenEstimation = Integer.MAX_VALUE;
+            case MAX -> chosenEstimation = Integer.MIN_VALUE;
+        }
 
-        Integer chosenEstimation = null;
         for (var move: allPossibleMoves) {
             var copied = checkersGrid.copy();
             copied.executeMove(move);
             switch (minMaxEnum) {
                 case MIN -> {
-                    if (chosenEstimation == null || chosenEstimation >= alpha) {
+                    if (chosenEstimation >= alpha) {
                         var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MAX, alpha, beta);
-                        if (chosenEstimation == null || chosenEstimation > estimation) {
+                        if (chosenEstimation > estimation) {
                             chosenEstimation = estimation;
                         }
 
@@ -56,9 +57,9 @@ public class AlphaBetaBot extends Bot {
                     }
                 }
                 case MAX -> {
-                    if (chosenEstimation == null || chosenEstimation <= beta) {
+                    if (chosenEstimation <= beta) {
                         var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MIN, alpha, beta);
-                        if (chosenEstimation == null || chosenEstimation < estimation) {
+                        if (chosenEstimation < estimation) {
                             chosenEstimation = estimation;
                         }
 

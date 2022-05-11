@@ -24,30 +24,35 @@ public class MinMaxBot extends Bot {
             return accessor.accessCheckersGrid(checkersGrid, playerColor, null);
         }
         var allPossibleMoves = checkersGrid.getAllCurrentPossibleMoves();
-        Integer chosenEstimation = null;
+        if (allPossibleMoves.isEmpty()) {
+            var currentEstimation = accessor.accessCheckersGrid(checkersGrid, playerColor, minMaxEnum);
+            return switch (minMaxEnum) {
+                case MIN -> currentEstimation - maxDepth + depth;
+                case MAX -> currentEstimation + maxDepth - depth;
+            };
+        }
+        int chosenEstimation = 0;
+        switch (minMaxEnum) {
+            case MIN -> chosenEstimation = Integer.MAX_VALUE;
+            case MAX -> chosenEstimation = Integer.MIN_VALUE;
+        }
         switch (minMaxEnum) {
             case MIN -> {
-                if (allPossibleMoves.isEmpty()) {
-                    return Integer.MAX_VALUE;
-                }
                 for (var move: allPossibleMoves) {
                     var copied = checkersGrid.copy();
                     copied.executeMove(move);
                     var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MAX);
-                    if (chosenEstimation == null || chosenEstimation > estimation) {
+                    if (chosenEstimation > estimation) {
                         chosenEstimation = estimation;
                     }
                 }
             }
             case MAX -> {
-                if (allPossibleMoves.isEmpty()) {
-                    return Integer.MIN_VALUE;
-                }
                 for (var move: allPossibleMoves) {
                     var copied = checkersGrid.copy();
                     copied.executeMove(move);
                     var estimation = minOrMax(copied, depth - 1, MinMaxEnum.MIN);
-                    if (chosenEstimation == null || chosenEstimation < estimation) {
+                    if (chosenEstimation < estimation) {
                         chosenEstimation = estimation;
                     }
                 }
