@@ -17,12 +17,12 @@ public class ComplexGridAccessor extends CheckersGridAccessor {
 
     @Override
     public int accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor, MinMaxEnum whoseTurn) {
-//        if (whoseTurn != null) {
-//            return switch (whoseTurn) {
-//                case MIN -> Integer.MAX_VALUE;
-//                case MAX -> Integer.MIN_VALUE;
-//            };
-//        }
+        if (whoseTurn != null) {
+            return switch (whoseTurn) {
+                case MIN -> Integer.MAX_VALUE;
+                case MAX -> Integer.MIN_VALUE;
+            };
+        }
 
         int countCurrent = 0;
 

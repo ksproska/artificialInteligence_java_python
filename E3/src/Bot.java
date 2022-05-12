@@ -5,18 +5,9 @@ public abstract class Bot implements Player {
     static Random random = new Random();
     final protected CheckersGridAccessor accessor;
     final protected PlayerColor playerColor;
-    final Integer maxDepth;
+    final protected Integer maxDepth;
     protected int lastMoveCount, lastMoveTime;
     protected int totalMoveCount, totalMoveTime, counter;
-
-    public CheckersGridAccessor getAccessor() {
-        return accessor;
-    }
-
-    @Override
-    public PlayerColor getPlayerColor() {
-        return playerColor;
-    }
 
     protected Bot(CheckersGridAccessor accessor, PlayerColor playerColor, Integer maxDepth) {
         totalMoveCount = 0;
@@ -85,5 +76,37 @@ public abstract class Bot implements Player {
             System.out.printf("\tNodes:      %.2f %n", (double) totalMoveCount / counter);
             System.out.printf("\tTime (ses): %.3f %n", (double) totalMoveTime / (1000 * counter));
         }
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
+    }
+
+
+    public double getAverageNodesVisited() {
+        return round((double) totalMoveCount / counter, 2);
+    }
+
+    public double getAverageTimeForMove() {
+        return round((double) totalMoveTime / (1000 * counter), 2);
+    }
+
+
+    public Integer getMaxDepth() {
+        return maxDepth;
+    }
+
+    public CheckersGridAccessor getAccessor() {
+        return accessor;
+    }
+
+    @Override
+    public PlayerColor getPlayerColor() {
+        return playerColor;
     }
 }

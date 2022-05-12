@@ -3,12 +3,12 @@ public class SimpleAccessor extends CheckersGridAccessor {
 
     @Override
     public int accessCheckersGrid(CheckersGrid checkersGrid, PlayerColor playerColor, MinMaxEnum whoseTurn) {
-//        if (whoseTurn != null) {
-//            return switch (whoseTurn) {
-//                case MIN -> Integer.MIN_VALUE;
-//                case MAX -> Integer.MAX_VALUE;
-//            };
-//        }
+        if (whoseTurn != null) {
+            return switch (whoseTurn) {
+                case MIN -> Integer.MIN_VALUE;
+                case MAX -> Integer.MAX_VALUE;
+            };
+        }
         int countCurrent = 0;
 
         for (var figure : checkersGrid.getAllFilledItems()) {
