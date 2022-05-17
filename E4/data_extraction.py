@@ -47,6 +47,7 @@ book_handler.remove_books_with_all_genres("Children's literature", 'Young adult 
 
 book_handler.remove_genre_if_count(lambda x: x < 300)
 # book_handler.remove_genre_if_count(lambda x: x > 1000)
+book_handler.remove_books_with_description_less_than(30)
 
 print(book_handler)
 book_handler.write_to_csv(f"normalised_genres_{str(datetime.now()).replace(':', '-')}.csv")

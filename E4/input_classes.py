@@ -6,7 +6,6 @@ class Book:
         self.id = id
         self.title = title
         self.description = description.replace('\n', '')
-        # self.word_count = {}
         self.genres = sorted(genres)
 
     def __str__(self):
@@ -19,16 +18,9 @@ class Book:
         self.remove_genre(to_replace)
         self.genres.append(replacement)
 
-    # def preprocess_description(self, preprocessing_fun):
-    #     self.word_count = preprocessing_fun(self.description)
-
     @property
     def number_of_genres(self):
         return len(self.genres)
-
-    # @property
-    # def words(self):
-    #     return self.word_count.keys()
 
     def contains_genre(self, genre):
         return self.genres.count(genre) != 0
@@ -49,7 +41,6 @@ class BookHandler:
                 self.genres_dict[genre] = 1
             else:
                 self.genres_dict[genre] += 1
-        # print(f"{len(self.book_collection)}: {other}")
 
     def remove_genre(self, genre):
         del self.genres_dict[genre]
@@ -134,17 +125,6 @@ class BookHandler:
                         del self.genres_dict[g]
         self.book_collection = [b for b in self.book_collection if b.number_of_genres > 0]
 
-    def preprocess_all(self, preprocess_fun):
-        counter = 1
-        for book in self.book_collection:
-            book.preprocess_description(preprocess_fun)
-            if counter % 100 == 0:
-                print(f"{counter}/{len(self.book_collection)}\t" + "*" * (int(60 * counter / len(self.book_collection)))
-                      + "-" * (int(60 * (len(self.book_collection) - counter) / len(self.book_collection))))
-                # print(book.description)
-                # print(book.words)
-            counter += 1
-
     def get_words_frequency_in_books(self):
         all_words_frequency = {}
         for book in self.book_collection:
@@ -155,3 +135,12 @@ class BookHandler:
                     all_words_frequency[word] += 1
         all_words_frequency = {k: v for k, v in sorted(all_words_frequency.items(), key=lambda item: item[1])}
         return all_words_frequency
+
+    def remove_books_with_description_less_than(self, x):
+        books_to_remove = [b for b in self.book_collection if len(b.description) < x]
+        for book in books_to_remove:
+            for g in book.genres:
+                self.genres_dict[g] -= 1
+                if self.genres_dict[g] == 0:
+                    del self.genres_dict[g]
+        self.book_collection = [b for b in self.book_collection if len(b.description) >= x]
