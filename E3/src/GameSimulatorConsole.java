@@ -96,26 +96,32 @@ public class GameSimulatorConsole {
                     ((Bot) black).getAverageNodesVisited(), ((Bot) black).getAverageTimeForMove(), ((Bot) black).maxDepth, ((Bot) black).accessor,
                     grid.getWinner());
         }
+        if (white instanceof Bot) {
+            return new StatsContainer(
+                    ((Bot) white).getAverageNodesVisited(), ((Bot) white).getAverageTimeForMove(), ((Bot) white).maxDepth, ((Bot) white).accessor,
+                    0, 0, 0, ((Bot) white).accessor,
+                    grid.getWinner());
+        }
         return null;
     }
 
     public static void main(String[] args) throws IOException {
 //        var human = new Human(PlayerColor.BLACK);
-        var randomPlayer = new RandomPlayer(PlayerColor.BLACK);
-        PrintWriter writer = new PrintWriter("F:\\sztuczna_inteligencja\\E3\\src\\stats\\stats_" + (new Timestamp(System.currentTimeMillis())).toString().replace(":", ".") + ".csv", "UTF-8");
-        writer.println("sep=\t");
-        writer.println(StatsContainer.columnsNames());
-        for (var depth : new int[]{4, 5, 6, 7}) {
+//        var randomPlayer = new RandomPlayer(PlayerColor.BLACK);
+//        PrintWriter writer = new PrintWriter("F:\\sztuczna_inteligencja\\E3\\src\\stats\\stats_" + (new Timestamp(System.currentTimeMillis())).toString().replace(":", ".") + ".csv", "UTF-8");
+//        writer.println("sep=\t");
+//        writer.println(StatsContainer.columnsNames());
+        for (var depth : new int[]{7}) {
             var botWhite = new BotAlphaBeta(new SimpleAccessor(), PlayerColor.WHITE, depth);
             var botBlack = new BotAlphaBeta(new ComplexGridAccessor(), PlayerColor.BLACK, depth);
             System.out.println("DEPTH: " + depth);
             for (int i = 0; i < 30; i++) {
                 System.out.println("CURRENT: " + i);
                 var stats = runGame(botWhite, botBlack);
-                writer.println(stats.toString().replace(".", ","));
+//                writer.println(stats.toString().replace(".", ","));
             }
-            writer.println();
+//            writer.println();
         }
-        writer.close();
+//        writer.close();
     }
 }
