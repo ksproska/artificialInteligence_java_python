@@ -57,7 +57,7 @@ def description_preprocessing(original_text: str):
     #                         ', ', '. ', ': ', ' # ', ' * ', ') ', ' (', '! ', ' \'', '\' ', '; ')
     # text = text.lower()
     # text = re.sub(" \d+ ", " ", text)
-    non_repeating_words = set()
+    non_repeating_words = {}
     tokenized_text = nltk.word_tokenize(original_text)
     for word_tokenized in nltk.pos_tag(tokenized_text):
         word = word_tokenized[0]
@@ -69,11 +69,12 @@ def description_preprocessing(original_text: str):
                 # print(word)
             elif word_type_letter == 'j':
                 word = lemmatizer.lemmatize(word, 'a')
-            if word[0].isalpha():
+            if all([letter.isalpha() or letter == '-' for letter in word]) and any([letter.isalpha() for letter in word]):
                 word = word.lower()
-                # print(f'{word_type}\t{word}')
-                non_repeating_words.add(word)
-    text = ' '.join(sorted(non_repeating_words))
-    return text
+                if non_repeating_words.get(word) is None:
+                    non_repeating_words[word] = 1
+                else:
+                    non_repeating_words[word] += 1
+    return non_repeating_words
 
 

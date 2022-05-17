@@ -1,15 +1,12 @@
 from pprint import pprint
 
-from preprocessing_methods import description_preprocessing
-
 
 class Book:
     def __init__(self, id, title, description, genres):
         self.id = id
         self.title = title
-        # print(len(description))
-        self.description = description
-        # print(len(self.description))
+        self.description = description.replace('\n', '')
+        # self.word_count = {}
         self.genres = sorted(genres)
 
     def __str__(self):
@@ -22,13 +19,16 @@ class Book:
         self.remove_genre(to_replace)
         self.genres.append(replacement)
 
-    def preprocess_description(self, preprocessing_fun):
-        self.description = preprocessing_fun(self.description)
-        # print(f"preprocessed: {self}")
+    # def preprocess_description(self, preprocessing_fun):
+    #     self.word_count = preprocessing_fun(self.description)
 
     @property
     def number_of_genres(self):
         return len(self.genres)
+
+    # @property
+    # def words(self):
+    #     return self.word_count.keys()
 
     def contains_genre(self, genre):
         return self.genres.count(genre) != 0
@@ -71,7 +71,6 @@ class BookHandler:
                + "\n".join([f"{e[0].ljust(42)}{e[1]}" for e in sorted(self.genres_dict.items(), key=lambda item: item[1], reverse=True)])
 
     def write_to_csv(self, filename):
-        count = 0
         with open(filename, "w", encoding="utf8") as f:
             f.write("sep=\t\n")
             f.write("id\ttitle\t")
@@ -138,9 +137,21 @@ class BookHandler:
     def preprocess_all(self, preprocess_fun):
         counter = 1
         for book in self.book_collection:
+            book.preprocess_description(preprocess_fun)
             if counter % 100 == 0:
                 print(f"{counter}/{len(self.book_collection)}\t" + "*" * (int(60 * counter / len(self.book_collection)))
                       + "-" * (int(60 * (len(self.book_collection) - counter) / len(self.book_collection))))
-            book.preprocess_description(preprocess_fun)
+                # print(book.description)
+                # print(book.words)
             counter += 1
 
+    def get_words_frequency_in_books(self):
+        all_words_frequency = {}
+        for book in self.book_collection:
+            for word in book.words:
+                if all_words_frequency.get(word) is None:
+                    all_words_frequency[word] = 1
+                else:
+                    all_words_frequency[word] += 1
+        all_words_frequency = {k: v for k, v in sorted(all_words_frequency.items(), key=lambda item: item[1])}
+        return all_words_frequency
