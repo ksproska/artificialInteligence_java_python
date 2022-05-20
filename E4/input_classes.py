@@ -57,7 +57,7 @@ class BookHandler:
             self.remove_genre(genre)
 
     def __str__(self):
-        return f"Number of books: {len(self.book_collection)}\nAverage number of genres per book {sum([x.number_of_genres for x in self.book_collection])/len(self.book_collection)}" \
+        return f"Number of books: {len(self.book_collection)}\nAverage description size {sum([len(x.description) for x in self.book_collection])/len(self.book_collection)}" \
                f"\nGenres ({len(self.genres_dict)}) count:\n" \
                + "\n".join([f"{e[0].ljust(42)}{e[1]}" for e in sorted(self.genres_dict.items(), key=lambda item: item[1], reverse=True)])
 

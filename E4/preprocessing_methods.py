@@ -22,16 +22,12 @@ WH	wh determiner	who, which, when, what, where, how
 '''
 
 import re
-# import nltk
-# nltk.download('wordnet')
-# import nltk
-# nltk.download('omw-1.4')
-# import nltk
-# nltk.download('averaged_perceptron_tagger')
 import nltk
+# nltk.download('wordnet')
+# nltk.download('omw-1.4')
+# nltk.download('averaged_perceptron_tagger')
 from nltk.stem.wordnet import WordNetLemmatizer
 # from pattern.text.en import singularize
-
 
 
 def replace_all_with(text, replacement, *to_replace) -> str:
@@ -40,7 +36,10 @@ def replace_all_with(text, replacement, *to_replace) -> str:
     return text
 
 
-def description_preprocessing(original_text: str):
+lemmatizer = WordNetLemmatizer()
+
+
+def description_preprocessing(original_text: str) -> str:
     MODAL = 'MD'
     COMMA = ','
     DOT = '.'
@@ -50,14 +49,13 @@ def description_preprocessing(original_text: str):
     POS = 'POS' # '
     WHICH = 'WDT'
     PREPOSITION = 'PRP$'
-    lemmatizer = WordNetLemmatizer()
     # text = replace_all_with(text, '',
     #                         '-\n', '\"', '\n', '\t', '.')
     # text = replace_all_with(text, " ",
     #                         ', ', '. ', ': ', ' # ', ' * ', ') ', ' (', '! ', ' \'', '\' ', '; ')
     # text = text.lower()
     # text = re.sub(" \d+ ", " ", text)
-    non_repeating_words = {}
+    repeating_words = []
     tokenized_text = nltk.word_tokenize(original_text)
     for word_tokenized in nltk.pos_tag(tokenized_text):
         word = word_tokenized[0]
@@ -71,10 +69,16 @@ def description_preprocessing(original_text: str):
                 word = lemmatizer.lemmatize(word, 'a')
             if all([letter.isalpha() or letter == '-' for letter in word]) and any([letter.isalpha() for letter in word]):
                 word = word.lower()
-                if non_repeating_words.get(word) is None:
-                    non_repeating_words[word] = 1
-                else:
-                    non_repeating_words[word] += 1
-    return non_repeating_words
+                repeating_words.append(word)
+                # if repeating_words.get(word) is None:
+                #     repeating_words[word] = 1
+                # else:
+                #     repeating_words[word] += 1
+    return " ".join(repeating_words)
 
 
+# def description_preprocessing_as_text(original_text: str):
+#     text = ""
+#     dict_data = description_preprocessing(original_text)
+#     for word in dict_data:
+#         text += (word + " ")*dict_data[word]

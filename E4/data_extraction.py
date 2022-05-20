@@ -9,6 +9,7 @@ for line in splitted_lines:
     next_book = Book(*line)
     book_handler.add_book(next_book)
 
+print(book_handler)
 book_handler.remove_genre("Fiction")
 book_handler.remove_genre("Speculative fiction")
 book_handler.remove_genre("Novel")
@@ -48,6 +49,13 @@ book_handler.remove_books_with_all_genres("Children's literature", 'Young adult 
 book_handler.remove_genre_if_count(lambda x: x < 300)
 # book_handler.remove_genre_if_count(lambda x: x > 1000)
 book_handler.remove_books_with_description_less_than(30)
+book_handler.remove_genre_if_count(lambda x: x < 1000)
+book_handler.remove_books_with_all_genres("Science Fiction", "Fantasy")
+book_handler.remove_books_with_all_genres("Science Fiction", "Children's literature")
+book_handler.remove_books_with_all_genres("Science Fiction", "Crime Fiction")
+book_handler.remove_books_with_all_genres("Fantasy", "Children's literature")
+book_handler.remove_books_with_all_genres("Fantasy", "Crime Fiction")
+book_handler.remove_books_with_all_genres("Children's literature", "Crime Fiction")
 
 print(book_handler)
 book_handler.write_to_csv(f"normalised_genres_{str(datetime.now()).replace(':', '-')}.csv")

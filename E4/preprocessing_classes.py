@@ -1,9 +1,11 @@
 import time
+import numpy as np
 
 
 class PreprocessingBook:
     OKBLUE = '\033[94m'
     ENDC = '\033[0m'
+    OKCYAN = '\033[96m'
 
     def __init__(self, id, title, description, *genres):
         self.id = id
@@ -15,22 +17,31 @@ class PreprocessingBook:
     def preprocess_description(self, preprocessing_fun):
         self.words_dictionary = preprocessing_fun(self.description)
 
-    def get_colored_genres(self):
-        return "\t".join([str(x) for x in self.genres]).replace("0", "☐").replace("1", self.OKBLUE + "☒" + self.ENDC)
+    def get_colored_genres(self, joiner='\t'):
+        return joiner.join([str(x) for x in self.genres]).replace("0", "◦").replace("1", self.OKBLUE + "X" + self.ENDC)
+
+    def get_colored_genre_letters(self, letters, joiner='\t'):
+        to_str = ""
+        for i in range(len(self.genres)):
+            if self.genres[i] == 1:
+                to_str += self.OKBLUE + letters[i] + self.ENDC + joiner
+            else:
+                to_str += "◦" + joiner
+        return to_str
 
     def __str__(self):
         return f"{self.id.ljust(10)} " + self.title.ljust(20)[:20] \
                + f"\t" + self.get_colored_genres() \
                + f"\t{self.description.ljust(40)[:40]}..."
 
-    def get_colored_for_words(self, just_len, *words):
+    def get_colored_for_words(self, just_len, letters, joiner, *words):
         all_string = ""
         for word in words:
             if self.words_dictionary.get(word) is None:
-                all_string += "☐".ljust(just_len)
+                all_string += "◦".ljust(just_len)
             else:
-                all_string += self.OKBLUE + "☒".ljust(just_len) + self.ENDC
-        return self.title.ljust(20)[:20] + '  ' + all_string
+                all_string += self.OKCYAN + word.ljust(just_len) + self.ENDC
+        return self.title.ljust(20)[:20] + "  " + all_string + "\t" + self.get_colored_genre_letters(letters, joiner)
 
     def contains_word(self, word):
         return self.words_dictionary.get(word) is not None
@@ -43,11 +54,13 @@ class PreprocessingHandler:
         self.genres = []
         self.all_words = {}
 
-    def load_file(self, filename):
+    def load_file(self, filename, part, num_of_parts):
         with open(filename, encoding='utf8') as f:
             f.readline()
             self.genres = f.readline().split('\t')[2:-1]
-            for line in f.readlines():
+            lines = f.readlines()
+            for line in np.array_split(lines, num_of_parts)[part - 1]:
+                # print(line)
                 splitted = line.split('\t')
                 next_book = PreprocessingBook(*splitted[:2], splitted[-1], *[int(x) for x in splitted[2:-1]])
                 self.add_book(next_book)
@@ -99,10 +112,12 @@ class PreprocessingHandler:
         return words
 
     def display_for_words(self, *words):
+        print(f"Number of books: {len(self.book_collection)}\n" + "\n".join([f"{g[0]} = {g}" for g in self.genres]))
         max_len = max([len(w) for w in words]) + 2
-        print(' '* 22 + ''.join([str(w).ljust(max_len) for w in words]))
+        print((' '* 22 + ''.join([str(w).ljust(max_len) for w in words])).ljust(22 + max_len*len(words)) + '  '
+              + " ".join([g[0] for g in self.genres]))
         for book in self.book_collection:
-            print(book.get_colored_for_words(max_len - 1, *words))
+            print(book.get_colored_for_words(max_len, [g[0] for g in self.genres], ' ', *words))
 
     def write_to_csv(self, filename):
         print(f"Saving to {filename}...")

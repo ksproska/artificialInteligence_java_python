@@ -21,13 +21,15 @@ public class GameSimulatorGUI {
         frame = new JFrame("Checkers");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400,400);
-        var whiteIconTemp = new ImageIcon("D:\\sztuczna_inteligencja\\E3\\src\\images\\white.png");
+        var current_dir = System.getProperty("user.dir");
+        System.out.println(current_dir);
+        var whiteIconTemp = new ImageIcon(current_dir + "\\src\\images\\white.png");
         whiteIcon = new ImageIcon(whiteIconTemp.getImage().getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH));
-        var whiteCrownedIconTemp = new ImageIcon("D:\\sztuczna_inteligencja\\E3\\src\\images\\white_crowned.png");
+        var whiteCrownedIconTemp = new ImageIcon(current_dir + "\\src\\images\\white_crowned.png");
         whiteCrownedIcon = new ImageIcon(whiteCrownedIconTemp.getImage().getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH));
-        var blackIconTemp = new ImageIcon("D:\\sztuczna_inteligencja\\E3\\src\\images\\black.png");
+        var blackIconTemp = new ImageIcon(current_dir + "\\src\\images\\black.png");
         blackIcon = new ImageIcon(blackIconTemp.getImage().getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH));
-        var blackIconCrownedTemp = new ImageIcon("D:\\sztuczna_inteligencja\\E3\\src\\images\\black_crowned.png");
+        var blackIconCrownedTemp = new ImageIcon(current_dir + "\\src\\images\\black_crowned.png");
         blackCrownedIcon = new ImageIcon(blackIconCrownedTemp.getImage().getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH));
 
         buttons = new ArrayList<ArrayList<JButton>>();
@@ -158,7 +160,7 @@ public class GameSimulatorGUI {
     }
 
     public static void main(String[] args) {
-        var botBlack = new BotAlphaBeta(new SimpleAccessor(), PlayerColor.BLACK, 7);
+        var botBlack = new BotAlphaBeta(new SimpleAccessor(), PlayerColor.BLACK, 9);
         var checkersGridHandler = new CheckersGridHandler();
         checkersGridHandler.basicSetup();
 //        checkersGridHandler.exampleSetup2();
