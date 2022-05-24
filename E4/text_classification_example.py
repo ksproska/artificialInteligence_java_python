@@ -3,13 +3,16 @@ from preprocessing_methods import description_preprocessing
 
 model, vectorizer, categories = get_model_with_vectorizer()
 
-sample_text = "Just after midnight, a snowdrift stops the Orient Express in its tracks as it travels through the " \
-              "mountainous Balkans. The luxurious train is surprisingly full for the time of the year but, " \
-              "by the morning, it is one passenger fewer. An American tycoon lies dead in his compartment, " \
-              "stabbed a dozen times, his door locked from the inside. One of the passengers is none other than " \
-              "detective Hercule Poirot. On vacation. Isolated and with a killer in their midst, Poirot must identify " \
-              "the murderer—in case he or she decides to strike again "
-should_be_label = "Crime"
+sample_text = "Inspector Harry Hole of the Oslo Crime Squad is dispatched to Sydney to observe a murder case. Harry " \
+              "is free to offer assistance, but he has firm instructions to stay out of trouble. The victim is a " \
+              "twenty-three year old Norwegian woman who is a minor celebrity back home. Never one to sit on the " \
+              "sidelines, Harry befriends one of the lead detectives, and one of the witnesses, as he is drawn deeper " \
+              "into the case. Together, they discover that this is only the latest in a string of unsolved murders, " \
+              "and the pattern points toward a psychopath working his way across the country. As they circle closer " \
+              "and closer to the killer, Harry begins to fear that no one is safe, least of all those investigating " \
+              "the case. "
+print("\nTested example: ", sample_text[:70], '...')
+should_be_label = "Crime fiction"
 preprocessed_text = description_preprocessing(sample_text)
 text_features = vectorizer.transform([preprocessed_text]).toarray()
 prediction = model.predict(text_features)[0]
