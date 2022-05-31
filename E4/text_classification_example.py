@@ -1,7 +1,38 @@
+from datetime import datetime
+
+from sklearn.linear_model import SGDClassifier
+from sklearn.svm import LinearSVC, LinearSVR, NuSVC, NuSVR, SVC
+from sklearn.naive_bayes import GaussianNB, BernoulliNB, ComplementNB, CategoricalNB, MultinomialNB
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor, ExtraTreeClassifier, ExtraTreeRegressor
 from creating_models import get_model_with_vectorizer
 from preprocessing_methods import description_preprocessing
+from nltk.corpus import stopwords
 
-model, vectorizer, categories = get_model_with_vectorizer()
+# https://scikit-learn.org/stable/modules/svm.html
+# https://scikit-learn.org/stable/modules/naive_bayes.html
+
+# Kernel Function - method used to take data as input and transform it
+# into the required form of processing data
+
+model, vectorizer, categories = get_model_with_vectorizer(
+    # model=GaussianNB() # general-purpose kernel
+    model=MultinomialNB() # P(spam|money) = P(spam) * P(money|spam) / P(money) - Bayes theorem
+    # model=BernoulliNB() # same as MultinomialNB, but binary
+    # model=ComplementNB() # particularly suited for imbalanced data sets
+    # model=CategoricalNB(min_categories=1) # each feature, has its own categorical distribution
+
+    # model=LinearSVC()
+    # model=SVC(kernel="linear")
+    # model=SVC(kernel="polynomial") - pl wielomian, with parameter d for polynomial degree
+    # model=SVC(kernel="rbf") # Gaussian radial basis function (RBF) - in Gaussian no sigma parameter, here there is
+    # model=SVC(kernel="sigmoid") # f(x) = 1/(1+e^-x) - for each x returns value between (0, 1)
+    # model=SVC(kernel="precomputed")
+    # model=NuSVC()
+
+    # model=LinearSVR()
+    # model=SGDClassifier()
+    # model=NuSVR()
+)
 
 sample_text = "Inspector Harry Hole of the Oslo Crime Squad is dispatched to Sydney to observe a murder case. Harry " \
               "is free to offer assistance, but he has firm instructions to stay out of trouble. The victim is a " \
