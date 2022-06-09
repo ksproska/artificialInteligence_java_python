@@ -40,6 +40,7 @@ lemmatizer = WordNetLemmatizer()
 
 
 def description_preprocessing(original_text: str) -> str:
+    # text elements that should be excluded from text since they have no impact on the content
     MODAL = 'MD'
     COMMA = ','
     DOT = '.'
@@ -49,36 +50,24 @@ def description_preprocessing(original_text: str) -> str:
     POS = 'POS' # '
     WHICH = 'WDT'
     PREPOSITION = 'PRP$'
-    # text = replace_all_with(text, '',
-    #                         '-\n', '\"', '\n', '\t', '.')
-    # text = replace_all_with(text, " ",
-    #                         ', ', '. ', ': ', ' # ', ' * ', ') ', ' (', '! ', ' \'', '\' ', '; ')
-    # text = text.lower()
-    # text = re.sub(" \d+ ", " ", text)
+    DT = 'DT'
+    IN = 'IN'
+    CC = 'CC'
+    PRP = 'PRP'
     repeating_words = []
     tokenized_text = nltk.word_tokenize(original_text)
     for word_tokenized in nltk.pos_tag(tokenized_text):
         word = word_tokenized[0]
         word_type = word_tokenized[1]
-        if word_type not in ['DT', 'IN', 'CC', 'PRP', NUMBER, WHEN_ADVERB, TO, MODAL, COMMA, DOT, POS, WHICH, PREPOSITION]:
+        if word_type not in [DT, IN, CC, PRP, NUMBER, WHEN_ADVERB,
+                             TO, MODAL, COMMA, DOT, POS, WHICH, PREPOSITION]:
             word_type_letter = word_type[0].lower()
-            if word_type_letter in ['v', 'n', 'r']:
+            if word_type_letter in ['v', 'n', 'r']: # verb, noun, adverb
                 word = lemmatizer.lemmatize(word, word_type_letter)
-                # print(word)
-            elif word_type_letter == 'j':
+            elif word_type_letter == 'j':           # adjective
                 word = lemmatizer.lemmatize(word, 'a')
-            if all([letter.isalpha() or letter == '-' for letter in word]) and any([letter.isalpha() for letter in word]):
+            if all([letter.isalpha() or letter == '-' for letter in word]) \
+                    and any([letter.isalpha() for letter in word]):
                 word = word.lower()
                 repeating_words.append(word)
-                # if repeating_words.get(word) is None:
-                #     repeating_words[word] = 1
-                # else:
-                #     repeating_words[word] += 1
     return " ".join(repeating_words)
-
-
-# def description_preprocessing_as_text(original_text: str):
-#     text = ""
-#     dict_data = description_preprocessing(original_text)
-#     for word in dict_data:
-#         text += (word + " ")*dict_data[word]
