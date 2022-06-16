@@ -16,7 +16,7 @@ Sample genetic algorithm [implementation](E1/src/GeneticAlgorithm.java).
 
 # [CSP](E2)
 CSP implemented for solving two problems:
-## Binary problem (and solution)
+## Binary problem (and example solution)
 - 0 or 1 for each cell
 - max sequence of same numbers of length less than 3
 - each row and column is unique
@@ -25,7 +25,7 @@ CSP implemented for solving two problems:
 ![image](https://user-images.githubusercontent.com/61067969/166144568-c14062ca-f384-4ba3-bdf1-bda149fd2225.png)
 ![image](https://user-images.githubusercontent.com/61067969/166144580-b1c12903-078c-4d6b-99d2-58c9a98f06ed.png)
 
-## Futoshiki problem (and solution)
+## Futoshiki problem (and example solution)
 Rules for solving futoshiki problem can be found [here](https://www.puzzlemix.com/rules-futoshiki.php).
 
 ![image](https://user-images.githubusercontent.com/61067969/166144515-57727c76-966a-41a1-a406-4f900bffc528.png)
