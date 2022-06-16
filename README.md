@@ -114,3 +114,6 @@ old major old boar manor farm call animal farm meeting compare human parasite te
 ```
 
 ## Creating models
+Method taking model type and number of best feacutes is implemented [here](E4/creating_models.py).
+
+For purposes of comparing different models as well as testing texts from outside the avaliable ones (using trained models) see [here](E4/text_classification_example.py).
