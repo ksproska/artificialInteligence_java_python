@@ -40,6 +40,18 @@ Rules for solving futoshiki problem can be found [here](https://www.puzzlemix.co
 
 Overview of interfaces and their implementations.
 
+Additionaly for each problem are avaliable different heuristic for ordering cells to fill and ordering their domains.
+
+Both problems:
+- in order (left to right, up to down) (+ domain order swapped)
+- smallest domain first (+ domain order swapped)
+
+Binary:
+- most in rows first (+ domain order swapped)
+
+Futoshiki:
+- most constraints first (+ domain order swapped)
+- most constraints first unless domain size of any equals 1 (+ domain order swapped)
 
 # [Checkers engine](E3)
 
