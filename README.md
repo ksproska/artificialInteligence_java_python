@@ -29,7 +29,16 @@ Rules for solving futoshiki problem can be found [here](https://www.puzzlemix.co
 ![image](https://user-images.githubusercontent.com/61067969/166144515-57727c76-966a-41a1-a406-4f900bffc528.png)
 ![image](https://user-images.githubusercontent.com/61067969/166144537-0fea7585-b7d7-44f6-b981-2ede5034bdc5.png)
 
+## Implementation
+- [CSP_Problem](E2/src/CSP_Problem.java) - original problem, intact ([Binary](E2/src/Binary_Problem.java) or [Futoshiki](E2/src/Futoshiki_Problem.java))
+- [CSP_PartialSolution](E2/src/CSP_PartialSolution.java) - attempt of solving CSP_Problem, not neccesserly completed or correct
+- [CSP_Solver](E2/src/CSP_Solver.java) - one of two CSP solving approaches:
+  - [Backtracking](E2/src/CSP_SolverBacktracking.java) - setting next element till constraints are broken, then go back
+  - [ForwardChecking](E2/src/CSP_SolverForwardChecking.java) - after each step update domains for each cell to see wheather any element can be selected, if not then go back
+
 ![image](https://user-images.githubusercontent.com/61067969/174037630-6d2573a6-6853-4aaa-b843-6684b5b9cc7e.png)
+
+Overview of interfaces and their implementations.
 
 
 # [Checkers engine](E3)
