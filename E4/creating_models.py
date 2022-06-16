@@ -16,19 +16,29 @@ import numpy as np
 # nltk.download('stopwords')
 
 
-def get_model_with_vectorizer(model, n_splits=5):
+def get_model_with_vectorizer(model, k, n_splits=5):
     start_time = datetime.now()
     vectorizer = CountVectorizer(stop_words='english')
-    # vectorizer = SelectKBest(chi2, k=2)
 
     print(f"Start time for {model}: {start_time}")
     df = pd.read_csv("preprocessed_genres.csv", encoding="utf-8", sep='\t')
     categories = list(df.drop_duplicates('category').sort_values('categoryId')['category'].values)
+    # categories_mx = df.drop_duplicates('category').sort_values('categoryId')['category'].values
     corpus = df["description"]
-    Xfeatures: csr_matrix = vectorizer.fit_transform(corpus)
-    Xfeatures = Xfeatures.toarray()
+    # Xfeatures: csr_matrix = vectorizer.fit_transform(corpus)
+    # Xfeatures = Xfeatures.toarray()
 
+    # vectorizer = TfidfVectorizer(sublinear_tf=True, max_df=0.5, min_df=1, stop_words='english')
+    Xfeatures = vectorizer.fit_transform(corpus)
+    # print(Xfeatures.shape)
+    # print(categories_mx.shape)
+
+    selector = SelectKBest(score_func=chi2, k=k)
     y = df['categoryId']
+    selector.fit(Xfeatures, y)
+
+    Xfeatures = selector.transform(Xfeatures).toarray()
+
     sss = StratifiedShuffleSplit(n_splits=n_splits, test_size=0.3, random_state=0)
     sss.get_n_splits(Xfeatures, y)
     score = None
@@ -40,10 +50,10 @@ def get_model_with_vectorizer(model, n_splits=5):
         score = accuracy_score(y_test, prediction)
         print(f"Score of split: {score}")
     end_time = datetime.now()
-    summary = "\t".join([str(model), str(score), str((end_time - start_time).seconds), str(n_splits)])
-    print("\t".join(["model", "accuracy_score", "seconds", "number_of_splits"]))
+    summary = "\t".join([str(model), str(score), str((end_time - start_time).seconds), str(n_splits), str(k)])
+    print("\t".join(["model", "accuracy_score", "seconds", "number_of_splits", "k"]))
     print(summary)
 
-    with open(f"comparison2.csv", "a", encoding="utf8") as f:
+    with open(f"selection.csv", "a", encoding="utf8") as f:
         f.write(summary + '\n')
     return model, vectorizer, categories

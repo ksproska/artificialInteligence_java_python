@@ -26,15 +26,16 @@ models_NB = [
 # penalty - norm used in the penalization
 # dual - either solve the dual or primal optimization problem
 models_SVM = [
-    SVC(C=2),
-    SVC(C=3),
-    SVC(C=4),
-    SVC(kernel='rbf', degree=1),
-    SVC(kernel='rbf', degree=2),
-    SVC(kernel='rbf', degree=3),
-    SVC(kernel='rbf', degree=4), # - pl wielomian, with parameter d for polynomial degree
-    SVC(kernel='rbf', degree=5),
-    SVC(kernel='rbf', degree=6),
+    LinearSVC()
+    # SVC(C=2),
+    # SVC(C=3),
+    # SVC(C=4),
+    # SVC(kernel='rbf', degree=1),
+    # SVC(kernel='rbf', degree=2),
+    # SVC(kernel='rbf', degree=3),
+    # SVC(kernel='rbf', degree=4), # - pl wielomian, with parameter d for polynomial degree
+    # SVC(kernel='rbf', degree=5),
+    # SVC(kernel='rbf', degree=6),
     # LinearSVC(C=0.1, penalty="l2", dual=False, loss='squared_hinge', class_weight="balanced"),            # uses hinge loss, supports only linear karnel
     # LinearSVC(C=0.3, penalty="l2", dual=False, loss='squared_hinge', class_weight="balanced"),            #
     # LinearSVC(C=0.5, penalty="l2", dual=False, loss='squared_hinge', class_weight="balanced"),            #
@@ -45,18 +46,19 @@ models_SVM = [
     # LinearSVC(C=4, penalty="l2", dual=False, loss='squared_hinge', class_weight="balanced"),            #
     # LinearSVC(C=5, penalty="l2", dual=False, loss='squared_hinge', class_weight="balanced"),            #
     # LinearSVC(C=6, penalty="l2", dual=False, loss='squared_hinge', class_weight="balanced"),            #
-    SVC(kernel="rbf"), # Gaussian radial basis function (RBF) - in Gaussian no sigma parameter, here there is
-    SVC(kernel="sigmoid"), # f(x) = 1/(1+e^-x) - for each x returns value between (0, 1)
-    SVC(kernel="precomputed"),
-    NuSVC(),
-
-    SGDClassifier(),
+    # SVC(kernel="rbf"), # Gaussian radial basis function (RBF) - in Gaussian no sigma parameter, here there is
+    # SVC(kernel="sigmoid"), # f(x) = 1/(1+e^-x) - for each x returns value between (0, 1)
+    # SVC(kernel="precomputed"),
+    # NuSVC(),
+    #
+    # SGDClassifier(),
 ]
 
 
 for m in models_SVM:
-    model, vectorizer, categories = get_model_with_vectorizer(model=m)
-    print("-----------------------------------------------------------------")
+    for k in [5]:
+        model, vectorizer, categories = get_model_with_vectorizer(model=m, k=k)
+        print("-----------------------------------------------------------------")
 
     sample_text = "Inspector Harry Hole of the Oslo Crime Squad is dispatched to Sydney to observe a murder case. Harry " \
                   "is free to offer assistance, but he has firm instructions to stay out of trouble. The victim is a " \

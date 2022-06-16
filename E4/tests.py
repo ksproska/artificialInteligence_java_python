@@ -1,9 +1,17 @@
-from input_classes import BookHandler, Book
-from input_methods import get_books_with_any_genres_and_description
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2, f_regression
+from sklearn.datasets import load_boston
+from sklearn.datasets import load_iris
+from numpy import array
 
+iris = load_iris()
+x = iris.data
+y = iris.target
 
-if __name__ == '__main__':
-    splitted_lines = get_books_with_any_genres_and_description("booksummaries/booksummaries.txt")
-    for line in splitted_lines[:1]:
-        next_book = Book(*line)
-        print(next_book.description)
+print("Feature data dimension: ", x.shape)
+
+select = SelectKBest(score_func=chi2, k=3)
+print(x)
+print(y)
+z = select.fit_transform(x, y)
+print("After selecting best 3 features:", z.shape)
