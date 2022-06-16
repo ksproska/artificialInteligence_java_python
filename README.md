@@ -1,11 +1,11 @@
-# [Genetic algorithm](E1)
+# [Genethic algorithm](E1)
 Algorithm was created for problem of Facility Layout Optimization (examlpe below).
 
 ![image](https://user-images.githubusercontent.com/61067969/166144399-a3c3b088-5d77-4708-be16-4461b9816118.png)
 
 Grid 3x4, 9 machines need to be set up, each pair has a cost depending on destination between machines on grid + extra parameters. Sample data is stored in .json files in [folder](flo_dane_v1.2), [README for .json](flo_dane_v1.2/README.pdf).
 
-## Implemented genetic algorithm elements
+## Implemented genethic algorithm elements
 - [selection](E1/src/zad2/Selection.java) - tournamet and roulette
 - [crossover](E1/src/zad2/Crossover.java) - partially matched
 - [mutation](E1/src/zad2/Mutation.java) - shuffling random part of flattened array
@@ -68,13 +68,49 @@ For accessment of grid avaliable are two approaches:
 ![image](https://user-images.githubusercontent.com/61067969/174041883-dbc5875a-8160-4bef-bbcb-1e3d55ea0b44.png)
 
 Game is avaliable in version:
-- only in console (good for bot vs bot): [implementation]()
+- only in console (good for bot vs bot): [implementation](E3/src/GameSimulatorConsole.java)
 
 ![image](https://user-images.githubusercontent.com/61067969/166144316-3f26bd5e-9e7f-476e-9615-474e5ae7f4c9.png)
 ![image](https://user-images.githubusercontent.com/61067969/174045046-083d2060-7c95-42a7-a8da-34f4edb5c80e.png)
 
-- clicable gui + console for displaying wrong inputs and past moves: [implementation]()
+- clicable gui + console for displaying wrong inputs and past moves: [implementation](E3/src/GameSimulatorGUI.java)
 
 ![image](https://user-images.githubusercontent.com/61067969/167789960-915d5e3c-cbb5-401d-a24f-75815a27535b.png)
 
 # [Machine learning](E4)
+Creating models for recognizing book genre from it's description.
+## Preprocessing
+For books avaliable in [booksummaries.txt](E4/booksummaries/booksummaries.txt), in format:
+```
+620	/m/0hhy	Animal Farm	George Orwell	1945-08-17	{"/m/016lj8": "Roman \u00e0 clef", "/m/06nbt": "Satire", "/m/0dwly": "Children's literature", "/m/014dfn": "Speculative fiction", "/m/02xlf": "Fiction"}	 Old Major, … malleable propaganda.
+843	/m/0k36	A Clockwork Orange	Anthony Burgess	1962	{"/m/06n90": "Science Fiction", "/m/0l67h": "Novella", "/m/014dfn": "Speculative fiction", "/m/0c082": "Utopian and dystopian fiction", "/m/06nbt": "Satire", "/m/02xlf": "Fiction"}	 Alex, a teenager living … fatalistically.
+...
+```
+We process data choosing 4 most popular genres (book count, books with multiple genres from the list were excluded):
+```
+Science Fiction                           2395
+Fantasy                                   1641
+Children's literature                     1287
+Crime Fiction                             970
+```
+Books were saved in file [normalised_genres.csv](E4/normalised_genres.csv), in format:
+```
+id	title	Children's literature	Science Fiction	Fantasy	Crime Fiction	description
+/m/0hhy	Animal Farm	1	0	0	0	 Old Major, … malleable propaganda.
+/m/0k36	A Clockwork Orange	0	1	0	0	 Alex, a teenager living … fatalistically.
+...
+```
+
+### Text lametization
+For text lametization WordNetLemmatizer from library nltk with stopwords was used, [implementation](E4/preprocessing_methods.py).
+
+Before:
+```
+Old Major, the old boar on the Manor Farm, calls the animals on the farm for a meeting, where he compares the humans to parasites and teaches the animals a revolutionary song, 'Beasts of England'. …
+```
+After:
+```
+old major old boar manor farm call animal farm meeting compare human parasite teach animal revolutionary song england …
+```
+
+## Creating models
