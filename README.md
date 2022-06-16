@@ -1,3 +1,5 @@
+This repository contains 4 different project implementing 4 different topics regarding Artificial Inteligence.
+
 # [Genethic algorithm](E1)
 Algorithm was created for problem of Facility Layout Optimization (examlpe below).
 
