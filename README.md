@@ -71,6 +71,7 @@ Game is avaliable in version:
 - only in console (good for bot vs bot): [implementation]()
 
 ![image](https://user-images.githubusercontent.com/61067969/166144316-3f26bd5e-9e7f-476e-9615-474e5ae7f4c9.png)
+![image](https://user-images.githubusercontent.com/61067969/174045046-083d2060-7c95-42a7-a8da-34f4edb5c80e.png)
 
 - clicable gui + console for displaying wrong inputs and past moves: [implementation]()
 
