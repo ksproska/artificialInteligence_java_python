@@ -40,7 +40,7 @@ Rules for solving futoshiki problem can be found [here](https://www.puzzlemix.co
 
 Overview of interfaces and their implementations.
 
-Additionaly for each problem are avaliable different heuristic for ordering cells to fill and ordering their domains.
+Additionaly for each problem are avaliable different heuristics for ordering cells to fill and ordering their domains.
 
 Both problems:
 - in order (left to right, up to down) (+ domain order swapped)
@@ -54,12 +54,25 @@ Futoshiki:
 - most constraints first unless domain size of any equals 1 (+ domain order swapped)
 
 # [Checkers engine](E3)
+Implementation of checkers engine for human player and bots. Avaliable bots:
+- Random (for comparison)
+- [Min-max](E3/src/BotMinMax.java)
+- [Aplha-beta](E3/src/BotAlphaBeta.java)
 
 ![image](https://user-images.githubusercontent.com/61067969/174041830-f8e41b5c-33d5-4c52-987a-925ea8b58a15.png)
 
+For accessment of grid avaliable are two approaches:
+- [simple](E3/src/SimpleAccessor.java) - counting figures (with weights normal=1, crowned=5)
+- [complex](E3/src/ComplexGridAccessor.java) - counting figures + the closer to the border the better
+
 ![image](https://user-images.githubusercontent.com/61067969/174041883-dbc5875a-8160-4bef-bbcb-1e3d55ea0b44.png)
 
+Game is avaliable in version:
+- only in console (good for bot vs bot): [implementation]()
+
 ![image](https://user-images.githubusercontent.com/61067969/166144316-3f26bd5e-9e7f-476e-9615-474e5ae7f4c9.png)
+
+- clicable gui + console for displaying wrong inputs and past moves: [implementation]()
 
 ![image](https://user-images.githubusercontent.com/61067969/167789960-915d5e3c-cbb5-401d-a24f-75815a27535b.png)
 
