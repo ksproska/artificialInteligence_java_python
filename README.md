@@ -29,6 +29,9 @@ Rules for solving futoshiki problem can be found [here](https://www.puzzlemix.co
 ![image](https://user-images.githubusercontent.com/61067969/166144515-57727c76-966a-41a1-a406-4f900bffc528.png)
 ![image](https://user-images.githubusercontent.com/61067969/166144537-0fea7585-b7d7-44f6-b981-2ede5034bdc5.png)
 
+![image](https://user-images.githubusercontent.com/61067969/174037630-6d2573a6-6853-4aaa-b843-6684b5b9cc7e.png)
+
+
 # [Checkers engine](E3)
 
 ![image](https://user-images.githubusercontent.com/61067969/166144316-3f26bd5e-9e7f-476e-9615-474e5ae7f4c9.png)
