@@ -3,28 +3,30 @@ Algorithm was created for problem of Facility Layout Optimization (examlpe below
 
 ![image](https://user-images.githubusercontent.com/61067969/166144399-a3c3b088-5d77-4708-be16-4461b9816118.png)
 
-Grid 3x4, 9 machines need to be set up, each pair has a cost depending on destination between machines on grid + extra parameters.
+Grid 3x4, 9 machines need to be set up, each pair has a cost depending on destination between machines on grid + extra parameters. Sample data is stored in .json files in [folder](flo_dane_v1.2), [README for .json](flo_dane_v1.2/README.pdf).
 
-## Genetic algorithm elements
+## Implemented genetic algorithm elements
 - [selection](E1/src/zad2/Selection.java) - tournamet and roulette
 - [crossover](E1/src/zad2/Crossover.java) - partially matched
 - [mutation](E1/src/zad2/Mutation.java) - shuffling random part of flattened array
 
+Sample genetic algorithm [implementation](E1/src/GeneticAlgorithm.java).
+
 # [CSP](E2)
-## Binary
+CSP implemented for solving two problems:
+## Binary problem (and solution)
+- 0 or 1 for each cell
+- max sequence of same numbers of length less than 3
+- each row and column is unique
+- each row and column has same number of 0 and 1
 
-### Problem:
 ![image](https://user-images.githubusercontent.com/61067969/166144568-c14062ca-f384-4ba3-bdf1-bda149fd2225.png)
-
-### Example solution:
 ![image](https://user-images.githubusercontent.com/61067969/166144580-b1c12903-078c-4d6b-99d2-58c9a98f06ed.png)
 
-## Futoshiki
+## Futoshiki problem (and solution)
+Rules for solving futoshiki problem can be found [here](https://www.puzzlemix.com/rules-futoshiki.php).
 
-### Problem:
 ![image](https://user-images.githubusercontent.com/61067969/166144515-57727c76-966a-41a1-a406-4f900bffc528.png)
-
-### Example solution:
 ![image](https://user-images.githubusercontent.com/61067969/166144537-0fea7585-b7d7-44f6-b981-2ede5034bdc5.png)
 
 # [Checkers engine](E3)
