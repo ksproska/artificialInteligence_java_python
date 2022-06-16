@@ -1,0 +1,33 @@
+sep=	
+whiteAverageNodes	blackAverageNodes	whiteAverageTime	blackAverageTime	whiteMaxDepth	blackMaxDepth	whiteAccessor	blackAccessor	winner
+68641,36	45287,05	0,33	0,18	8	8	SimpleAccessor	SimpleAccessor	BLACK
+123001,89	83872,57	0,57	0,38	8	8	SimpleAccessor	SimpleAccessor	WHITE
+125405,54	76530,27	0,58	0,34	8	8	SimpleAccessor	SimpleAccessor	WHITE
+108292,72	62307,79	0,5	0,28	8	8	SimpleAccessor	SimpleAccessor	WHITE
+117779,72	69092,59	0,55	0,31	8	8	SimpleAccessor	SimpleAccessor	WHITE
+126830,5	75154,65	0,59	0,34	8	8	SimpleAccessor	SimpleAccessor	WHITE
+585581,88	142910,07	2,64	0,72	8	8	SimpleAccessor	SimpleAccessor	null
+688158,69	193218,15	3,4	0,92	8	8	SimpleAccessor	SimpleAccessor	null
+652286,14	185424,58	3,22	0,88	8	8	SimpleAccessor	SimpleAccessor	WHITE
+597346,73	172223,68	2,95	0,82	8	8	SimpleAccessor	SimpleAccessor	BLACK
+551195,99	163459,52	2,71	0,78	8	8	SimpleAccessor	SimpleAccessor	BLACK
+523691,97	165613,29	2,57	0,78	8	8	SimpleAccessor	SimpleAccessor	BLACK
+501752,81	162267,0	2,46	0,77	8	8	SimpleAccessor	SimpleAccessor	BLACK
+537639,17	165838,2	2,58	0,78	8	8	SimpleAccessor	SimpleAccessor	null
+563723,88	161457,12	2,66	0,75	8	8	SimpleAccessor	SimpleAccessor	null
+581813,35	174736,54	2,71	0,81	8	8	SimpleAccessor	SimpleAccessor	null
+551405,81	166184,43	2,56	0,77	8	8	SimpleAccessor	SimpleAccessor	WHITE
+536414,11	158931,55	2,49	0,74	8	8	SimpleAccessor	SimpleAccessor	WHITE
+528719,1	162088,32	2,45	0,76	8	8	SimpleAccessor	SimpleAccessor	BLACK
+507150,85	157818,81	2,35	0,73	8	8	SimpleAccessor	SimpleAccessor	BLACK
+484511,65	151171,75	2,24	0,7	8	8	SimpleAccessor	SimpleAccessor	BLACK
+475147,02	148972,68	2,2	0,69	8	8	SimpleAccessor	SimpleAccessor	WHITE
+492712,26	148762,8	2,26	0,68	8	8	SimpleAccessor	SimpleAccessor	null
+499136,52	160085,19	2,29	0,74	8	8	SimpleAccessor	SimpleAccessor	WHITE
+782158,41	178132,29	3,53	0,86	8	8	SimpleAccessor	SimpleAccessor	null
+800727,51	183004,52	3,6	0,88	8	8	SimpleAccessor	SimpleAccessor	null
+783056,95	179992,16	3,52	0,86	8	8	SimpleAccessor	SimpleAccessor	BLACK
+759572,6	175593,07	3,41	0,84	8	8	SimpleAccessor	SimpleAccessor	WHITE
+741030,9	171984,33	3,33	0,82	8	8	SimpleAccessor	SimpleAccessor	BLACK
+721538,87	167736,62	3,24	0,8	8	8	SimpleAccessor	SimpleAccessor	WHITE
+

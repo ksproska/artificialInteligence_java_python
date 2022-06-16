@@ -1,0 +1,68 @@
+model	accuracy_score	seconds	number_of_splits
+MultinomialNB()	0.8367469879518072	115	5
+ComplementNB()	0.8271084337349398	128	5
+BernoulliNB()	0.7078313253012049	152	5
+GaussianNB()	0.6198795180722891	91	5
+
+"LinearSVC(C=0.1, penalty=""l2"", dual=True)"	0.7831325301204819	67	5
+"LinearSVC(C=0.3, penalty=""l2"", dual=True)"	0.7728915662650603	56	5
+"LinearSVC(C=0.5, penalty=""l2"", dual=True)"	0.7686746987951807	63	5
+"LinearSVC(C=0.7, penalty=""l2"", dual=True)"	0.7698795180722892	85	5
+"LinearSVC(C=1, penalty=""l2"", dual=True)"	0.7674698795180723	81	5
+"LinearSVC(C=2, penalty=""l2"", dual=True)"	0.7662650602409639	79	5
+"LinearSVC(C=3, penalty=""l2"", dual=True)"	0.766867469879518	67	5
+"LinearSVC(C=4, penalty=""l2"", dual=True)"	0.7662650602409639	72	5
+"LinearSVC(C=5, penalty=""l2"", dual=True)"	0.7656626506024097	93	5
+"LinearSVC(C=6, penalty=""l2"", dual=True)"	0.7656626506024097	78	5
+LinearSVC(C=0.1, dual=False, penalty='l1')	0.7933734939759036	96	5
+LinearSVC(C=0.3, dual=False, penalty='l1')	0.7813253012048192	94	5
+LinearSVC(C=0.5, dual=False, penalty='l1')	0.7765060240963856	89	5
+LinearSVC(C=0.7, dual=False, penalty='l1')	0.7674698795180723	102	5
+LinearSVC(C=1, dual=False, penalty='l1')	0.7746987951807229	109	5
+LinearSVC(C=2, dual=False, penalty='l1')	0.769277108433735	87	5
+LinearSVC(C=3, dual=False, penalty='l1')	0.7686746987951807	98	5
+LinearSVC(C=4, dual=False, penalty='l1')	0.7765060240963856	101	5
+LinearSVC(C=5, dual=False, penalty='l1')	0.7674698795180723	92	5
+LinearSVC(C=6, dual=False, penalty='l1')	0.7704819277108433	98	5
+LinearSVC(C=0.1, loss='hinge')	0.7783132530120482	63	5
+LinearSVC(C=0.3, loss='hinge')	0.7662650602409639	51	5
+LinearSVC(C=0.5, loss='hinge')	0.7662650602409639	49	5
+LinearSVC(C=0.7, loss='hinge')	0.7662650602409639	58	5
+LinearSVC(C=1, loss='hinge')	0.7650602409638554	48	5
+LinearSVC(C=2, loss='hinge')	0.7596385542168674	49	5
+LinearSVC(C=3, loss='hinge')	0.7596385542168674	53	5
+LinearSVC(C=4, loss='hinge')	0.7596385542168674	47	5
+LinearSVC(C=5, loss='hinge')	0.7596385542168674	53	5
+LinearSVC(C=6, loss='hinge')	0.7596385542168674	48	5
+SVC(kernel='linear')	0.7518072289156627	2464	5
+OneClassSVM()	0.1710843373493976	4334	5
+SVC()	0.6903614457831325	6794	5
+SVC(kernel='sigmoid')	0.6716867469879518	3465	5
+LinearSVC()	0.7674698795180723	95	5
+LinearSVC()	0.7674698795180723	97	5
+LinearSVC()	0.7674698795180723	123	5
+LinearSVC(C=0.1, class_weight='balanced')	0.7843373493975904	95	5
+LinearSVC(C=0.3, class_weight='balanced')	0.7753012048192771	135	5
+LinearSVC(C=0.5, class_weight='balanced')	0.7698795180722892	73	5
+LinearSVC(C=0.7, class_weight='balanced')	0.7704819277108433	99	5
+LinearSVC(C=1, class_weight='balanced')	0.766867469879518	93	5
+LinearSVC(C=2, class_weight='balanced')	0.7656626506024097	83	5
+LinearSVC(C=3, class_weight='balanced')	0.766867469879518	73	5
+LinearSVC(C=4, class_weight='balanced')	0.7662650602409639	104	5
+LinearSVC(C=5, class_weight='balanced')	0.7656626506024097	83	5
+LinearSVC(C=6, class_weight='balanced')	0.7656626506024097	123	5
+LinearSVC(C=0.1, class_weight='balanced', dual=False)	0.7855421686746988	210	5
+LinearSVC(C=0.3, class_weight='balanced', dual=False)	0.7807228915662651	218	5
+LinearSVC(C=0.5, class_weight='balanced', dual=False)	0.7777108433734939	207	5
+LinearSVC(C=0.7, class_weight='balanced', dual=False)	0.7789156626506024	206	5
+LinearSVC(C=1, class_weight='balanced', dual=False)	0.7765060240963856	175	5
+LinearSVC(C=2, class_weight='balanced', dual=False)	0.7746987951807229	185	5
+LinearSVC(C=3, class_weight='balanced', dual=False)	0.7734939759036145	159	5
+LinearSVC(C=4, class_weight='balanced', dual=False)	0.7728915662650603	143	5
+LinearSVC(C=5, class_weight='balanced', dual=False)	0.7734939759036145	141	5
+LinearSVC(C=6, class_weight='balanced', dual=False)	0.7716867469879518	132	5
+SVC(degree=1, kernel='poly')	0.6421686746987951	4149	5
+SVC(degree=2, kernel='poly')	0.45963855421686745	5101	5
+SVC(kernel='poly')	0.4102409638554217	5264	5
+SVC(degree=4, kernel='poly')	0.39397590361445783	5254	5
+SVC(degree=5, kernel='poly')	0.38674698795180723	5720	5

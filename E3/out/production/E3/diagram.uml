@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="430.0" y="0.0">BotMinMax</node>
+    <node x="569.0" y="249.0">RandomPlayer</node>
+    <node x="347.0" y="167.0">BotAlphaBeta</node>
+    <node x="0.0" y="0.0">SimpleAccessor</node>
+    <node x="107.0" y="262.0">ComplexGridAccessor</node>
+    <node x="197.0" y="558.0">GridItemLetter</node>
+    <node x="40.0" y="128.0">CheckersGridAccessor</node>
+    <node x="0.0" y="854.0">GridItem</node>
+    <node x="343.0" y="706.0">stats</node>
+    <node x="0.0" y="410.0">GameSimulatorConsole</node>
+    <node x="794.0" y="93.0">Move</node>
+    <node x="0.0" y="484.0">CheckersGridHandler</node>
+    <node x="186.0" y="632.0">MinMaxEnum</node>
+    <node x="371.0" y="632.0">Players</node>
+    <node x="651.0" y="76.0">Human</node>
+    <node x="467.0" y="484.0">GameSimulatorGUI</node>
+    <node x="0.0" y="632.0">images</node>
+    <node x="579.0" y="146.0">Player</node>
+    <node x="234.0" y="484.0">MoveWithEstimation</node>
+    <node x="465.0" y="97.0">Bot</node>
+    <node x="511.0" y="706.0">FigureType</node>
+    <node x="388.0" y="558.0">StatsContainer</node>
+    <node x="739.0" y="632.0">CheckersGrid</node>
+    <node x="798.0" y="0.0">Jump</node>
+    <node x="153.0" y="854.0">Figure</node>
+    <node x="172.0" y="706.0">PlayerColor</node>
+    <node x="579.0" y="558.0">GridItemColor</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="ComplexGridAccessor" target="CheckersGridAccessor" relationship="GENERALIZATION">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="BotMinMax" target="Bot" relationship="GENERALIZATION">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="SimpleAccessor" target="CheckersGridAccessor" relationship="GENERALIZATION">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="Human" target="Player" relationship="REALIZATION">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="Jump" target="Move" relationship="GENERALIZATION">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="RandomPlayer" target="Player" relationship="REALIZATION">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="BotAlphaBeta" target="Bot" relationship="GENERALIZATION">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="Bot" target="Player" relationship="REALIZATION">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.9180509413067552" showDependencies="false" x="441.50000000000006" y="441.5" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>Production</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

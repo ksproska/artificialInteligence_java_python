@@ -1,0 +1,33 @@
+sep=	
+whiteAverageNodes	blackAverageNodes	whiteAverageTime	blackAverageTime	whiteMaxDepth	blackMaxDepth	whiteAccessor	blackAccessor	winner
+32191,83	19222,2	0,17	0,09	7	7	ComplexGridAccessor	ComplexGridAccessor	WHITE
+29315,95	18558,76	0,15	0,08	7	7	ComplexGridAccessor	ComplexGridAccessor	WHITE
+31337,85	18226,23	0,15	0,08	7	7	ComplexGridAccessor	ComplexGridAccessor	WHITE
+82572,74	37309,67	0,42	0,17	7	7	ComplexGridAccessor	ComplexGridAccessor	null
+72719,78	34973,76	0,36	0,16	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+67440,3	32117,69	0,34	0,15	7	7	ComplexGridAccessor	ComplexGridAccessor	WHITE
+66667,93	32798,08	0,33	0,15	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+115110,16	41266,58	0,69	0,19	7	7	ComplexGridAccessor	ComplexGridAccessor	null
+127636,84	58900,1	0,74	0,32	7	7	ComplexGridAccessor	ComplexGridAccessor	null
+122340,23	58129,16	0,71	0,31	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+114973,25	54395,34	0,66	0,29	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+121547,31	53597,89	0,72	0,28	7	7	ComplexGridAccessor	ComplexGridAccessor	null
+115264,9	52117,5	0,68	0,27	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+112788,27	50781,91	0,66	0,27	7	7	ComplexGridAccessor	ComplexGridAccessor	WHITE
+114731,4	55531,5	0,67	0,29	7	7	ComplexGridAccessor	ComplexGridAccessor	null
+110444,56	53543,61	0,64	0,28	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+105880,45	51827,33	0,61	0,27	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+115092,61	63714,18	0,65	0,36	7	7	ComplexGridAccessor	ComplexGridAccessor	null
+114207,97	64299,57	0,64	0,36	7	7	ComplexGridAccessor	ComplexGridAccessor	null
+110214,93	62431,83	0,62	0,35	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+107311,67	60193,37	0,6	0,34	7	7	ComplexGridAccessor	ComplexGridAccessor	WHITE
+112559,43	59832,54	0,64	0,33	7	7	ComplexGridAccessor	ComplexGridAccessor	null
+109610,78	58399,56	0,63	0,32	7	7	ComplexGridAccessor	ComplexGridAccessor	WHITE
+107261,76	57069,48	0,61	0,31	7	7	ComplexGridAccessor	ComplexGridAccessor	WHITE
+104417,09	56195,31	0,59	0,31	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+102904,7	55288,98	0,58	0,3	7	7	ComplexGridAccessor	ComplexGridAccessor	WHITE
+99809,18	53926,88	0,57	0,29	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+98768,8	53433,79	0,56	0,29	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+96464,02	52248,91	0,55	0,28	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+94841,51	51687,07	0,54	0,28	7	7	ComplexGridAccessor	ComplexGridAccessor	BLACK
+

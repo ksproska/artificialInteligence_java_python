@@ -1,0 +1,4 @@
+sep=	
+whiteAverageNodes	blackAverageNodes	whiteAverageTime	blackAverageTime	whiteMaxDepth	blackMaxDepth	whiteAccessor	blackAccessor	winner
+66114,77	27771,28	0,35	0,19	8	8	SimpleAccessor	SimpleAccessor	WHITE
+

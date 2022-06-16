@@ -1,0 +1,18 @@
+GaussianNB	CountVectorizer	0.636144578313253	25
+MultinomialNB	CountVectorizer	0.8265060240963855	19
+BernoulliNB	CountVectorizer	0.7343373493975903	34
+SGDClassifier	CountVectorizer	0.8042168674698795	32
+LinearSVC	CountVectorizer	0.7891566265060241	11
+NuSVC	CountVectorizer	0.7012048192771084	1395
+DecisionTreeClassifier	CountVectorizer	0.6030120481927711	957
+ExtraTreeClassifier	CountVectorizer	0.4831325301204819	14
+DecisionTreeRegressor	CountVectorizer	0.5704819277108434	1302
+SVC(karnel="linear")	CountVectorizer	0.7620481927710844	599
+SVC(kernel="rbf")	CountVectorizer	0.653012048192771	1302
+GaussianNB	CountVectorizer	0.6373493975903615	161
+MultinomialNB	CountVectorizer	0.8228915662650602	142
+MultinomialNB	CountVectorizer	0.8228915662650602	44
+MultinomialNB	CountVectorizer	0.8367469879518072	130
+GaussianNB	CountVectorizer	0.6198795180722891	110
+
+GaussianNB()	0.6198795180722891	120
